@@ -1,0 +1,925 @@
+---
+- MARCHAL : 
+  - SAY    : MsgPack_Object_Unpacker TEST 1 Start.
+---
+#---------------------------------------------------------------
+- MARCHAL :
+  - SAY    : MsgPack_Object_Unpacker TEST 1.1  positive fixnum
+#---------------------------------------------------------------
+- I  :
+  - XFER   : {DATA: [0x00,0x01,0x05,0x70,0x2A,0x61,0x40,0x7F]}
+- O :
+  - READY  : 1
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000000, USER: 0x34, STRB: 0x1, LAST: 1}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000001, USER: 0x34, STRB: 0x1, LAST: 1}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000005, USER: 0x34, STRB: 0x1, LAST: 1}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000070, USER: 0x34, STRB: 0x1, LAST: 1}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x0000002A, USER: 0x34, STRB: 0x1, LAST: 1}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000061, USER: 0x34, STRB: 0x1, LAST: 1}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000040, USER: 0x34, STRB: 0x1, LAST: 1}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x0000007F, USER: 0x34, STRB: 0x1, LAST: 1}
+
+---
+#---------------------------------------------------------------
+- MARCHAL :
+  - SAY    : MsgPack_Object_Unpacker TEST 1.2  negative fixnum
+#---------------------------------------------------------------
+- I :
+  - XFER   : {DATA: [0xE0,0xFF,0xE1,0xE2,0xEF,0xF0,0xF1,0xF7]}
+- O :
+  - READY  : 1
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0xFFFFFFE0, USER: 0x35, STRB: 0x1, LAST: 1}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0xFFFFFFFF, USER: 0x35, STRB: 0x1, LAST: 1}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0xFFFFFFE1, USER: 0x35, STRB: 0x1, LAST: 1}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0xFFFFFFE2, USER: 0x35, STRB: 0x1, LAST: 1}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0xFFFFFFEF, USER: 0x35, STRB: 0x1, LAST: 1}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0xFFFFFFF0, USER: 0x35, STRB: 0x1, LAST: 1}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0xFFFFFFF1, USER: 0x35, STRB: 0x1, LAST: 1}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0xFFFFFFF7, USER: 0x35, STRB: 0x1, LAST: 1}
+
+---
+#---------------------------------------------------------------
+- MARCHAL :
+  - SAY    : MsgPack_Object_Unpacker TEST 1.3  8/16/32 unsigned integer
+#---------------------------------------------------------------
+- I :
+  - XFER   : {DATA: [0xCC, 0x80]}
+  - XFER   : {DATA: [0xCC, 0xFF]}
+  - XFER   : {DATA: [0xCD, 0xCD, 0xCD]}
+  - XFER   : {DATA: [0xCE, 0xDE, 0xAD, 0xBE, 0xEF]}
+  - XFER   : {DATA: [0xCF, 0x81, 0x92, 0xA3, 0xB4, 0xC5, 0xD6, 0xE7, 0xF8]}
+  - XFER   : {DATA: [0xCC, 0xA1]}
+- O :
+  - READY  : 1
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000080, USER: 0x34, STRB: 0x1, LAST: 1}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x000000FF, USER: 0x34, STRB: 0x1, LAST: 1}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x0000CDCD, USER: 0x34, STRB: 0x3, LAST: 1}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0xDEADBEEF, USER: 0x34, STRB: 0xF, LAST: 1}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x8192A3B4, USER: 0x24, STRB: 0xF, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0xC5D6E7F8, USER: 0x34, STRB: 0xF, LAST: 1}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x000000A1, USER: 0x34, STRB: 0x1, LAST: 1}
+
+---
+#---------------------------------------------------------------
+- MARCHAL :
+  - SAY    : MsgPack_Object_Unpacker TEST 1.4  8/16/32 signed integer
+#---------------------------------------------------------------
+- I :
+  - XFER   : {DATA: [0xD0, 0x80]}
+  - XFER   : {DATA: [0xD0, 0xFF]}
+  - XFER   : {DATA: [0xD0, 0x41]}
+  - XFER   : {DATA: [0xD1, 0xCD, 0xCD]}
+  - XFER   : {DATA: [0xD2, 0xDE, 0xAD, 0xBE, 0xEF]}
+  - XFER   : {DATA: [0xD3, 0x81, 0x92, 0xA3, 0xB4, 0xC5, 0xD6, 0xE7, 0xF8]}
+- O :
+  - READY  : 1
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0xFFFFFF80, USER: 0x35, STRB: 0x1, LAST: 1}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0xFFFFFFFF, USER: 0x35, STRB: 0x1, LAST: 1}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000041, USER: 0x35, STRB: 0x1, LAST: 1}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0xFFFFCDCD, USER: 0x35, STRB: 0x3, LAST: 1}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0xDEADBEEF, USER: 0x35, STRB: 0xF, LAST: 1}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x8192A3B4, USER: 0x25, STRB: 0xF, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0xC5D6E7F8, USER: 0x35, STRB: 0xF, LAST: 1}
+
+---
+#---------------------------------------------------------------
+- MARCHAL :
+  - SAY    : MsgPack_Object_Unpacker TEST 1.5  float 32/64
+#---------------------------------------------------------------
+- I :
+  - XFER   : {DATA: [0xCA, 0x80, 0x91, 0xA2, 0xB3]}
+  - XFER   : {DATA: [0xCB, 0x80, 0x91, 0xA2, 0xB3, 0xC4, 0xD5, 0xE6, 0xF7]}
+- O :
+  - READY  : 1
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x8091A2B3, USER: 0x36, STRB: 0xF, LAST: 1}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x8091A2B3, USER: 0x26, STRB: 0xF, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0xC4D5E6F7, USER: 0x36, STRB: 0xF, LAST: 1}
+
+---
+#---------------------------------------------------------------
+- MARCHAL :
+  - SAY    : MsgPack_Object_Unpacker TEST 1.6  fixstr
+#---------------------------------------------------------------
+- I :
+  - XFER   : {DATA: [0xA0]}
+  - XFER   : {DATA: [0xA1, 0x30]}
+  - XFER   : {DATA: [0xA2, 0x30, 0x31]}
+  - XFER   : {DATA: [0xA3, 0x30, 0x31, 0x32]}
+  - XFER   : {DATA: [0xA4, 0x30, 0x31, 0x32, 0x33]}
+  - XFER   : {DATA: [0xA5, 0x30, 0x31, 0x32, 0x33, 0x34]}
+  - XFER   : {DATA: [0xA6, 0x30, 0x31, 0x32, 0x33, 0x34, 0x35]}
+  - XFER   : {DATA: [0xA7, 0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36]}
+  - XFER   : {DATA: [0xA8, 0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37]}
+  - XFER   : {DATA: [0xA9, 0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38]}
+  - XFER   : {DATA: [0xAA, 0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39]}
+  - XFER   : {DATA: [0xAB, 0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39, 0x3A]}
+  - XFER   : {DATA: [0xAC, 0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39, 0x3A, 0x3B]}
+- O :
+  - READY  : 1
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000000, USER: 0x38, STRB: 0x1, LAST: 1}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x------30, USER: 0x39, STRB: 0x1, LAST: 1}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x----3130, USER: 0x39, STRB: 0x3, LAST: 1}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x--323130, USER: 0x39, STRB: 0x7, LAST: 1}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x33323130, USER: 0x39, STRB: 0xF, LAST: 1}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x33323130, USER: 0x29, STRB: 0xF, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x------34, USER: 0x39, STRB: 0x1, LAST: 1}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x33323130, USER: 0x29, STRB: 0xF, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x----3534, USER: 0x39, STRB: 0x3, LAST: 1}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x33323130, USER: 0x29, STRB: 0xF, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x--363534, USER: 0x39, STRB: 0x7, LAST: 1}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x33323130, USER: 0x29, STRB: 0xF, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x37363534, USER: 0x39, STRB: 0xF, LAST: 1}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000009, USER: 0x28, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x33323130, USER: 0x29, STRB: 0xF, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x37363534, USER: 0x29, STRB: 0xF, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x------38, USER: 0x39, STRB: 0x1, LAST: 1}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x0000000A, USER: 0x28, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x33323130, USER: 0x29, STRB: 0xF, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x37363534, USER: 0x29, STRB: 0xF, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x----3938, USER: 0x39, STRB: 0x3, LAST: 1}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x0000000B, USER: 0x28, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x33323130, USER: 0x29, STRB: 0xF, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x37363534, USER: 0x29, STRB: 0xF, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x--3A3938, USER: 0x39, STRB: 0x7, LAST: 1}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x0000000C, USER: 0x28, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x33323130, USER: 0x29, STRB: 0xF, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x37363534, USER: 0x29, STRB: 0xF, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x3B3A3938, USER: 0x39, STRB: 0xF, LAST: 1}
+
+---
+#---------------------------------------------------------------
+- MARCHAL :
+  - SAY    : MsgPack_Object_Unpacker TEST 1.7  str 8/16/32
+#---------------------------------------------------------------
+- I :
+  - XFER   : {DATA: [0xD9, 0x00]}
+  - XFER   : {DATA: [0xD9, 0x01, 0x30]}
+  - XFER   : {DATA: [0xDA, 0x00, 0x01, 0x30]}
+  - XFER   : {DATA: [0xDB, 0x00, 0x00, 0x00, 0x01, 0x30]}
+  - XFER   : {DATA: [0xDA, 0x00, 0x40]}
+  - XFER   : {DATA: [0x3F3E3D3C3B3A39383736353433323130]}
+  - XFER   : {DATA: [0x4F4E4D4C4B4A49484746454443424140]}
+  - XFER   : {DATA: [0x5F5E5D5C5B5A59585756555453525150]}
+  - XFER   : {DATA: [0x6F6E6D6C6B6A69686766656463626160]}
+- O :
+  - READY  : 1
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000000, USER: 0x38, STRB: 0x1, LAST: 1}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000001, USER: 0x28, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x------30, USER: 0x39, STRB: 0x1, LAST: 1}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000001, USER: 0x28, STRB: 0x3, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x------30, USER: 0x39, STRB: 0x1, LAST: 1}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000001, USER: 0x28, STRB: 0xF, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x------30, USER: 0x39, STRB: 0x1, LAST: 1}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000040, USER: 0x28, STRB: 0x3, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x33323130, USER: 0x29, STRB: 0xF, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x37363534, USER: 0x29, STRB: 0xF, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x3B3A3938, USER: 0x29, STRB: 0xF, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x3F3E3D3C, USER: 0x29, STRB: 0xF, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x43424140, USER: 0x29, STRB: 0xF, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x47464544, USER: 0x29, STRB: 0xF, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x4B4A4948, USER: 0x29, STRB: 0xF, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x4F4E4D4C, USER: 0x29, STRB: 0xF, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x53525150, USER: 0x29, STRB: 0xF, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x57565554, USER: 0x29, STRB: 0xF, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x5B5A5958, USER: 0x29, STRB: 0xF, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x5F5E5D5C, USER: 0x29, STRB: 0xF, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x63626160, USER: 0x29, STRB: 0xF, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x67666564, USER: 0x29, STRB: 0xF, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x6B6A6968, USER: 0x29, STRB: 0xF, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x6F6E6D6C, USER: 0x39, STRB: 0xF, LAST: 1}
+
+---
+#---------------------------------------------------------------
+- MARCHAL :
+  - SAY    : MsgPack_Object_Unpacker TEST 1.8  bin 8/16/32
+#---------------------------------------------------------------
+- I :
+  - XFER   : {DATA: [0xC4, 0x00]}
+  - XFER   : {DATA: [0xC4, 0x01, 0x30]}
+  - XFER   : {DATA: [0xC5, 0x00, 0x01, 0x30]}
+  - XFER   : {DATA: [0xC6, 0x00, 0x00, 0x00, 0x01, 0x30]}
+  - XFER   : {DATA: [0xC5, 0x00, 0x40]}
+  - XFER   : {DATA: [0x3F3E3D3C3B3A39383736353433323130]}
+  - XFER   : {DATA: [0x4F4E4D4C4B4A49484746454443424140]}
+  - XFER   : {DATA: [0x5F5E5D5C5B5A59585756555453525150]}
+  - XFER   : {DATA: [0x6F6E6D6C6B6A69686766656463626160]}
+- O :
+  - READY  : 1
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000000, USER: 0x3A, STRB: 0x1, LAST: 1}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000001, USER: 0x2A, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x------30, USER: 0x3B, STRB: 0x1, LAST: 1}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000001, USER: 0x2A, STRB: 0x3, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x------30, USER: 0x3B, STRB: 0x1, LAST: 1}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000001, USER: 0x2A, STRB: 0xF, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x------30, USER: 0x3B, STRB: 0x1, LAST: 1}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000040, USER: 0x2A, STRB: 0x3, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x33323130, USER: 0x2B, STRB: 0xF, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x37363534, USER: 0x2B, STRB: 0xF, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x3B3A3938, USER: 0x2B, STRB: 0xF, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x3F3E3D3C, USER: 0x2B, STRB: 0xF, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x43424140, USER: 0x2B, STRB: 0xF, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x47464544, USER: 0x2B, STRB: 0xF, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x4B4A4948, USER: 0x2B, STRB: 0xF, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x4F4E4D4C, USER: 0x2B, STRB: 0xF, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x53525150, USER: 0x2B, STRB: 0xF, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x57565554, USER: 0x2B, STRB: 0xF, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x5B5A5958, USER: 0x2B, STRB: 0xF, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x5F5E5D5C, USER: 0x2B, STRB: 0xF, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x63626160, USER: 0x2B, STRB: 0xF, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x67666564, USER: 0x2B, STRB: 0xF, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x6B6A6968, USER: 0x2B, STRB: 0xF, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x6F6E6D6C, USER: 0x3B, STRB: 0xF, LAST: 1}
+
+---
+#---------------------------------------------------------------
+- MARCHAL :
+  - SAY    : MsgPack_Object_Unpacker TEST 1.9  fixarray 
+#---------------------------------------------------------------
+  # => []
+- I :
+  - XFER   : {DATA: [0x90]}
+- O :
+  - READY  : 1
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000000, USER: 0x32, STRB: 0x1, LAST: 1}
+
+  # => [0x08]
+- I :
+  - XFER   : {DATA: [0x91, 0x08]}
+- O :
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000001, USER: 0x32, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000008, USER: 0x34, STRB: 0x1, LAST: 1}
+
+  # [0x01,0x02]
+- I :
+  - XFER   : {DATA: [0x92, 0x01, 0x02]}
+- O :
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000002, USER: 0x32, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000001, USER: 0x34, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000002, USER: 0x34, STRB: 0x1, LAST: 1}
+
+  # [0x01,0x02,0x03]
+- I :
+  - XFER   : {DATA: [0x93, 0x01, 0x02, 0x03]}
+- O :
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000003, USER: 0x32, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000001, USER: 0x34, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000002, USER: 0x34, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000003, USER: 0x34, STRB: 0x1, LAST: 1}
+
+  # [[0x01,0x02],[0x03,0x04],[0x05,0x06],0x07]
+- I :
+  - XFER   : {DATA: [0x94, 0x92, 0x01, 0x02, 0x92, 0x03, 0x04, 0x92, 0x05, 0x06, 0x07]}
+- O :
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000004, USER: 0x32, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000002, USER: 0x32, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000001, USER: 0x34, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000002, USER: 0x34, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000002, USER: 0x32, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000003, USER: 0x34, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000004, USER: 0x34, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000002, USER: 0x32, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000005, USER: 0x34, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000006, USER: 0x34, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000007, USER: 0x34, STRB: 0x1, LAST: 1}
+
+  # [[0x01,0x02],[0x03,0x04],[0x05,0x06],[0x07,0x08]]
+- I :
+  - XFER   : {DATA: [0x94, 0x92, 0x01, 0x02, 0x92, 0x03, 0x04, 0x92, 0x05, 0x06, 0x92, 0x07 ,0x08]}
+- O :
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000004, USER: 0x32, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000002, USER: 0x32, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000001, USER: 0x34, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000002, USER: 0x34, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000002, USER: 0x32, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000003, USER: 0x34, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000004, USER: 0x34, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000002, USER: 0x32, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000005, USER: 0x34, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000006, USER: 0x34, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000002, USER: 0x32, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000007, USER: 0x34, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000008, USER: 0x34, STRB: 0x1, LAST: 1}
+
+  # [[[[[[-1]]]]]]
+- I :
+  - XFER   : {DATA: [0x91, 0x91, 0x91, 0x91, 0x91, 0x91, 0xFF]}
+- O :
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000001, USER: 0x32, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000001, USER: 0x32, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000001, USER: 0x32, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000001, USER: 0x32, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000001, USER: 0x32, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000001, USER: 0x32, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0xFFFFFFFF, USER: 0x35, STRB: 0x1, LAST: 1}
+
+  # [[[1],[2]],[[3],[4]],[[5],[6]],[[7],[8]]]
+- I :
+  - XFER   : {DATA: [0x94]}
+  - XFER   : {DATA: [0x92, 0x91, 0x01, 0x91, 0x02]}
+  - XFER   : {DATA: [0x92, 0x91, 0x03, 0x91, 0x04]}
+  - XFER   : {DATA: [0x92, 0x91, 0x05, 0x91, 0x06]}
+  - XFER   : {DATA: [0x92, 0x91, 0x07, 0x91, 0x08]}
+- O :
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000004, USER: 0x32, STRB: 0x1, LAST: 0}
+
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000002, USER: 0x32, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000001, USER: 0x32, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000001, USER: 0x34, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000001, USER: 0x32, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000002, USER: 0x34, STRB: 0x1, LAST: 0}
+
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000002, USER: 0x32, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000001, USER: 0x32, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000003, USER: 0x34, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000001, USER: 0x32, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000004, USER: 0x34, STRB: 0x1, LAST: 0}
+
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000002, USER: 0x32, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000001, USER: 0x32, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000005, USER: 0x34, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000001, USER: 0x32, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000006, USER: 0x34, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+
+  - CHECK  : {DATA: 0x00000002, USER: 0x32, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000001, USER: 0x32, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000007, USER: 0x34, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000001, USER: 0x32, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000008, USER: 0x34, STRB: 0x1, LAST: 1}
+
+  # [[[1,2,3],4,5],6,[7,[8,9]],10]
+- I :
+  - XFER   : {DATA: [0x94]}
+  - XFER   : {DATA: [0x93, 0x93, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06]}
+  - XFER   : {DATA: [0x92, 0x92, 0x07, 0x08, 0x09, 0x0A]}
+- O :
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000004, USER: 0x32, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000003, USER: 0x32, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000003, USER: 0x32, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000001, USER: 0x34, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000002, USER: 0x34, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000003, USER: 0x34, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000004, USER: 0x34, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000005, USER: 0x34, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000006, USER: 0x34, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000002, USER: 0x32, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000002, USER: 0x32, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000007, USER: 0x34, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000008, USER: 0x34, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000009, USER: 0x34, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x0000000A, USER: 0x34, STRB: 0x1, LAST: 1}
+
+---
+#---------------------------------------------------------------
+- MARCHAL :
+  - SAY    : MsgPack_Object_Unpacker TEST 1.10 array 16/32
+#---------------------------------------------------------------
+
+  # [1,2,3,4,5,6,7,8,9]
+- I :  
+  - XFER   : {DATA: [0xDC, 0x00, 0x09, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09]}
+- O :
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000009, USER: 0x32, STRB: 0x3, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000001, USER: 0x34, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000002, USER: 0x34, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000003, USER: 0x34, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000004, USER: 0x34, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000005, USER: 0x34, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000006, USER: 0x34, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000007, USER: 0x34, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000008, USER: 0x34, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000009, USER: 0x34, STRB: 0x1, LAST: 1}
+
+  # [1,2,3,4,5,6,7,8,9]
+- I :  
+  - XFER   : {DATA: [0xDD, 0x00, 0x00, 0x00, 0x09, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09]}
+- O :
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000009, USER: 0x32, STRB: 0xF, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000001, USER: 0x34, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000002, USER: 0x34, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000003, USER: 0x34, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000004, USER: 0x34, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000005, USER: 0x34, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000006, USER: 0x34, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000007, USER: 0x34, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000008, USER: 0x34, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000009, USER: 0x34, STRB: 0x1, LAST: 1}
+
+  # [[1,2,3],4]
+- I :  
+  - XFER   : {DATA: [0xDC, 0x00, 0x02, 0xDD, 0x00, 0x00, 0x00, 0x03, 0x01, 0x02, 0x03, 0x04]}
+- O :
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000002, USER: 0x32, STRB: 0x3, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000003, USER: 0x32, STRB: 0xF, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000001, USER: 0x34, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000002, USER: 0x34, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000003, USER: 0x34, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000004, USER: 0x34, STRB: 0x1, LAST: 1}
+
+---
+#---------------------------------------------------------------
+- MARCHAL :
+  - SAY    : MsgPack_Object_Unpacker TEST 1.11 fixmap
+#---------------------------------------------------------------
+  # => {}
+- I :
+  - XFER   : {DATA: [0x80]}
+- O :
+  - READY  : 1
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000000, USER: 0x33, STRB: 0x1, LAST: 1}
+
+  # => {KEY: 0x1}
+- I :
+  - XFER   : {DATA: [0x81, 0xA3, 0x4B, 0x45, 0x59, 0x01]}
+- O :
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000001, USER: 0x33, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x--59454B, USER: 0x39, STRB: 0x7, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000001, USER: 0x34, STRB: 0x1, LAST: 1}
+
+  # => {KEY1: 0x1, KEY2: 2}
+- I :
+  - XFER   : {DATA: [0x82, 0xA4, 0x4B, 0x45, 0x59, 0x31, 0x01, 0xA4, 0x4B, 0x45, 0x59, 0x32, 0x02]}
+- O :
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000002, USER: 0x33, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x3159454B, USER: 0x39, STRB: 0xF, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000001, USER: 0x34, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x3259454B, USER: 0x39, STRB: 0xF, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000002, USER: 0x34, STRB: 0x1, LAST: 1}
+
+  # => {DATA: {KEY1: 0x1, KEY2: 2}}
+- I :
+  - XFER   : {DATA: [0x81, 0xA4, 0x44, 0x41, 0x54, 0x41]}
+  - XFER   : {DATA: [0x82, 0xA4, 0x4B, 0x45, 0x59, 0x31, 0x01, 0xA4, 0x4B, 0x45, 0x59, 0x32, 0x02]}
+- O :
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000001, USER: 0x33, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x41544144, USER: 0x39, STRB: 0xF, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000002, USER: 0x33, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x3159454B, USER: 0x39, STRB: 0xF, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000001, USER: 0x34, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x3259454B, USER: 0x39, STRB: 0xF, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000002, USER: 0x34, STRB: 0x1, LAST: 1}
+
+---
+#---------------------------------------------------------------
+- MARCHAL :
+  - SAY    : MsgPack_Object_Unpacker TEST 1.12 map 16/32
+#---------------------------------------------------------------
+  # => {}
+- I :
+  - XFER   : {DATA: [0xDE, 0x00, 0x00]}
+- O :
+  - READY  : 1
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000000, USER: 0x33, STRB: 0x3, LAST: 1}
+
+  # => {KEY: 0x1}
+- I :
+  - XFER   : {DATA: [0xDE, 0x00, 0x01, 0xA3, 0x4B, 0x45, 0x59, 0x01]}
+- O :
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000001, USER: 0x33, STRB: 0x3, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x--59454B, USER: 0x39, STRB: 0x7, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000001, USER: 0x34, STRB: 0x1, LAST: 1}
+
+  # => {KEY1: 0x1, KEY2: 2}
+- I :
+  - XFER   : {DATA: [0xDE, 0x00, 0x02, 0xA4, 0x4B, 0x45, 0x59, 0x31, 0x01, 0xA4, 0x4B, 0x45, 0x59, 0x32, 0x02]}
+- O :
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000002, USER: 0x33, STRB: 0x3, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x3159454B, USER: 0x39, STRB: 0xF, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000001, USER: 0x34, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x3259454B, USER: 0x39, STRB: 0xF, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000002, USER: 0x34, STRB: 0x1, LAST: 1}
+
+  # => {DATA: {KEY1: 0x1, KEY2: 2}}
+- I :
+  - XFER   : {DATA: [0xDE, 0x00, 0x01, 0xA4, 0x44, 0x41, 0x54, 0x41]}
+  - XFER   : {DATA: [0xDE, 0x00, 0x02, 0xA4, 0x4B, 0x45, 0x59, 0x31, 0x01, 0xA4, 0x4B, 0x45, 0x59, 0x32, 0x02]}
+- O :
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000001, USER: 0x33, STRB: 0x3, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x41544144, USER: 0x39, STRB: 0xF, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000002, USER: 0x33, STRB: 0x3, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x3159454B, USER: 0x39, STRB: 0xF, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000001, USER: 0x34, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x3259454B, USER: 0x39, STRB: 0xF, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000002, USER: 0x34, STRB: 0x1, LAST: 1}
+
+
+  # => {}
+- I :
+  - XFER   : {DATA: [0xDF, 0x00, 0x00, 0x00, 0x00]}
+- O :
+  - READY  : 1
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000000, USER: 0x33, STRB: 0xF, LAST: 1}
+
+  # => {KEY: 0x1}
+- I :
+  - XFER   : {DATA: [0xDF, 0x00, 0x00, 0x00, 0x01, 0xA3, 0x4B, 0x45, 0x59, 0x01]}
+- O :
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000001, USER: 0x33, STRB: 0xF, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x--59454B, USER: 0x39, STRB: 0x7, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000001, USER: 0x34, STRB: 0x1, LAST: 1}
+
+  # => {KEY1: 0x1, KEY2: 2}
+- I :
+  - XFER   : {DATA: [0xDF, 0x00, 0x00, 0x00, 0x02, 0xA4, 0x4B, 0x45, 0x59, 0x31, 0x01, 0xA4, 0x4B, 0x45, 0x59, 0x32, 0x02]}
+- O :
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000002, USER: 0x33, STRB: 0xF, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x3159454B, USER: 0x39, STRB: 0xF, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000001, USER: 0x34, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x3259454B, USER: 0x39, STRB: 0xF, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000002, USER: 0x34, STRB: 0x1, LAST: 1}
+
+  # => {DATA: {KEY1: 0x1, KEY2: 2}}
+- I :
+  - XFER   : {DATA: [0xDF, 0x00, 0x00, 0x00, 0x01, 0xA4, 0x44, 0x41, 0x54, 0x41]}
+  - XFER   : {DATA: [0xDF, 0x00, 0x00, 0x00, 0x02, 0xA4, 0x4B, 0x45, 0x59, 0x31, 0x01, 0xA4, 0x4B, 0x45, 0x59, 0x32, 0x02]}
+- O :
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000001, USER: 0x33, STRB: 0xF, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x41544144, USER: 0x39, STRB: 0xF, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000002, USER: 0x33, STRB: 0xF, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x3159454B, USER: 0x39, STRB: 0xF, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000001, USER: 0x34, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x3259454B, USER: 0x39, STRB: 0xF, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000002, USER: 0x34, STRB: 0x1, LAST: 1}
+
+---
+#---------------------------------------------------------------
+- MARCHAL :
+  - SAY    : MsgPack_Object_Unpacker TEST 1.13 ext
+#---------------------------------------------------------------
+- I :
+  - XFER   : {DATA: [0xD4, 0x42, 0x01]}
+- O :
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000001, USER: 0x2C, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000042, USER: 0x2E, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000001, USER: 0x3D, STRB: 0x1, LAST: 1}
+
+- I :
+  - XFER   : {DATA: [0xD5, 0x42, 0x01, 0x02]}
+- O :
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000002, USER: 0x2C, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000042, USER: 0x2E, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000201, USER: 0x3D, STRB: 0x3, LAST: 1}
+
+- I :
+  - XFER   : {DATA: [0xD6, 0x42, 0x01, 0x02, 0x03, 0x04]}
+- O :
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000004, USER: 0x2C, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000042, USER: 0x2E, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x04030201, USER: 0x3D, STRB: 0xF, LAST: 1}
+
+- I :
+  - XFER   : {DATA: [0xD7, 0x42, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08]}
+- O :
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000008, USER: 0x2C, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000042, USER: 0x2E, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x04030201, USER: 0x2D, STRB: 0xF, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x08070605, USER: 0x3D, STRB: 0xF, LAST: 1}
+
+- I :
+  - XFER   : {DATA: [0xD8, 0x42, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F, 0x10]}
+- O :
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000010, USER: 0x2C, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000042, USER: 0x2E, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x04030201, USER: 0x2D, STRB: 0xF, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x08070605, USER: 0x2D, STRB: 0xF, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x0C0B0A09, USER: 0x2D, STRB: 0xF, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x100F0E0D, USER: 0x3D, STRB: 0xF, LAST: 1}
+
+- I :
+  - XFER   : {DATA: [0xC7, 0x05, 0x42, 0x01, 0x02, 0x03, 0x04, 0x05]}
+- O :
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000005, USER: 0x2C, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000042, USER: 0x2E, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x04030201, USER: 0x2D, STRB: 0xF, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x------05, USER: 0x3D, STRB: 0x1, LAST: 1}
+
+- I :
+  - XFER   : {DATA: [0xC8, 0x00, 0x05, 0x42, 0x01, 0x02, 0x03, 0x04, 0x05]}
+- O :
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000005, USER: 0x2C, STRB: 0x3, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000042, USER: 0x2E, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x04030201, USER: 0x2D, STRB: 0xF, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x------05, USER: 0x3D, STRB: 0x1, LAST: 1}
+
+
+- I :
+  - XFER   : {DATA: [0xC9, 0x00, 0x00, 0x00, 0x05, 0x42, 0x01, 0x02, 0x03, 0x04, 0x05]}
+- O :
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000005, USER: 0x2C, STRB: 0xF, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000042, USER: 0x2E, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x04030201, USER: 0x2D, STRB: 0xF, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x------05, USER: 0x3D, STRB: 0x1, LAST: 1}
+
+---
+#---------------------------------------------------------------
+- MARCHAL :
+  - SAY    : MsgPack_Object_Unpacker TEST 1.14 boolean/nil
+#---------------------------------------------------------------
+  # => [nil, false, true]
+- I :
+  - XFER   : {DATA: [0x93, 0xC0, 0xC2, 0xC3]}
+- O :
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000003, USER: 0x32, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000000, USER: 0x37, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000000, USER: 0x31, STRB: 0x1, LAST: 0}
+  - WAIT   : {VALID: 1, READY: 1}
+  - CHECK  : {DATA: 0x00000001, USER: 0x31, STRB: 0x1, LAST: 1}
+
+---
+- MARCHAL : 
+  - SAY    : MsgPack_Object_Unpacker TEST 1 Done.
+---
