@@ -19,6 +19,7 @@ add_vhdl_file sources_1 MSGPACK ../../../msgpack-vhdl/src/msgpack/object/msgpack
 add_vhdl_file sources_1 MSGPACK ../../../msgpack-vhdl/src/msgpack/object/msgpack_object_packer.vhd
 add_vhdl_file sources_1 MSGPACK ../../../msgpack-vhdl/src/msgpack/object/msgpack_object_unpacker.vhd
 add_vhdl_file sources_1 MSGPACK ../../../msgpack-vhdl/src/msgpack/pipework/queue_arbiter.vhd
+add_vhdl_file sources_1 MSGPACK ../../../msgpack-vhdl/src/msgpack/pipework/queue_register.vhd
 add_vhdl_file sources_1 MSGPACK ../../../msgpack-vhdl/src/msgpack/rpc/msgpack_rpc.vhd
 add_vhdl_file sources_1 MSGPACK ../../../msgpack-vhdl/src/msgpack/kvmap/msgpack_kvmap_get_map_value.vhd
 add_vhdl_file sources_1 MSGPACK ../../../msgpack-vhdl/src/msgpack/kvmap/msgpack_kvmap_key_compare.vhd

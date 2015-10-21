@@ -109,7 +109,7 @@ begin
             KEY             => STRING'("PARAM_A")  , --
             CODE_WIDTH      => MsgPack_RPC.Code_Length  , --
             MATCH_PHASE     => MATCH_PHASE         , --
-            VALUE_WIDTH     => PARAM_A_VALUE'length, --
+            VALUE_BITS      => PARAM_A_VALUE'length, --
             VALUE_SIGN      => TRUE                , --
             CHECK_RANGE     => TRUE                , --
             ENABLE64        => TRUE                  --
@@ -129,9 +129,11 @@ begin
             MATCH_OK        => key_match_ok   (0)  , -- Out :
             MATCH_NOT       => key_match_not  (0)  , -- Out :
             MATCH_SHIFT     => key_match_shift(0)  , -- Out :
-            VALUE           => PARAM_A_VALUE       , -- Out :
-            SIGN            => open                , -- Out :
-            WE              => PARAM_A_WE            -- Out :
+            O_VALUE         => PARAM_A_VALUE       , -- Out :
+            O_SIGN          => open                , -- Out :
+            O_LAST          => open                , -- Out :
+            O_VALID         => PARAM_A_WE          , -- Out :
+            O_READY         => '1'                   -- Out :
         );                                           -- 
     -------------------------------------------------------------------------------
     --
@@ -141,7 +143,7 @@ begin
             KEY             => STRING'("PARAM_B")  , --
             CODE_WIDTH      => MsgPack_RPC.Code_Length  , --
             MATCH_PHASE     => MATCH_PHASE         , --
-            VALUE_WIDTH     => PARAM_B_VALUE'length, --
+            VALUE_BITS      => PARAM_B_VALUE'length, --
             VALUE_SIGN      => TRUE                , --
             CHECK_RANGE     => TRUE                , --
             ENABLE64        => TRUE                  --
@@ -161,9 +163,11 @@ begin
             MATCH_OK        => key_match_ok   (1)  , -- Out :
             MATCH_NOT       => key_match_not  (1)  , -- Out :
             MATCH_SHIFT     => key_match_shift(1)  , -- Out :
-            VALUE           => PARAM_B_VALUE       , -- Out :
-            SIGN            => open                , -- Out :
-            WE              => PARAM_B_WE            -- Out :
+            O_VALUE         => PARAM_B_VALUE       , -- Out :
+            O_SIGN          => open                , -- Out :
+            O_LAST          => open                , -- Out :
+            O_VALID         => PARAM_B_WE          , -- Out :
+            O_READY         => '1'                   -- Out :
         );
 end RTL;
 

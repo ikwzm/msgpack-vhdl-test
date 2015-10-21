@@ -43,6 +43,9 @@ msgpack_structure_stack.o : ../../../msgpack-vhdl/src/msgpack/object/msgpack_str
 chopper.o : ../../../msgpack-vhdl/src/msgpack/pipework/chopper.vhd 
 	ghdl -a -C $(GHDLFLAGS) --work=MSGPACK ../../../msgpack-vhdl/src/msgpack/pipework/chopper.vhd
 
+queue_register.o : ../../../msgpack-vhdl/src/msgpack/pipework/queue_register.vhd 
+	ghdl -a -C $(GHDLFLAGS) --work=MSGPACK ../../../msgpack-vhdl/src/msgpack/pipework/queue_register.vhd
+
 msgpack_rpc.o : ../../../msgpack-vhdl/src/msgpack/rpc/msgpack_rpc.vhd msgpack_object.o
 	ghdl -a -C $(GHDLFLAGS) --work=MSGPACK ../../../msgpack-vhdl/src/msgpack/rpc/msgpack_rpc.vhd
 
@@ -58,7 +61,7 @@ msgpack_kvmap_set_map_value.o : ../../../msgpack-vhdl/src/msgpack/kvmap/msgpack_
 msgpack_object_code_fifo.o : ../../../msgpack-vhdl/src/msgpack/object/msgpack_object_code_fifo.vhd msgpack_object.o
 	ghdl -a -C $(GHDLFLAGS) --work=MSGPACK ../../../msgpack-vhdl/src/msgpack/object/msgpack_object_code_fifo.vhd
 
-msgpack_object_decode_integer.o : ../../../msgpack-vhdl/src/msgpack/object/msgpack_object_decode_integer.vhd msgpack_object.o
+msgpack_object_decode_integer.o : ../../../msgpack-vhdl/src/msgpack/object/msgpack_object_decode_integer.vhd msgpack_object.o pipework_components.o queue_register.o
 	ghdl -a -C $(GHDLFLAGS) --work=MSGPACK ../../../msgpack-vhdl/src/msgpack/object/msgpack_object_decode_integer.vhd
 
 msgpack_object_encode_integer.o : ../../../msgpack-vhdl/src/msgpack/object/msgpack_object_encode_integer.vhd msgpack_object.o

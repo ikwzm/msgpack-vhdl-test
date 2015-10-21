@@ -121,7 +121,7 @@ begin
     -------------------------------------------------------------------------------
     ARG0: MsgPack_RPC_Method_Set_Param_Integer       -- 
         generic map (                                -- 
-            VALUE_WIDTH     => add_a'length        , --
+            VALUE_BITS      => add_a'length        , --
             VALUE_SIGN      => TRUE                , --
             CHECK_RANGE     => TRUE                , --
             ENABLE64        => TRUE                  --
@@ -146,7 +146,7 @@ begin
     -------------------------------------------------------------------------------
     ARG1: MsgPack_RPC_Method_Set_Param_Integer       -- 
         generic map (                                -- 
-            VALUE_WIDTH     => add_b'length        , --
+            VALUE_BITS      => add_b'length        , --
             VALUE_SIGN      => TRUE                , --
             CHECK_RANGE     => TRUE                , --
             ENABLE64        => TRUE                  --
