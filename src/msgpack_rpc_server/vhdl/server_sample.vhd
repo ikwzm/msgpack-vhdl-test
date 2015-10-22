@@ -150,6 +150,13 @@ architecture RTL of Server_Sample is
     signal   param_b_value  :  std_logic_vector(63 downto 0);
     signal   param_b_din    :  std_logic_vector(63 downto 0);
     signal   param_b_we     :  std_logic;
+    signal   param_c_wdata  :  std_logic_vector(31 downto 0);
+    signal   param_c_waddr  :  std_logic_vector( 3 downto 0);
+    signal   param_c_we     :  std_logic;
+    signal   param_c_rdata  :  std_logic_vector(31 downto 0);
+    signal   param_c_raddr  :  std_logic_vector( 3 downto 0);
+    type     MEMORY_TYPE    is array(integer range <>) of std_logic_vector(31 downto 0);
+    signal   param_c_memory :  MEMORY_TYPE(0 to 2**4-1);
     -------------------------------------------------------------------------------
     --
     -------------------------------------------------------------------------------
@@ -266,7 +273,10 @@ architecture RTL of Server_Sample is
             PARAM_A_VALUE   : out std_logic_vector(31 downto 0);
             PARAM_A_WE      : out std_logic;
             PARAM_B_VALUE   : out std_logic_vector(63 downto 0);
-            PARAM_B_WE      : out std_logic
+            PARAM_B_WE      : out std_logic;
+            PARAM_C_VALUE   : out std_logic_vector(31 downto 0);
+            PARAM_C_ADDR    : out std_logic_vector( 3 downto 0);
+            PARAM_C_WE      : out std_logic
         );
     end  component;
     component PROC_KVMAP_GET_VALUE_SAMPLE
@@ -296,7 +306,9 @@ architecture RTL of Server_Sample is
             PROC_RES_LAST   : out std_logic;
             PROC_RES_READY  : in  std_logic;
             PARAM_A_VALUE   : in  std_logic_vector(31 downto 0);
-            PARAM_B_VALUE   : in  std_logic_vector(63 downto 0)
+            PARAM_B_VALUE   : in  std_logic_vector(63 downto 0);
+            PARAM_C_VALUE   : in  std_logic_vector(31 downto 0);
+            PARAM_C_ADDR    : out std_logic_vector( 3 downto 0)
         );
     end  component;
 begin
@@ -464,7 +476,10 @@ begin
             PARAM_A_VALUE   => param_a_din         , -- Out :
             PARAM_A_WE      => param_a_we          , -- Out :
             PARAM_B_VALUE   => param_b_din         , -- Out :
-            PARAM_B_WE      => param_b_we            -- Out :
+            PARAM_B_WE      => param_b_we          , -- Out :
+            PARAM_C_VALUE   => param_c_wdata       , -- Out :
+            PARAM_C_ADDR    => param_c_waddr       , -- Out :
+            PARAM_C_WE      => param_c_we            -- Out :
         );                                           -- 
     -------------------------------------------------------------------------------
     --
@@ -496,7 +511,9 @@ begin
             PROC_RES_LAST   => proc_res_last (4)   , -- Out :
             PROC_RES_READY  => proc_res_ready(4)   , -- In  :
             PARAM_A_VALUE   => param_a_value       , -- Out :
-            PARAM_B_VALUE   => param_b_value         -- Out :
+            PARAM_B_VALUE   => param_b_value       , -- Out :
+            PARAM_C_VALUE   => param_c_rdata       , -- In  :
+            PARAM_C_ADDR    => param_c_raddr         -- Out :
         );                                           -- 
     -------------------------------------------------------------------------------
     --
@@ -520,6 +537,17 @@ begin
             if (param_b_we = '1') then
                 param_b_value <= param_b_din;
             end if;
+        end if;
+    end process;
+    -------------------------------------------------------------------------------
+    --
+    -------------------------------------------------------------------------------
+    process (CLK) begin
+        if (CLK'event and CLK = '1') then
+            if (param_c_we = '1') then
+                param_c_memory(to_integer(to_01(unsigned(param_c_waddr)))) <= param_c_wdata;
+            end if;
+            param_c_rdata <= param_c_memory(to_integer(to_01(unsigned(param_c_raddr))));
         end if;
     end process;
 end RTL;

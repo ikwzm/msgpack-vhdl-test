@@ -39,11 +39,30 @@ File.open('test_1.snr','w') do |file|
   file.puts "- MARCHAL  : "
   file.puts "  - SAY    : MsgPack_RPC_Server TEST 1.4 Start."
   file.puts "---"
-  file.puts i.request( 0x41, "$SET" , [{'PARAM_A' => 100, 'PARAM_B' => 100}])
+  param_c_data = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]
+  file.puts i.request( 0x41, "$SET" , [{'PARAM_A' => 100, 'PARAM_B' => 100, 'PARAM_C' => param_c_data}])
+  file.puts o.response(0x41, nil, nil)
+  file.puts "---"
+  file.puts i.request( 0x41, "$GET" , ['PARAM_A', 'PARAM_B', 'PARAM_C'])
+  file.puts o.response(0x41, nil,      {'PARAM_A' => 100, 'PARAM_B' => 100, 'PARAM_C' => param_c_data})
+  file.puts "---"
+  file.puts i.request( 0x41, "$SET" , [{'PARAM_A' => 100000, 'PARAM_B' => 100000}])
   file.puts o.response(0x41, nil, nil)
   file.puts "---"
   file.puts i.request( 0x41, "$GET" , ['PARAM_A', 'PARAM_B'])
-  file.puts o.response(0x41, nil, {'PARAM_A' => 100, 'PARAM_B' => 100})
+  file.puts o.response(0x41, nil,      {'PARAM_A' => 100000, 'PARAM_B' => 100000})
+  file.puts "---"
+  file.puts i.request( 0x41, "$SET" , [{'PARAM_A' => -8, 'PARAM_B' => -100000}])
+  file.puts o.response(0x41, nil, nil)
+  file.puts "---"
+  file.puts i.request( 0x41, "$GET" , ['PARAM_A', 'PARAM_B'])
+  file.puts o.response(0x41, nil,      {'PARAM_A' => -8, 'PARAM_B' => -100000})
+  file.puts "---"
+  file.puts i.request( 0x41, "$SET" , [{'PARAM_A' => -8, 'PARAM_B' => -8000000000}])
+  file.puts o.response(0x41, nil, nil)
+  file.puts "---"
+  file.puts i.request( 0x41, "$GET" , ['PARAM_A', 'PARAM_B'])
+  file.puts o.response(0x41, nil,      {'PARAM_A' => -8, 'PARAM_B' => -8000000000})
   file.puts "---"
   file.puts "- MARCHAL  : "
   file.puts "- SAY    : MsgPack_RPC_Server TEST 1 Done."
