@@ -106,9 +106,9 @@ begin
     PARAM_A:  MsgPack_KVMap_Get_Integer              -- 
         generic map (                                -- 
             KEY             => STRING'("PARAM_A")  , --
-            CODE_WIDTH     => MsgPack_RPC.Code_Length  , --
+            CODE_WIDTH      => MsgPack_RPC.Code_Length  , --
             MATCH_PHASE     => MATCH_PHASE         , --
-            VALUE_WIDTH     => PARAM_A_VALUE'length, --
+            VALUE_BITS      => PARAM_A_VALUE'length, --
             VALUE_SIGN      => TRUE                  --
         )                                            -- 
         port map (                                   -- 
@@ -127,7 +127,9 @@ begin
             MATCH_OK        => key_match_ok   (0)  , -- Out :
             MATCH_NOT       => key_match_not  (0)  , -- Out :
             MATCH_SHIFT     => key_match_shift(0)  , -- Out :
-            VALUE           => PARAM_A_VALUE         -- In  :
+            I_VALUE         => PARAM_A_VALUE       , -- In  :
+            I_VALID         => '1'                 , -- In  :
+            I_READY         => open                  -- Out :
         );                                           -- 
     -------------------------------------------------------------------------------
     --
@@ -137,7 +139,7 @@ begin
             KEY             => STRING'("PARAM_B")  , --
             CODE_WIDTH      => MsgPack_RPC.Code_Length  , --
             MATCH_PHASE     => MATCH_PHASE         , --
-            VALUE_WIDTH     => PARAM_B_VALUE'length, --
+            VALUE_BITS      => PARAM_B_VALUE'length, --
             VALUE_SIGN      => TRUE                  --
         )                                            -- 
         port map (                                   -- 
@@ -156,7 +158,9 @@ begin
             MATCH_OK        => key_match_ok   (1)  , -- Out :
             MATCH_NOT       => key_match_not  (1)  , -- Out :
             MATCH_SHIFT     => key_match_shift(1)  , -- Out :
-            VALUE           => PARAM_B_VALUE         -- In  :
+            I_VALUE         => PARAM_B_VALUE       , -- In  :
+            I_VALID         => '1'                 , -- In  :
+            I_READY         => open                  -- Out :
         );
 end RTL;
 
