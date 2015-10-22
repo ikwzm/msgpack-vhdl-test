@@ -31,7 +31,10 @@ entity  PROC_KVMAP_SET_VALUE_SAMPLE is
         PARAM_A_VALUE   : out std_logic_vector(31 downto 0);
         PARAM_A_WE      : out std_logic;
         PARAM_B_VALUE   : out std_logic_vector(63 downto 0);
-        PARAM_B_WE      : out std_logic
+        PARAM_B_WE      : out std_logic;
+        PARAM_C_VALUE   : out std_logic_vector(31 downto 0);
+        PARAM_C_ADDR    : out std_logic_vector( 3 downto 0);
+        PARAM_C_WE      : out std_logic
     );
 end  PROC_KVMAP_SET_VALUE_SAMPLE;
 -----------------------------------------------------------------------------------
@@ -45,8 +48,9 @@ use     MsgPack.MsgPack_Object;
 use     MsgPack.MsgPack_RPC;
 use     MsgPack.MsgPack_RPC_Components.MsgPack_RPC_Server_KVMap_Set_Value;
 use     MsgPack.MsgPack_KVMap_Components.MsgPack_KVMap_Set_Integer;
+use     MsgPack.MsgPack_KVMap_Components.MsgPack_KVMap_Set_Integer_Array;
 architecture RTL of PROC_KVMAP_SET_VALUE_SAMPLE is
-    constant  STORE_SIZE        :  integer := 2;
+    constant  STORE_SIZE        :  integer := 3;
     signal    key_match_req     :  std_logic_vector       (MATCH_PHASE-1 downto 0);
     signal    key_match_code    :  MsgPack_RPC.Code_Type;
     signal    key_match_ok      :  std_logic_vector        (STORE_SIZE-1 downto 0);
@@ -169,6 +173,40 @@ begin
             O_VALID         => PARAM_B_WE          , -- Out :
             O_READY         => '1'                   -- Out :
         );
+    -------------------------------------------------------------------------------
+    --
+    -------------------------------------------------------------------------------
+    PARAM_C:  MsgPack_KVMap_Set_Integer_Array        -- 
+        generic map (                                -- 
+            KEY             => STRING'("PARAM_C")  , --
+            CODE_WIDTH      => MsgPack_RPC.Code_Length  , --
+            MATCH_PHASE     => MATCH_PHASE         , --
+            ADDR_BITS       => PARAM_C_ADDR'length , -- 
+            VALUE_BITS      => PARAM_C_VALUE'length, --
+            VALUE_SIGN      => TRUE                , --
+            CHECK_RANGE     => TRUE                , --
+            ENABLE64        => TRUE                  --
+        )                                            -- 
+        port map (                                   -- 
+            CLK             => CLK                 , -- In  :
+            RST             => RST                 , -- in  :
+            CLR             => CLR                 , -- In  :
+            I_CODE          => value_code          , -- In  :
+            I_LAST          => value_last          , -- In  :
+            I_VALID         => value_valid    (2)  , -- In  :
+            I_ERROR         => value_error    (2)  , -- Out :
+            I_DONE          => value_done     (2)  , -- Out :
+            I_SHIFT         => value_shift    (2)  , -- Out :
+            MATCH_REQ       => key_match_req       , -- In  :
+            MATCH_CODE      => key_match_code      , -- In  :
+            MATCH_OK        => key_match_ok   (2)  , -- Out :
+            MATCH_NOT       => key_match_not  (2)  , -- Out :
+            MATCH_SHIFT     => key_match_shift(2)  , -- Out :
+            O_VALUE         => PARAM_C_VALUE       , -- Out :
+            O_ADDR          => PARAM_C_ADDR        , -- Out :
+            O_SIGN          => open                , -- Out :
+            O_LAST          => open                , -- Out :
+            O_VALID         => PARAM_C_WE          , -- Out :
+            O_READY         => '1'                   -- Out :
+        );
 end RTL;
-
-    
