@@ -45,21 +45,26 @@ use     MsgPack.MsgPack_Object;
 use     MsgPack.MsgPack_RPC;
 use     MsgPack.MsgPack_RPC_Components.MsgPack_RPC_Server_KVMap_Get_Value;
 use     MsgPack.MsgPack_KVMap_Components.MsgPack_KVMap_Get_Integer;
-use     MsgPack.MsgPack_KVMap_Components.MsgPack_KVMap_Get_Integer_Array;
+use     MsgPack.MsgPack_KVMap_Components.MsgPack_KVMap_Get_Integer_Memory;
 architecture RTL of PROC_KVMAP_GET_VALUE_SAMPLE is
     constant  STORE_SIZE        :  integer := 3;
-    signal    key_match_req     :  std_logic_vector       (MATCH_PHASE-1 downto 0);
-    signal    key_match_code    :  MsgPack_RPC.Code_Type;
-    signal    key_match_ok      :  std_logic_vector        (STORE_SIZE-1 downto 0);
-    signal    key_match_not     :  std_logic_vector        (STORE_SIZE-1 downto 0);
-    signal    key_match_shift   :  MsgPack_RPC.Shift_Vector(STORE_SIZE-1 downto 0);
-    signal    value_code        :  MsgPack_RPC.Code_Vector (STORE_SIZE-1 downto 0);
-    signal    value_start       :  std_logic_vector        (STORE_SIZE-1 downto 0);
-    signal    value_valid       :  std_logic_vector        (STORE_SIZE-1 downto 0);
-    signal    value_last        :  std_logic_vector        (STORE_SIZE-1 downto 0);
-    signal    value_error       :  std_logic_vector        (STORE_SIZE-1 downto 0);
-    signal    value_done        :  std_logic_vector        (STORE_SIZE-1 downto 0);
-    signal    value_ready       :  std_logic_vector        (STORE_SIZE-1 downto 0);
+    signal    map_match_req     :  std_logic_vector       (MATCH_PHASE-1 downto 0);
+    signal    map_match_code    :  MsgPack_RPC.Code_Type;
+    signal    map_match_ok      :  std_logic_vector        (STORE_SIZE-1 downto 0);
+    signal    map_match_not     :  std_logic_vector        (STORE_SIZE-1 downto 0);
+    signal    map_match_shift   :  MsgPack_RPC.Shift_Vector(STORE_SIZE-1 downto 0);
+    signal    map_param_code    :  MsgPack_RPC.Code_Type;
+    signal    map_param_last    :  std_logic;
+    signal    map_param_start   :  std_logic_vector        (STORE_SIZE-1 downto 0);
+    signal    map_param_valid   :  std_logic_vector        (STORE_SIZE-1 downto 0);
+    signal    map_param_error   :  std_logic_vector        (STORE_SIZE-1 downto 0);
+    signal    map_param_done    :  std_logic_vector        (STORE_SIZE-1 downto 0);
+    signal    map_param_shift   :  MsgPack_RPC.Shift_Vector(STORE_SIZE-1 downto 0);
+    signal    map_value_code    :  MsgPack_RPC.Code_Vector (STORE_SIZE-1 downto 0);
+    signal    map_value_valid   :  std_logic_vector        (STORE_SIZE-1 downto 0);
+    signal    map_value_last    :  std_logic_vector        (STORE_SIZE-1 downto 0);
+    signal    map_value_error   :  std_logic_vector        (STORE_SIZE-1 downto 0);
+    signal    map_value_ready   :  std_logic_vector        (STORE_SIZE-1 downto 0);
 begin
     -------------------------------------------------------------------------------
     --
@@ -86,17 +91,23 @@ begin
             PARAM_VALID     => PARAM_VALID         , -- In  :
             PARAM_LAST      => PARAM_LAST          , -- In  :
             PARAM_SHIFT     => PARAM_SHIFT         , -- Out :
-            KEY_MATCH_REQ   => key_match_req       , -- Out :
-            KEY_MATCH_CODE  => key_match_code      , -- Out :
-            KEY_MATCH_OK    => key_match_ok        , -- In  :
-            KEY_MATCH_NOT   => key_match_not       , -- In  :
-            KEY_MATCH_SHIFT => key_match_shift     , -- In  :
-            VALUE_START     => value_start         , -- Out :
-            VALUE_VALID     => value_valid         , -- In  :
-            VALUE_CODE      => value_code          , -- In  :
-            VALUE_LAST      => value_last          , -- In  :
-            VALUE_ERROR     => value_error         , -- In  :
-            VALUE_READY     => value_ready         , -- Out :
+            MAP_MATCH_REQ   => map_match_req       , -- Out :
+            MAP_MATCH_CODE  => map_match_code      , -- Out :
+            MAP_MATCH_OK    => map_match_ok        , -- In  :
+            MAP_MATCH_NOT   => map_match_not       , -- In  :
+            MAP_MATCH_SHIFT => map_match_shift     , -- In  :
+            MAP_PARAM_START => map_param_start     , -- Out :
+            MAP_PARAM_VALID => map_param_valid     , -- Out :
+            MAP_PARAM_CODE  => map_param_code      , -- Out :
+            MAP_PARAM_LAST  => map_param_last      , -- Out :
+            MAP_PARAM_ERROR => map_param_error     , -- In  :
+            MAP_PARAM_DONE  => map_param_done      , -- In  :
+            MAP_PARAM_SHIFT => map_param_shift     , -- In  :
+            MAP_VALUE_VALID => map_value_valid     , -- In  :
+            MAP_VALUE_CODE  => map_value_code      , -- In  :
+            MAP_VALUE_LAST  => map_value_last      , -- In  :
+            MAP_VALUE_ERROR => map_value_error     , -- In  :
+            MAP_VALUE_READY => map_value_ready     , -- Out :
             RES_ID          => PROC_RES_ID         , -- Out :
             RES_CODE        => PROC_RES_CODE       , -- Out :
             RES_VALID       => PROC_RES_VALID      , -- Out :
@@ -118,21 +129,25 @@ begin
             CLK             => CLK                 , -- In  :
             RST             => RST                 , -- in  :
             CLR             => CLR                 , -- In  :
-            START           => value_start    (0)  , -- In  :
-            BUSY            => open                , -- Out :
-            O_CODE          => value_code     (0)  , -- Out :
-            O_LAST          => value_last     (0)  , -- Out :
-            O_VALID         => value_valid    (0)  , -- Out :
-            O_ERROR         => value_error    (0)  , -- Out :
-            O_READY         => value_ready    (0)  , -- In  :
-            MATCH_REQ       => key_match_req       , -- In  :
-            MATCH_CODE      => key_match_code      , -- In  :
-            MATCH_OK        => key_match_ok   (0)  , -- Out :
-            MATCH_NOT       => key_match_not  (0)  , -- Out :
-            MATCH_SHIFT     => key_match_shift(0)  , -- Out :
-            I_VALUE         => PARAM_A_VALUE       , -- In  :
-            I_VALID         => '1'                 , -- In  :
-            I_READY         => open                  -- Out :
+            I_CODE          => map_param_code      , -- In  :
+            I_LAST          => map_param_last      , -- In  :
+            I_VALID         => map_param_valid(0)  , -- In  :
+            I_ERROR         => map_param_error(0)  , -- Out :
+            I_DONE          => map_param_done (0)  , -- Out :
+            I_SHIFT         => map_param_shift(0)  , -- Out :
+            O_CODE          => map_value_code (0)  , -- Out :
+            O_LAST          => map_value_last (0)  , -- Out :
+            O_VALID         => map_value_valid(0)  , -- Out :
+            O_ERROR         => map_value_error(0)  , -- Out :
+            O_READY         => map_value_ready(0)  , -- In  :
+            MATCH_REQ       => map_match_req       , -- In  :
+            MATCH_CODE      => map_match_code      , -- In  :
+            MATCH_OK        => map_match_ok   (0)  , -- Out :
+            MATCH_NOT       => map_match_not  (0)  , -- Out :
+            MATCH_SHIFT     => map_match_shift(0)  , -- Out :
+            VALUE           => PARAM_A_VALUE       , -- In  :
+            VALID           => '1'                 , -- In  :
+            READY           => open                  -- Out :
         );                                           -- 
     -------------------------------------------------------------------------------
     --
@@ -149,26 +164,30 @@ begin
             CLK             => CLK                 , -- In  :
             RST             => RST                 , -- in  :
             CLR             => CLR                 , -- In  :
-            START           => value_start    (1)  , -- In  :
-            BUSY            => open                , -- Out :
-            O_CODE          => value_code     (1)  , -- Out :
-            O_LAST          => value_last     (1)  , -- Out :
-            O_VALID         => value_valid    (1)  , -- Out :
-            O_ERROR         => value_error    (1)  , -- Out :
-            O_READY         => value_ready    (1)  , -- In  :
-            MATCH_REQ       => key_match_req       , -- In  :
-            MATCH_CODE      => key_match_code      , -- In  :
-            MATCH_OK        => key_match_ok   (1)  , -- Out :
-            MATCH_NOT       => key_match_not  (1)  , -- Out :
-            MATCH_SHIFT     => key_match_shift(1)  , -- Out :
-            I_VALUE         => PARAM_B_VALUE       , -- In  :
-            I_VALID         => '1'                 , -- In  :
-            I_READY         => open                  -- Out :
+            I_CODE          => map_param_code      , -- In  :
+            I_LAST          => map_param_last      , -- In  :
+            I_VALID         => map_param_valid(1)  , -- In  :
+            I_ERROR         => map_param_error(1)  , -- Out :
+            I_DONE          => map_param_done (1)  , -- Out :
+            I_SHIFT         => map_param_shift(1)  , -- Out :
+            O_CODE          => map_value_code (1)  , -- Out :
+            O_LAST          => map_value_last (1)  , -- Out :
+            O_VALID         => map_value_valid(1)  , -- Out :
+            O_ERROR         => map_value_error(1)  , -- Out :
+            O_READY         => map_value_ready(1)  , -- In  :
+            MATCH_REQ       => map_match_req       , -- In  :
+            MATCH_CODE      => map_match_code      , -- In  :
+            MATCH_OK        => map_match_ok   (1)  , -- Out :
+            MATCH_NOT       => map_match_not  (1)  , -- Out :
+            MATCH_SHIFT     => map_match_shift(1)  , -- Out :
+            VALUE           => PARAM_B_VALUE       , -- In  :
+            VALID           => '1'                 , -- In  :
+            READY           => open                  -- Out :
         );
     -------------------------------------------------------------------------------
     --
     -------------------------------------------------------------------------------
-    PARAM_C:  MsgPack_KVMap_Get_Integer_Array        -- 
+    PARAM_C:  MsgPack_KVMap_Get_Integer_Memory       -- 
         generic map (                                -- 
             KEY             => STRING'("PARAM_C")  , --
             CODE_WIDTH      => MsgPack_RPC.Code_Length  , --
@@ -181,22 +200,25 @@ begin
             CLK             => CLK                 , -- In  :
             RST             => RST                 , -- in  :
             CLR             => CLR                 , -- In  :
-            START           => value_start    (2)  , -- In  :
-            SIZE            => std_logic_vector(to_unsigned(2**PARAM_C_ADDR'length, 32)), 
-            BUSY            => open                , -- Out :
-            O_CODE          => value_code     (2)  , -- Out :
-            O_LAST          => value_last     (2)  , -- Out :
-            O_VALID         => value_valid    (2)  , -- Out :
-            O_ERROR         => value_error    (2)  , -- Out :
-            O_READY         => value_ready    (2)  , -- In  :
-            MATCH_REQ       => key_match_req       , -- In  :
-            MATCH_CODE      => key_match_code      , -- In  :
-            MATCH_OK        => key_match_ok   (2)  , -- Out :
-            MATCH_NOT       => key_match_not  (2)  , -- Out :
-            MATCH_SHIFT     => key_match_shift(2)  , -- Out :
-            I_VALUE         => PARAM_C_VALUE       , -- In  :
-            I_ADDR          => PARAM_C_ADDR        , -- Out :
-            I_VALID         => '1'                 , -- In  :
-            I_READY         => open                  -- Out :
+            I_CODE          => map_param_code      , -- In  :
+            I_LAST          => map_param_last      , -- In  :
+            I_VALID         => map_param_valid(2)  , -- In  :
+            I_ERROR         => map_param_error(2)  , -- Out :
+            I_DONE          => map_param_done (2)  , -- Out :
+            I_SHIFT         => map_param_shift(2)  , -- Out :
+            O_CODE          => map_value_code (2)  , -- Out :
+            O_LAST          => map_value_last (2)  , -- Out :
+            O_VALID         => map_value_valid(2)  , -- Out :
+            O_ERROR         => map_value_error(2)  , -- Out :
+            O_READY         => map_value_ready(2)  , -- In  :
+            MATCH_REQ       => map_match_req       , -- In  :
+            MATCH_CODE      => map_match_code      , -- In  :
+            MATCH_OK        => map_match_ok   (2)  , -- Out :
+            MATCH_NOT       => map_match_not  (2)  , -- Out :
+            MATCH_SHIFT     => map_match_shift(2)  , -- Out :
+            VALUE           => PARAM_C_VALUE       , -- In  :
+            ADDR            => PARAM_C_ADDR        , -- Out :
+            VALID           => '1'                 , -- In  :
+            READY           => open                  -- Out :
         );
 end RTL;

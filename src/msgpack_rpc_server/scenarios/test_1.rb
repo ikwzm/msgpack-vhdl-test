@@ -43,26 +43,26 @@ File.open('test_1.snr','w') do |file|
   file.puts i.request( 0x41, "$SET" , [{'PARAM_A' => 100, 'PARAM_B' => 100, 'PARAM_C' => param_c_data}])
   file.puts o.response(0x41, nil, nil)
   file.puts "---"
-  file.puts i.request( 0x41, "$GET" , ['PARAM_A', 'PARAM_B', 'PARAM_C'])
-  file.puts o.response(0x41, nil,      {'PARAM_A' => 100, 'PARAM_B' => 100, 'PARAM_C' => param_c_data})
+  file.puts i.request( 0x41, "$GET" , [{'PARAM_A' => nil, 'PARAM_B' => nil, 'PARAM_C' => nil}])
+  file.puts o.response(0x41, nil,     [{'PARAM_A' => 100, 'PARAM_B' => 100, 'PARAM_C' => param_c_data}])
   file.puts "---"
   file.puts i.request( 0x41, "$SET" , [{'PARAM_A' => 100000, 'PARAM_B' => 100000}])
   file.puts o.response(0x41, nil, nil)
   file.puts "---"
-  file.puts i.request( 0x41, "$GET" , ['PARAM_A', 'PARAM_B'])
-  file.puts o.response(0x41, nil,      {'PARAM_A' => 100000, 'PARAM_B' => 100000})
+  file.puts i.request( 0x41, "$GET" , [{'PARAM_A' => nil   , 'PARAM_B' => nil   }])
+  file.puts o.response(0x41, nil,     [{'PARAM_A' => 100000, 'PARAM_B' => 100000}])
   file.puts "---"
   file.puts i.request( 0x41, "$SET" , [{'PARAM_A' => -8, 'PARAM_B' => -100000}])
   file.puts o.response(0x41, nil, nil)
   file.puts "---"
-  file.puts i.request( 0x41, "$GET" , ['PARAM_A', 'PARAM_B'])
-  file.puts o.response(0x41, nil,      {'PARAM_A' => -8, 'PARAM_B' => -100000})
+  file.puts i.request( 0x41, "$GET" , [{'PARAM_A' => nil, 'PARAM_B' => nil    }])
+  file.puts o.response(0x41, nil,     [{'PARAM_A' => -8 , 'PARAM_B' => -100000}])
   file.puts "---"
-  file.puts i.request( 0x41, "$SET" , [{'PARAM_A' => -8, 'PARAM_B' => -8000000000}])
+  file.puts i.request( 0x41, "$SET" , [{'PARAM_A' => -8,  'PARAM_B' => -8000000000}])
   file.puts o.response(0x41, nil, nil)
   file.puts "---"
-  file.puts i.request( 0x41, "$GET" , ['PARAM_A', 'PARAM_B'])
-  file.puts o.response(0x41, nil,      {'PARAM_A' => -8, 'PARAM_B' => -8000000000})
+  file.puts i.request( 0x41, "$GET" , [{'PARAM_A' => nil, 'PARAM_B' => nil}])
+  file.puts o.response(0x41, nil,     [{'PARAM_A' => -8 , 'PARAM_B' => -8000000000}])
   file.puts "---"
   file.puts "- MARCHAL  : "
   file.puts "- SAY    : MsgPack_RPC_Server TEST 1 Done."
