@@ -48,7 +48,7 @@ use     MsgPack.MsgPack_Object;
 use     MsgPack.MsgPack_RPC;
 use     MsgPack.MsgPack_RPC_Components.MsgPack_RPC_Server_KVMap_Set_Value;
 use     MsgPack.MsgPack_KVMap_Components.MsgPack_KVMap_Set_Integer;
-use     MsgPack.MsgPack_KVMap_Components.MsgPack_KVMap_Set_Integer_Array;
+use     MsgPack.MsgPack_KVMap_Components.MsgPack_KVMap_Set_Integer_Memory;
 architecture RTL of PROC_KVMAP_SET_VALUE_SAMPLE is
     constant  STORE_SIZE        :  integer := 3;
     signal    map_match_req     :  std_logic_vector       (MATCH_PHASE-1 downto 0);
@@ -176,7 +176,7 @@ begin
     -------------------------------------------------------------------------------
     --
     -------------------------------------------------------------------------------
-    PARAM_C:  MsgPack_KVMap_Set_Integer_Array        -- 
+    PARAM_C:  MsgPack_KVMap_Set_Integer_Memory       -- 
         generic map (                                -- 
             KEY             => STRING'("PARAM_C")  , --
             CODE_WIDTH      => MsgPack_RPC.Code_Length  , --
