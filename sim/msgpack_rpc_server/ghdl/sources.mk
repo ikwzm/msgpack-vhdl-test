@@ -13,8 +13,14 @@ pipework_components.o : ../../../msgpack-vhdl/src/msgpack/pipework/pipework_comp
 queue_register.o : ../../../msgpack-vhdl/src/msgpack/pipework/queue_register.vhd 
 	ghdl -a -C $(GHDLFLAGS) --work=MSGPACK ../../../msgpack-vhdl/src/msgpack/pipework/queue_register.vhd
 
+reducer.o : ../../../msgpack-vhdl/src/msgpack/pipework/reducer.vhd 
+	ghdl -a -C $(GHDLFLAGS) --work=MSGPACK ../../../msgpack-vhdl/src/msgpack/pipework/reducer.vhd
+
 msgpack_kvmap_dispatcher.o : ../../../msgpack-vhdl/src/msgpack/kvmap/msgpack_kvmap_dispatcher.vhd msgpack_object.o msgpack_kvmap_components.o msgpack_kvmap_key_match_aggregator.o
 	ghdl -a -C $(GHDLFLAGS) --work=MSGPACK ../../../msgpack-vhdl/src/msgpack/kvmap/msgpack_kvmap_dispatcher.vhd
+
+msgpack_object_code_reducer.o : ../../../msgpack-vhdl/src/msgpack/object/msgpack_object_code_reducer.vhd msgpack_object.o pipework_components.o reducer.o
+	ghdl -a -C $(GHDLFLAGS) --work=MSGPACK ../../../msgpack-vhdl/src/msgpack/object/msgpack_object_code_reducer.vhd
 
 msgpack_object_components.o : ../../../msgpack-vhdl/src/msgpack/object/msgpack_object_components.vhd msgpack_object.o
 	ghdl -a -C $(GHDLFLAGS) --work=MSGPACK ../../../msgpack-vhdl/src/msgpack/object/msgpack_object_components.vhd
@@ -25,8 +31,8 @@ msgpack_object_decode_array.o : ../../../msgpack-vhdl/src/msgpack/object/msgpack
 msgpack_object_decode_integer.o : ../../../msgpack-vhdl/src/msgpack/object/msgpack_object_decode_integer.vhd msgpack_object.o pipework_components.o queue_register.o
 	ghdl -a -C $(GHDLFLAGS) --work=MSGPACK ../../../msgpack-vhdl/src/msgpack/object/msgpack_object_decode_integer.vhd
 
-reducer.o : ../../../msgpack-vhdl/src/msgpack/pipework/reducer.vhd 
-	ghdl -a -C $(GHDLFLAGS) --work=MSGPACK ../../../msgpack-vhdl/src/msgpack/pipework/reducer.vhd
+msgpack_object_encode_array.o : ../../../msgpack-vhdl/src/msgpack/object/msgpack_object_encode_array.vhd msgpack_object.o
+	ghdl -a -C $(GHDLFLAGS) --work=MSGPACK ../../../msgpack-vhdl/src/msgpack/object/msgpack_object_encode_array.vhd
 
 msgpack_kvmap_get_value.o : ../../../msgpack-vhdl/src/msgpack/kvmap/msgpack_kvmap_get_value.vhd msgpack_object.o msgpack_kvmap_components.o msgpack_kvmap_dispatcher.o
 	ghdl -a -C $(GHDLFLAGS) --work=MSGPACK ../../../msgpack-vhdl/src/msgpack/kvmap/msgpack_kvmap_get_value.vhd
@@ -37,14 +43,14 @@ msgpack_kvmap_set_value.o : ../../../msgpack-vhdl/src/msgpack/kvmap/msgpack_kvma
 msgpack_object_code_compare.o : ../../../msgpack-vhdl/src/msgpack/object/msgpack_object_code_compare.vhd msgpack_object.o
 	ghdl -a -C $(GHDLFLAGS) --work=MSGPACK ../../../msgpack-vhdl/src/msgpack/object/msgpack_object_code_compare.vhd
 
-msgpack_object_code_reducer.o : ../../../msgpack-vhdl/src/msgpack/object/msgpack_object_code_reducer.vhd msgpack_object.o pipework_components.o reducer.o
-	ghdl -a -C $(GHDLFLAGS) --work=MSGPACK ../../../msgpack-vhdl/src/msgpack/object/msgpack_object_code_reducer.vhd
-
 msgpack_object_decode_integer_stream.o : ../../../msgpack-vhdl/src/msgpack/object/msgpack_object_decode_integer_stream.vhd msgpack_object.o msgpack_object_components.o msgpack_object_decode_array.o msgpack_object_decode_integer.o
 	ghdl -a -C $(GHDLFLAGS) --work=MSGPACK ../../../msgpack-vhdl/src/msgpack/object/msgpack_object_decode_integer_stream.vhd
 
 msgpack_object_decode_map.o : ../../../msgpack-vhdl/src/msgpack/object/msgpack_object_decode_map.vhd msgpack_object.o
 	ghdl -a -C $(GHDLFLAGS) --work=MSGPACK ../../../msgpack-vhdl/src/msgpack/object/msgpack_object_decode_map.vhd
+
+msgpack_object_encode_integer_stream.o : ../../../msgpack-vhdl/src/msgpack/object/msgpack_object_encode_integer_stream.vhd msgpack_object.o msgpack_object_components.o msgpack_object_code_reducer.o msgpack_object_encode_array.o
+	ghdl -a -C $(GHDLFLAGS) --work=MSGPACK ../../../msgpack-vhdl/src/msgpack/object/msgpack_object_encode_integer_stream.vhd
 
 msgpack_object_encode_map.o : ../../../msgpack-vhdl/src/msgpack/object/msgpack_object_encode_map.vhd msgpack_object.o
 	ghdl -a -C $(GHDLFLAGS) --work=MSGPACK ../../../msgpack-vhdl/src/msgpack/object/msgpack_object_encode_map.vhd
@@ -57,6 +63,9 @@ chopper.o : ../../../msgpack-vhdl/src/msgpack/pipework/chopper.vhd
 
 msgpack_rpc.o : ../../../msgpack-vhdl/src/msgpack/rpc/msgpack_rpc.vhd msgpack_object.o
 	ghdl -a -C $(GHDLFLAGS) --work=MSGPACK ../../../msgpack-vhdl/src/msgpack/rpc/msgpack_rpc.vhd
+
+msgpack_kvmap_decode_get_stream_parameter.o : ../../../msgpack-vhdl/src/msgpack/kvmap/msgpack_kvmap_decode_get_stream_parameter.vhd msgpack_object.o msgpack_object_components.o msgpack_object_decode_integer.o
+	ghdl -a -C $(GHDLFLAGS) --work=MSGPACK ../../../msgpack-vhdl/src/msgpack/kvmap/msgpack_kvmap_decode_get_stream_parameter.vhd
 
 msgpack_kvmap_get_map_value.o : ../../../msgpack-vhdl/src/msgpack/kvmap/msgpack_kvmap_get_map_value.vhd msgpack_object.o msgpack_object_components.o msgpack_kvmap_components.o msgpack_object_decode_map.o msgpack_kvmap_get_value.o msgpack_object_encode_map.o
 	ghdl -a -C $(GHDLFLAGS) --work=MSGPACK ../../../msgpack-vhdl/src/msgpack/kvmap/msgpack_kvmap_get_map_value.vhd
@@ -73,13 +82,10 @@ msgpack_object_code_fifo.o : ../../../msgpack-vhdl/src/msgpack/object/msgpack_ob
 msgpack_object_decode_integer_memory.o : ../../../msgpack-vhdl/src/msgpack/object/msgpack_object_decode_integer_memory.vhd msgpack_object.o msgpack_object_components.o msgpack_object_decode_integer_stream.o
 	ghdl -a -C $(GHDLFLAGS) --work=MSGPACK ../../../msgpack-vhdl/src/msgpack/object/msgpack_object_decode_integer_memory.vhd
 
-msgpack_object_encode_array.o : ../../../msgpack-vhdl/src/msgpack/object/msgpack_object_encode_array.vhd msgpack_object.o
-	ghdl -a -C $(GHDLFLAGS) --work=MSGPACK ../../../msgpack-vhdl/src/msgpack/object/msgpack_object_encode_array.vhd
-
 msgpack_object_encode_integer.o : ../../../msgpack-vhdl/src/msgpack/object/msgpack_object_encode_integer.vhd msgpack_object.o msgpack_object_components.o msgpack_object_code_reducer.o
 	ghdl -a -C $(GHDLFLAGS) --work=MSGPACK ../../../msgpack-vhdl/src/msgpack/object/msgpack_object_encode_integer.vhd
 
-msgpack_object_encode_integer_memory.o : ../../../msgpack-vhdl/src/msgpack/object/msgpack_object_encode_integer_memory.vhd msgpack_object.o msgpack_object_components.o
+msgpack_object_encode_integer_memory.o : ../../../msgpack-vhdl/src/msgpack/object/msgpack_object_encode_integer_memory.vhd msgpack_object.o msgpack_object_components.o msgpack_object_encode_integer_stream.o
 	ghdl -a -C $(GHDLFLAGS) --work=MSGPACK ../../../msgpack-vhdl/src/msgpack/object/msgpack_object_encode_integer_memory.vhd
 
 msgpack_object_encode_string_constant.o : ../../../msgpack-vhdl/src/msgpack/object/msgpack_object_encode_string_constant.vhd msgpack_object.o
@@ -106,7 +112,7 @@ msgpack_rpc_method_return_code.o : ../../../msgpack-vhdl/src/msgpack/rpc/msgpack
 msgpack_rpc_method_return_nil.o : ../../../msgpack-vhdl/src/msgpack/rpc/msgpack_rpc_method_return_nil.vhd msgpack_object.o msgpack_rpc.o msgpack_object_components.o msgpack_object_code_reducer.o
 	ghdl -a -C $(GHDLFLAGS) --work=MSGPACK ../../../msgpack-vhdl/src/msgpack/rpc/msgpack_rpc_method_return_nil.vhd
 
-msgpack_kvmap_get_integer.o : ../../../msgpack-vhdl/src/msgpack/kvmap/msgpack_kvmap_get_integer.vhd msgpack_object.o msgpack_object_components.o msgpack_kvmap_components.o msgpack_kvmap_key_compare.o msgpack_object_encode_integer.o
+msgpack_kvmap_get_integer.o : ../../../msgpack-vhdl/src/msgpack/kvmap/msgpack_kvmap_get_integer.vhd msgpack_object.o msgpack_object_components.o msgpack_kvmap_components.o msgpack_kvmap_key_compare.o msgpack_kvmap_decode_get_stream_parameter.o msgpack_object_encode_integer.o
 	ghdl -a -C $(GHDLFLAGS) --work=MSGPACK ../../../msgpack-vhdl/src/msgpack/kvmap/msgpack_kvmap_get_integer.vhd
 
 msgpack_kvmap_get_integer_memory.o : ../../../msgpack-vhdl/src/msgpack/kvmap/msgpack_kvmap_get_integer_memory.vhd msgpack_object.o msgpack_object_components.o msgpack_kvmap_components.o msgpack_kvmap_key_compare.o msgpack_object_encode_integer_memory.o
