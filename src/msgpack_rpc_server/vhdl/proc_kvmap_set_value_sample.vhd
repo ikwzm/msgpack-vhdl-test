@@ -47,8 +47,8 @@ library MsgPack;
 use     MsgPack.MsgPack_Object;
 use     MsgPack.MsgPack_RPC;
 use     MsgPack.MsgPack_RPC_Components.MsgPack_RPC_Server_KVMap_Set_Value;
-use     MsgPack.MsgPack_KVMap_Components.MsgPack_KVMap_Set_Integer;
-use     MsgPack.MsgPack_KVMap_Components.MsgPack_KVMap_Set_Integer_Memory;
+use     MsgPack.MsgPack_KVMap_Components.MsgPack_KVMap_Store_Integer_Register;
+use     MsgPack.MsgPack_KVMap_Components.MsgPack_KVMap_Store_Integer_Array;
 architecture RTL of PROC_KVMAP_SET_VALUE_SAMPLE is
     constant  STORE_SIZE        :  integer := 3;
     signal    map_match_req     :  std_logic_vector       (MATCH_PHASE-1 downto 0);
@@ -108,7 +108,7 @@ begin
     -------------------------------------------------------------------------------
     --
     -------------------------------------------------------------------------------
-    PARAM_A:  MsgPack_KVMap_Set_Integer              -- 
+    PARAM_A:  MsgPack_KVMap_Store_Integer_Register   -- 
         generic map (                                -- 
             KEY             => STRING'("PARAM_A")  , --
             CODE_WIDTH      => MsgPack_RPC.Code_Length  , --
@@ -142,7 +142,7 @@ begin
     -------------------------------------------------------------------------------
     --
     -------------------------------------------------------------------------------
-    PARAM_B:  MsgPack_KVMap_Set_Integer              -- 
+    PARAM_B:  MsgPack_KVMap_Store_Integer_Register              -- 
         generic map (                                -- 
             KEY             => STRING'("PARAM_B")  , --
             CODE_WIDTH      => MsgPack_RPC.Code_Length  , --
@@ -176,7 +176,7 @@ begin
     -------------------------------------------------------------------------------
     --
     -------------------------------------------------------------------------------
-    PARAM_C:  MsgPack_KVMap_Set_Integer_Memory       -- 
+    PARAM_C:  MsgPack_KVMap_Store_Integer_Array      -- 
         generic map (                                -- 
             KEY             => STRING'("PARAM_C")  , --
             CODE_WIDTH      => MsgPack_RPC.Code_Length  , --
