@@ -39,12 +39,13 @@ File.open('test_1.snr','w') do |file|
   file.puts "- MARCHAL  : "
   file.puts "  - SAY    : MsgPack_RPC_Server TEST 1.4 Start."
   file.puts "---"
+  param_c_addr = 0x00000000
   param_c_data = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]
-  file.puts i.request( 0x41, "$SET" , [{'PARAM_A' => 100, 'PARAM_B' => 100, 'PARAM_C' => {0 => param_c_data}}])
+  file.puts i.request( 0x41, "$SET" , [{'PARAM_A' => 100, 'PARAM_B' => 100, 'PARAM_C' => {param_c_addr => param_c_data}}])
   file.puts o.response(0x41, nil, nil)
   file.puts "---"
-  file.puts i.request( 0x41, "$GET" , [{'PARAM_A' => nil, 'PARAM_B' => nil, 'PARAM_C' => {0 => param_c_data.size}}])
-  file.puts o.response(0x41, nil,     [{'PARAM_A' => 100, 'PARAM_B' => 100, 'PARAM_C' => {0 => param_c_data}}])
+  file.puts i.request( 0x41, "$GET" , [{'PARAM_A' => nil, 'PARAM_B' => nil, 'PARAM_C' => {param_c_addr => param_c_data.size}}])
+  file.puts o.response(0x41, nil,     [{'PARAM_A' => 100, 'PARAM_B' => 100, 'PARAM_C' => {param_c_addr => param_c_data}}])
   file.puts "---"
   file.puts i.request( 0x41, "$SET" , [{'PARAM_A' => 100000, 'PARAM_B' => 100000}])
   file.puts o.response(0x41, nil, nil)

@@ -53,6 +53,7 @@ architecture RTL of PROC_ADD_SAMPLE is
     signal    return_id         :  MsgPack_RPC.MsgID_Type;
     signal    return_error      :  std_logic;
     signal    return_start      :  std_logic;
+    signal    return_done       :  std_logic;
     signal    return_busy       :  std_logic;
     signal    proc_start        :  std_logic;
     signal    add_req           :  std_logic;
@@ -114,6 +115,7 @@ begin
             RET_ID          => PROC_RES_ID         , -- Out :
             RET_ERROR       => return_error        , -- Out :
             RET_START       => return_start        , -- Out :
+            RET_DONE        => return_done         , -- Out :
             RET_BUSY        => return_busy           -- In  :
         );                                           -- 
     -------------------------------------------------------------------------------
@@ -183,6 +185,7 @@ begin
             CLR             => CLR                 , -- In  :
             RET_ERROR       => return_error        , -- In  :
             RET_START       => return_start        , -- In  :
+            RET_DONE        => return_done         , -- In  :
             RET_BUSY        => return_busy         , -- Out :
             RES_CODE        => PROC_RES_CODE       , -- Out :
             RES_VALID       => PROC_RES_VALID      , -- Out :
