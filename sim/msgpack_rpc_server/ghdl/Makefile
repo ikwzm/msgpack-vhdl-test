@@ -25,6 +25,11 @@ test_2 : test_bench.o dut $(SRC_PATH)/msgpack_rpc_server/scenarios/test_2.snr
 	$(GHDL) -e $(GHDLFLAGS) --work=msgpack TEST_BENCH
 	$(GHDL) -r $(GHDLFLAGS) --work=msgpack TEST_BENCH
 
+test_3 : test_bench.o dut $(SRC_PATH)/msgpack_rpc_server/scenarios/test_3.snr 
+	$(COPY) $(SRC_PATH)/msgpack_rpc_server/scenarios/test_3.snr test.snr
+	$(GHDL) -e $(GHDLFLAGS) --work=msgpack TEST_BENCH
+	$(GHDL) -r $(GHDLFLAGS) --work=msgpack TEST_BENCH
+
 clean  : 
 	$(REMOVE) *.o *.cf
 

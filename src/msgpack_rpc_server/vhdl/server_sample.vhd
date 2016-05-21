@@ -150,13 +150,14 @@ architecture RTL of Server_Sample is
     signal   param_b_value  :  std_logic_vector(63 downto 0);
     signal   param_b_din    :  std_logic_vector(63 downto 0);
     signal   param_b_we     :  std_logic;
+    constant PARAM_C_DEPTH  :  integer := 16; 
     signal   param_c_wdata  :  std_logic_vector(31 downto 0);
-    signal   param_c_waddr  :  std_logic_vector( 3 downto 0);
+    signal   param_c_waddr  :  std_logic_vector(PARAM_C_DEPTH-1 downto 0);
     signal   param_c_we     :  std_logic;
     signal   param_c_rdata  :  std_logic_vector(31 downto 0);
-    signal   param_c_raddr  :  std_logic_vector( 3 downto 0);
+    signal   param_c_raddr  :  std_logic_vector(PARAM_C_DEPTH-1 downto 0);
     type     MEMORY_TYPE    is array(integer range <>) of std_logic_vector(31 downto 0);
-    signal   param_c_memory :  MEMORY_TYPE(0 to 2**4-1);
+    signal   param_c_memory :  MEMORY_TYPE(0 to 2**PARAM_C_DEPTH-1);
     -------------------------------------------------------------------------------
     --
     -------------------------------------------------------------------------------
@@ -275,7 +276,7 @@ architecture RTL of Server_Sample is
             PARAM_B_VALUE   : out std_logic_vector(63 downto 0);
             PARAM_B_WE      : out std_logic;
             PARAM_C_VALUE   : out std_logic_vector(31 downto 0);
-            PARAM_C_ADDR    : out std_logic_vector( 3 downto 0);
+            PARAM_C_ADDR    : out std_logic_vector(15 downto 0);
             PARAM_C_WE      : out std_logic
         );
     end  component;
@@ -308,7 +309,7 @@ architecture RTL of Server_Sample is
             PARAM_A_VALUE   : in  std_logic_vector(31 downto 0);
             PARAM_B_VALUE   : in  std_logic_vector(63 downto 0);
             PARAM_C_VALUE   : in  std_logic_vector(31 downto 0);
-            PARAM_C_ADDR    : out std_logic_vector( 3 downto 0)
+            PARAM_C_ADDR    : out std_logic_vector(15 downto 0)
         );
     end  component;
 begin

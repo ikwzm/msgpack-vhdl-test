@@ -31,7 +31,7 @@ entity  PROC_KVMAP_GET_VALUE_SAMPLE is
         PARAM_A_VALUE   : in  std_logic_vector(31 downto 0);
         PARAM_B_VALUE   : in  std_logic_vector(63 downto 0);
         PARAM_C_VALUE   : in  std_logic_vector(31 downto 0);
-        PARAM_C_ADDR    : out std_logic_vector( 3 downto 0)
+        PARAM_C_ADDR    : out std_logic_vector(15 downto 0)
     );
 end  PROC_KVMAP_GET_VALUE_SAMPLE;
 -----------------------------------------------------------------------------------
