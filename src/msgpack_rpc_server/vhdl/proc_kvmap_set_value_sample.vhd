@@ -32,9 +32,12 @@ entity  PROC_KVMAP_SET_VALUE_SAMPLE is
         PARAM_A_WE      : out std_logic;
         PARAM_B_VALUE   : out std_logic_vector(63 downto 0);
         PARAM_B_WE      : out std_logic;
+        PARAM_C_START   : out std_logic;
+        PARAM_C_BUSY    : out std_logic;
         PARAM_C_VALUE   : out std_logic_vector(31 downto 0);
         PARAM_C_ADDR    : out std_logic_vector(15 downto 0);
-        PARAM_C_WE      : out std_logic
+        PARAM_C_VALID   : out std_logic;
+        PARAM_C_READY   : in  std_logic
     );
 end  PROC_KVMAP_SET_VALUE_SAMPLE;
 -----------------------------------------------------------------------------------
@@ -202,11 +205,13 @@ begin
             MATCH_OK        => map_match_ok   (2)  , -- Out :
             MATCH_NOT       => map_match_not  (2)  , -- Out :
             MATCH_SHIFT     => map_match_shift(2)  , -- Out :
-            VALUE           => PARAM_C_VALUE       , -- Out :
+            START           => PARAM_C_START       , -- Out :
+            BUSY            => PARAM_C_BUSY        , -- Out :
             ADDR            => PARAM_C_ADDR        , -- Out :
+            VALUE           => PARAM_C_VALUE       , -- Out :
             SIGN            => open                , -- Out :
             LAST            => open                , -- Out :
-            VALID           => PARAM_C_WE          , -- Out :
-            READY           => '1'                   -- Out :
+            VALID           => PARAM_C_VALID       , -- Out :
+            READY           => PARAM_C_READY         -- Out :
         );
 end RTL;

@@ -1,12 +1,12 @@
 -----------------------------------------------------------------------------------
 --!     @file    server_sample.vhd
 --!     @brief   Sample Module for MsgPack_RPC_Server
---!     @version 0.1.0
---!     @date    2015/10/2
+--!     @version 0.2.0
+--!     @date    2016/6/6
 --!     @author  Ichiro Kawazome <ichiro_k@ca2.so-net.ne.jp>
 -----------------------------------------------------------------------------------
 --
---      Copyright (C) 2015 Ichiro Kawazome
+--      Copyright (C) 2015-2016 Ichiro Kawazome
 --      All rights reserved.
 --
 --      Redistribution and use in source and binary forms, with or without
@@ -150,12 +150,21 @@ architecture RTL of Server_Sample is
     signal   param_b_value  :  std_logic_vector(63 downto 0);
     signal   param_b_din    :  std_logic_vector(63 downto 0);
     signal   param_b_we     :  std_logic;
-    constant PARAM_C_DEPTH  :  integer := 16; 
+    constant PARAM_C_DEPTH  :  integer := 16;
+    signal   param_c_wstart :  std_logic;
+    signal   param_c_wbusy  :  std_logic;
+    signal   param_c_wvalid :  std_logic;
+    signal   param_c_wready :  std_logic;
     signal   param_c_wdata  :  std_logic_vector(31 downto 0);
     signal   param_c_waddr  :  std_logic_vector(PARAM_C_DEPTH-1 downto 0);
-    signal   param_c_we     :  std_logic;
+    signal   param_c_rstart :  std_logic;
+    signal   param_c_rbusy  :  std_logic;
+    signal   param_c_rvalid :  std_logic;
+    signal   param_c_rready :  std_logic;
     signal   param_c_rdata  :  std_logic_vector(31 downto 0);
     signal   param_c_raddr  :  std_logic_vector(PARAM_C_DEPTH-1 downto 0);
+    signal   param_c_addr   :  std_logic_vector(PARAM_C_DEPTH-1 downto 0);
+    signal   param_c_we     :  std_logic;
     type     MEMORY_TYPE    is array(integer range <>) of std_logic_vector(31 downto 0);
     signal   param_c_memory :  MEMORY_TYPE(0 to 2**PARAM_C_DEPTH-1);
     -------------------------------------------------------------------------------
@@ -275,9 +284,12 @@ architecture RTL of Server_Sample is
             PARAM_A_WE      : out std_logic;
             PARAM_B_VALUE   : out std_logic_vector(63 downto 0);
             PARAM_B_WE      : out std_logic;
-            PARAM_C_VALUE   : out std_logic_vector(31 downto 0);
+            PARAM_C_START   : out std_logic;
+            PARAM_C_BUSY    : out std_logic;
             PARAM_C_ADDR    : out std_logic_vector(15 downto 0);
-            PARAM_C_WE      : out std_logic
+            PARAM_C_VALUE   : out std_logic_vector(31 downto 0);
+            PARAM_C_VALID   : out std_logic;
+            PARAM_C_READY   : in  std_logic
         );
     end  component;
     component PROC_KVMAP_GET_VALUE_SAMPLE
@@ -308,8 +320,12 @@ architecture RTL of Server_Sample is
             PROC_RES_READY  : in  std_logic;
             PARAM_A_VALUE   : in  std_logic_vector(31 downto 0);
             PARAM_B_VALUE   : in  std_logic_vector(63 downto 0);
+            PARAM_C_START   : out std_logic;
+            PARAM_C_BUSY    : out std_logic;
+            PARAM_C_ADDR    : out std_logic_vector(15 downto 0);
             PARAM_C_VALUE   : in  std_logic_vector(31 downto 0);
-            PARAM_C_ADDR    : out std_logic_vector(15 downto 0)
+            PARAM_C_VALID   : in  std_logic;
+            PARAM_C_READY   : out std_logic
         );
     end  component;
 begin
@@ -478,9 +494,12 @@ begin
             PARAM_A_WE      => param_a_we          , -- Out :
             PARAM_B_VALUE   => param_b_din         , -- Out :
             PARAM_B_WE      => param_b_we          , -- Out :
+            PARAM_C_START   => param_c_wstart      , -- Out :
+            PARAM_C_BUSY    => param_c_wbusy       , -- Out :
             PARAM_C_VALUE   => param_c_wdata       , -- Out :
             PARAM_C_ADDR    => param_c_waddr       , -- Out :
-            PARAM_C_WE      => param_c_we            -- Out :
+            PARAM_C_VALID   => param_c_wvalid      , -- Out :
+            PARAM_C_READY   => param_c_wready        -- In  :
         );                                           -- 
     -------------------------------------------------------------------------------
     --
@@ -513,8 +532,12 @@ begin
             PROC_RES_READY  => proc_res_ready(4)   , -- In  :
             PARAM_A_VALUE   => param_a_value       , -- Out :
             PARAM_B_VALUE   => param_b_value       , -- Out :
+            PARAM_C_START   => param_c_rstart      , -- Out :
+            PARAM_C_BUSY    => param_c_rbusy       , -- Out :
+            PARAM_C_ADDR    => param_c_raddr       , -- Out :
             PARAM_C_VALUE   => param_c_rdata       , -- In  :
-            PARAM_C_ADDR    => param_c_raddr         -- Out :
+            PARAM_C_VALID   => param_c_rvalid      , -- In  :
+            PARAM_C_READY   => param_c_rready        -- Out :
         );                                           -- 
     -------------------------------------------------------------------------------
     --
@@ -543,12 +566,52 @@ begin
     -------------------------------------------------------------------------------
     --
     -------------------------------------------------------------------------------
+    PARAM_C_ARB: block
+        type    STATE_TYPE  is (IDLE_STATE, WRITE_STATE, READ_STATE);
+        signal  curr_state  :  STATE_TYPE;
+    begin
+        process (CLK) begin
+            if (RST = '1') then
+                curr_state <= IDLE_STATE;
+            elsif (CLK'event and CLK = '1') then
+                case curr_state is
+                    when IDLE_STATE =>
+                        if    (param_c_wstart = '1') then
+                            curr_state <= WRITE_STATE;
+                        elsif (param_c_rstart = '1') then
+                            curr_state <= READ_STATE;
+                        else
+                            curr_state <= IDLE_STATE;
+                        end if;
+                    when WRITE_STATE =>
+                        if    (param_c_wbusy  = '1') then
+                            curr_state <= WRITE_STATE;
+                        else
+                            curr_state <= IDLE_STATE;
+                        end if;
+                    when READ_STATE =>
+                        if    (param_c_rbusy  = '1') then
+                            curr_state <= READ_STATE;
+                        else
+                            curr_state <= IDLE_STATE;
+                        end if;
+                    when others =>
+                        curr_state <= IDLE_STATE;
+                end case;
+            end if;
+        end process;
+        param_c_wready <= '1' when (curr_state = WRITE_STATE) else '0';
+        param_c_we     <= '1' when (curr_state = WRITE_STATE and param_c_wvalid = '1') else '0';
+        param_c_rvalid <= '1' when (curr_state = READ_STATE ) else '0';
+        param_c_addr   <= param_c_waddr when (curr_state = WRITE_STATE) else
+                          param_c_raddr;
+    end block;
     process (CLK) begin
         if (CLK'event and CLK = '1') then
             if (param_c_we = '1') then
-                param_c_memory(to_integer(to_01(unsigned(param_c_waddr)))) <= param_c_wdata;
+                param_c_memory(to_integer(to_01(unsigned(param_c_addr)))) <= param_c_wdata;
             end if;
-            param_c_rdata <= param_c_memory(to_integer(to_01(unsigned(param_c_raddr))));
+            param_c_rdata <= param_c_memory(to_integer(to_01(unsigned(param_c_addr))));
         end if;
     end process;
 end RTL;
