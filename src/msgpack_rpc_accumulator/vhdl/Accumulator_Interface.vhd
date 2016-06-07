@@ -37,12 +37,12 @@ use     MsgPack.MsgPack_Object;
 use     MsgPack.MsgPack_RPC;
 use     MsgPack.MsgPack_RPC_Components.MsgPack_RPC_Server;
 use     MsgPack.MsgPack_RPC_Components.MsgPack_RPC_Method_Main_with_Param;
+use     MsgPack.MsgPack_Object_Components.MsgPack_Object_Store_Integer_Register;
 use     MsgPack.MsgPack_RPC_Components.MsgPack_RPC_Method_Return_Integer;
 use     MsgPack.MsgPack_RPC_Components.MsgPack_RPC_Server_KVMap_Get_Value;
 use     MsgPack.MsgPack_RPC_Components.MsgPack_RPC_Server_KVMap_Set_Value;
 use     MsgPack.MsgPack_KVMap_Components.MsgPack_KVMap_Query_Integer_Register;
 use     MsgPack.MsgPack_KVMap_Components.MsgPack_KVMap_Store_Integer_Register;
-use     MsgPack.MsgPack_Object_Components.MsgPack_Object_Decode_Integer;
 architecture RTL of Accumulator_Interface is
     constant  PROC_NUM          :  integer := 3;
     signal    proc_match_req    :  std_logic_vector        (8-1 downto 0);
@@ -168,12 +168,11 @@ begin
                     end if;
                 end if;
             end process;
-            PROC_DECODE_X : MsgPack_Object_Decode_Integer                          -- 
+            PROC_STORE_X : MsgPack_Object_Store_Integer_Register                      -- 
                 generic map (                                             -- 
                     CODE_WIDTH          => MsgPack_RPC.Code_Length      , --
-                    VALUE_BITS          => proc_0_value'length          , --
+                    VALUE_BITS          => 32                           , --
                     VALUE_SIGN          => true                         , --
-                    QUEUE_SIZE          => 0                            , --
                     CHECK_RANGE         => TRUE                         , --
                     ENABLE64            => TRUE                           --
                 )                                                         -- 
@@ -187,11 +186,11 @@ begin
                     I_ERROR             => proc_set_param_error(0)      , -- Out :
                     I_DONE              => proc_set_param_done (0)      , -- Out :
                     I_SHIFT             => proc_set_param_shift(0)      , -- Out :
-                    O_VALUE             => proc_0_value                 , -- Out :
-                    O_SIGN              => open                         , -- Out :
-                    O_LAST              => open                         , -- Out :
-                    O_VALID             => proc_0_valid                 , -- Out :
-                    O_READY             => '1'                            -- In  :
+                    VALUE               => proc_0_value                 , -- Out :
+                    SIGN                => open                         , -- Out :
+                    LAST                => open                         , -- Out :
+                    VALID               => proc_0_valid                 , -- Out :
+                    READY               => '1'                            -- In  :
                 );                                                        -- 
         end block;
         PROC_RETURN : MsgPack_RPC_Method_Return_Integer  -- 
@@ -379,8 +378,8 @@ begin
             PROC_0 : MsgPack_KVMap_Store_Integer_Register   -- 
                 generic map (                                             -- 
                     KEY                 => STRING'("reg")               , --
-                    CODE_WIDTH          => MsgPack_RPC.Code_Length      , --
                     MATCH_PHASE         => 8                            , --
+                    CODE_WIDTH          => MsgPack_RPC.Code_Length      , --
                     VALUE_BITS          => 32                           , --
                     VALUE_SIGN          => true                         , --
                     CHECK_RANGE         => TRUE                         , --
