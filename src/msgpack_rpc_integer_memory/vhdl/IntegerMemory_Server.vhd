@@ -83,7 +83,7 @@ architecture RTL of IntegerMemory_Server is
     -------------------------------------------------------------------------------
     --
     -------------------------------------------------------------------------------
-    signal   data_address   : unsigned(32-1 downto 0);
+    signal   data_address   : signed(32-1 downto 0);
     signal   data_dout      : signed(32-1 downto 0);
     signal   data_we        : std_logic;
     signal   data_din       : signed(32-1 downto 0);
@@ -109,7 +109,7 @@ architecture RTL of IntegerMemory_Server is
             O_LAST          : out std_logic;
             O_VALID         : out std_logic;
             O_READY         : in  std_logic;
-            data_address    : out unsigned(32-1 downto 0);
+            data_address    : out signed(32-1 downto 0);
             data_we         : out std_logic;
             data_din        : out signed(32-1 downto 0);
             data_dout       : in  signed(32-1 downto 0)
@@ -122,7 +122,7 @@ architecture RTL of IntegerMemory_Server is
         port (
             clk          : in  std_logic;
             reset        : in  std_logic;
-            data_address : in  unsigned(32-1 downto 0);
+            data_address : in  signed(32-1 downto 0);
             data_we      : in  std_logic;
             data_oe      : in  std_logic;
             data_din     : in  signed(32-1 downto 0);

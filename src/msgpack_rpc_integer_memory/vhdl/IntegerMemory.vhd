@@ -6,7 +6,7 @@ entity IntegerMemory is
   port (
     clk          : in  std_logic;
     reset        : in  std_logic;
-    data_address : in  unsigned(32-1 downto 0);
+    data_address : in  signed(32-1 downto 0);
     data_we      : in  std_logic;
     data_oe      : in  std_logic;
     data_din     : in  signed(32-1 downto 0);

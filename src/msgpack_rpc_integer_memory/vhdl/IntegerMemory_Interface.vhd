@@ -20,7 +20,7 @@ entity  IntegerMemory_Interface is
         O_LAST               : out std_logic;
         O_VALID              : out std_logic;
         O_READY              : in  std_logic;
-        data_address         : out unsigned(32-1 downto 0);
+        data_address         : out signed(32-1 downto 0);
         data_din             : out signed(32-1 downto 0);
         data_we              : out std_logic;
         data_dout            : in  signed(32-1 downto 0)
@@ -56,11 +56,11 @@ architecture RTL of IntegerMemory_Interface is
     signal    proc_res_valid    :  std_logic_vector        (PROC_NUM-1 downto 0);
     signal    proc_res_last     :  std_logic_vector        (PROC_NUM-1 downto 0);
     signal    proc_res_ready    :  std_logic_vector        (PROC_NUM-1 downto 0);
-    signal    proc_data_waddr   :  unsigned(32-1 downto 0);
+    signal    proc_data_waddr   :  signed(32-1 downto 0);
     signal    proc_data_wready  :  std_logic;
     signal    proc_data_wstart  :  std_logic;
     signal    proc_data_wbusy   :  std_logic;
-    signal    proc_data_raddr   :  unsigned(32-1 downto 0);
+    signal    proc_data_raddr   :  signed(32-1 downto 0);
     signal    proc_data_rvalid  :  std_logic;
     signal    proc_data_rstart  :  std_logic;
     signal    proc_data_rbusy   :  std_logic;
@@ -179,6 +179,8 @@ begin
                     CODE_WIDTH          => MsgPack_RPC.Code_Length      , --
                     MATCH_PHASE         => 8                            , --
                     ADDR_BITS           => 32                           , --
+                    SIZE_BITS           => 32                           , --
+                    SIZE_MAX            => 4096                         , --
                     VALUE_BITS          => 32                           , --
                     VALUE_SIGN          => true                           --
                 )                                                         -- 
@@ -210,7 +212,7 @@ begin
                     READY               => open                           -- Out :
                 );                                                        -- 
             proc_1_data <= std_logic_vector(data_dout);
-            proc_data_raddr <= unsigned(proc_1_addr);
+            proc_data_raddr <= signed(proc_1_addr);
         end block;
     end block;
     PROC_STORE_VARIABLES: block
@@ -306,7 +308,7 @@ begin
                     READY               => proc_data_wready               -- In  :
                 );                                                        -- 
             data_din <= signed(proc_0_data);
-            proc_data_waddr <= unsigned(proc_0_addr);
+            proc_data_waddr <= signed(proc_0_addr);
         end block;
     end block;
     PROC_ARB_DATA : block
