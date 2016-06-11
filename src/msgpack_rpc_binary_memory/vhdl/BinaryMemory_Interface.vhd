@@ -229,15 +229,15 @@ begin
                 CODE_WIDTH          => MsgPack_RPC.Code_Length      , --
                 ADDR_BITS           => 12                           , --
                 DATA_BITS           => 8                            , --
-                SIZE_BITS           => 32                           , --
-                SIZE_MAX            => 4096                         , --
+                SIZE_BITS           => 13                           , --
                 ENCODE_BINARY       => TRUE                         , --
                 ENCODE_STRING       => FALSE                          --
             )                                                         -- 
             port map (                                                -- 
                 CLK                 => CLK                          , -- In  :
-                RST                 => RST                          , -- in  :
-                CLR                 => CLR                          , -- in  :
+                RST                 => RST                          , -- In  :
+                CLR                 => CLR                          , -- In  :
+                DEFAULT_SIZE        => "1000000000000"              , -- In  :
                 I_CODE              => proc_map_param_code          , -- In  :
                 I_LAST              => proc_map_param_last          , -- In  :
                 I_VALID             => proc_map_param_valid(0)      , -- In  :
@@ -257,6 +257,7 @@ begin
                 START               => proc_bin1_rstart             , -- Out :
                 BUSY                => proc_bin1_rbusy              , -- Out :
                 ADDR                => proc_bin1_raddr              , -- Out :
+                SIZE                => open                         , -- Out :
                 DATA                => bin1_rdata                   , -- In  :
                 VALID               => proc_bin1_rvalid             , -- In  :
                 READY               => open                           -- Out :
@@ -268,15 +269,15 @@ begin
                 CODE_WIDTH          => MsgPack_RPC.Code_Length      , --
                 ADDR_BITS           => 12                           , --
                 DATA_BITS           => 16                           , --
-                SIZE_BITS           => 32                           , --
-                SIZE_MAX            => 4096                         , --
+                SIZE_BITS           => 13                           , --
                 ENCODE_BINARY       => TRUE                         , --
                 ENCODE_STRING       => FALSE                          --
             )                                                         -- 
             port map (                                                -- 
                 CLK                 => CLK                          , -- In  :
-                RST                 => RST                          , -- in  :
-                CLR                 => CLR                          , -- in  :
+                RST                 => RST                          , -- In  :
+                CLR                 => CLR                          , -- In  :
+                DEFAULT_SIZE        => "1000000000000"              , -- In  :
                 I_CODE              => proc_map_param_code          , -- In  :
                 I_LAST              => proc_map_param_last          , -- In  :
                 I_VALID             => proc_map_param_valid(1)      , -- In  :
@@ -296,6 +297,7 @@ begin
                 START               => proc_bin2_rstart             , -- Out :
                 BUSY                => proc_bin2_rbusy              , -- Out :
                 ADDR                => proc_bin2_raddr              , -- Out :
+                SIZE                => open                         , -- Out :
                 DATA                => bin2_rdata                   , -- In  :
                 VALID               => proc_bin2_rvalid             , -- In  :
                 READY               => open                           -- Out :
@@ -307,15 +309,15 @@ begin
                 CODE_WIDTH          => MsgPack_RPC.Code_Length      , --
                 ADDR_BITS           => 12                           , --
                 DATA_BITS           => 32                           , --
-                SIZE_BITS           => 32                           , --
-                SIZE_MAX            => 4096                         , --
+                SIZE_BITS           => 13                           , --
                 ENCODE_BINARY       => TRUE                         , --
                 ENCODE_STRING       => FALSE                          --
             )                                                         -- 
             port map (                                                -- 
                 CLK                 => CLK                          , -- In  :
-                RST                 => RST                          , -- in  :
-                CLR                 => CLR                          , -- in  :
+                RST                 => RST                          , -- In  :
+                CLR                 => CLR                          , -- In  :
+                DEFAULT_SIZE        => "1000000000000"              , -- In  :
                 I_CODE              => proc_map_param_code          , -- In  :
                 I_LAST              => proc_map_param_last          , -- In  :
                 I_VALID             => proc_map_param_valid(2)      , -- In  :
@@ -335,6 +337,7 @@ begin
                 START               => proc_bin4_rstart             , -- Out :
                 BUSY                => proc_bin4_rbusy              , -- Out :
                 ADDR                => proc_bin4_raddr              , -- Out :
+                SIZE                => open                         , -- Out :
                 DATA                => bin4_rdata                   , -- In  :
                 VALID               => proc_bin4_rvalid             , -- In  :
                 READY               => open                           -- Out :
@@ -346,15 +349,15 @@ begin
                 CODE_WIDTH          => MsgPack_RPC.Code_Length      , --
                 ADDR_BITS           => 12                           , --
                 DATA_BITS           => 64                           , --
-                SIZE_BITS           => 32                           , --
-                SIZE_MAX            => 4096                         , --
+                SIZE_BITS           => 13                           , --
                 ENCODE_BINARY       => TRUE                         , --
                 ENCODE_STRING       => FALSE                          --
             )                                                         -- 
             port map (                                                -- 
                 CLK                 => CLK                          , -- In  :
-                RST                 => RST                          , -- in  :
-                CLR                 => CLR                          , -- in  :
+                RST                 => RST                          , -- In  :
+                CLR                 => CLR                          , -- In  :
+                DEFAULT_SIZE        => "1000000000000"              , -- In  :
                 I_CODE              => proc_map_param_code          , -- In  :
                 I_LAST              => proc_map_param_last          , -- In  :
                 I_VALID             => proc_map_param_valid(3)      , -- In  :
@@ -374,6 +377,7 @@ begin
                 START               => proc_bin8_rstart             , -- Out :
                 BUSY                => proc_bin8_rbusy              , -- Out :
                 ADDR                => proc_bin8_raddr              , -- Out :
+                SIZE                => open                         , -- Out :
                 DATA                => bin8_rdata                   , -- In  :
                 VALID               => proc_bin8_rvalid             , -- In  :
                 READY               => open                           -- Out :
@@ -385,15 +389,15 @@ begin
                 CODE_WIDTH          => MsgPack_RPC.Code_Length      , --
                 ADDR_BITS           => 12                           , --
                 DATA_BITS           => 32                           , --
-                SIZE_BITS           => 32                           , --
-                SIZE_MAX            => 4096                         , --
+                SIZE_BITS           => 13                           , --
                 ENCODE_BINARY       => FALSE                        , --
                 ENCODE_STRING       => TRUE                           --
             )                                                         -- 
             port map (                                                -- 
                 CLK                 => CLK                          , -- In  :
-                RST                 => RST                          , -- in  :
-                CLR                 => CLR                          , -- in  :
+                RST                 => RST                          , -- In  :
+                CLR                 => CLR                          , -- In  :
+                DEFAULT_SIZE        => "1000000000000"              , -- In  :
                 I_CODE              => proc_map_param_code          , -- In  :
                 I_LAST              => proc_map_param_last          , -- In  :
                 I_VALID             => proc_map_param_valid(4)      , -- In  :
@@ -413,6 +417,7 @@ begin
                 START               => proc_str4_rstart             , -- Out :
                 BUSY                => proc_str4_rbusy              , -- Out :
                 ADDR                => proc_str4_raddr              , -- Out :
+                SIZE                => open                         , -- Out :
                 DATA                => str4_rdata                   , -- In  :
                 VALID               => proc_str4_rvalid             , -- In  :
                 READY               => open                           -- Out :

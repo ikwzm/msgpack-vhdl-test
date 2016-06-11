@@ -34,6 +34,16 @@ File.open('test_1.snr','w') do |file|
     file.puts o.response(0x41, nil,     [{name => {addr => bin}}])
   end
   
+  def check(file, i, o, name, data)
+    if name.match(/^str/) then
+      bin = data.pack("C*").to_sym
+    else
+      bin = data.pack("C*")
+    end
+    file.puts i.request( 0x41, "$GET" , [{name => {0 => nil}}])
+    file.puts o.response(0x41, nil,     [{name => {0 => bin}}])
+  end
+  
   file.puts "---"
   file.puts "- MARCHAL  : "
   file.puts "  - SAY    : MsgPack_RPC_Server TEST 1 Start."
@@ -96,7 +106,7 @@ File.open('test_1.snr','w') do |file|
   ['bin1', 'bin2', 'bin4', 'str4'].each_with_index do | name , n |
     file.puts "- MARCHAL  : "
     file.puts "  - SAY    : MsgPack_RPC_Server TEST 1.2.#{num+n} #{name} Check."
-    query(file, i, o, name, 0, memory[name])
+    check(file, i, o, name, memory[name])
     file.puts "---"
   end
   

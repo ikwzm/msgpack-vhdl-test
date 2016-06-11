@@ -20,6 +20,11 @@ test_1 : test_bench.o dut $(SRC_PATH)/msgpack_rpc_integer_memory/scenarios/test_
 	$(GHDL) -e $(GHDLFLAGS) --work=msgpack TEST_BENCH
 	$(GHDL) -r $(GHDLFLAGS) --work=msgpack TEST_BENCH
 
+test_2 : test_bench.o dut $(SRC_PATH)/msgpack_rpc_integer_memory/scenarios/test_2.snr 
+	$(COPY) $(SRC_PATH)/msgpack_rpc_integer_memory/scenarios/test_2.snr test.snr
+	$(GHDL) -e $(GHDLFLAGS) --work=msgpack TEST_BENCH
+	$(GHDL) -r $(GHDLFLAGS) --work=msgpack TEST_BENCH
+
 clean  : 
 	$(REMOVE) *.o *.cf
 

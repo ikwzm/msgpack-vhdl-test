@@ -179,8 +179,7 @@ begin
                     CODE_WIDTH          => MsgPack_RPC.Code_Length      , --
                     MATCH_PHASE         => 8                            , --
                     ADDR_BITS           => 32                           , --
-                    SIZE_BITS           => 32                           , --
-                    SIZE_MAX            => 4096                         , --
+                    SIZE_BITS           => 13                           , --
                     VALUE_BITS          => 32                           , --
                     VALUE_SIGN          => true                           --
                 )                                                         -- 
@@ -188,6 +187,7 @@ begin
                     CLK                 => CLK                          , -- In  :
                     RST                 => RST                          , -- in  :
                     CLR                 => CLR                          , -- in  :
+                    DEFAULT_SIZE        => "1000000000000"              , -- In  :
                     I_CODE              => proc_map_param_code          , -- In  :
                     I_LAST              => proc_map_param_last          , -- In  :
                     I_VALID             => proc_map_param_valid(0)      , -- In  :
@@ -207,6 +207,7 @@ begin
                     START               => proc_data_rstart             , -- Out :
                     BUSY                => proc_data_rbusy              , -- Out :
                     ADDR                => proc_1_addr                  , -- Out :
+                    SIZE                => open                         , -- Out :
                     VALUE               => proc_1_data                  , -- In  :
                     VALID               => proc_data_rvalid             , -- In  :
                     READY               => open                           -- Out :

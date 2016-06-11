@@ -148,7 +148,7 @@ IntegerMemory.o : ../../../src/msgpack_rpc_integer_memory/vhdl/IntegerMemory.vhd
 IntegerMemory_Interface.o : ../../../src/msgpack_rpc_integer_memory/vhdl/IntegerMemory_Interface.vhd msgpack_object.o msgpack_rpc.o msgpack_rpc_components.o msgpack_kvmap_components.o msgpack_rpc_server.o msgpack_rpc_server_kvmap_get_value.o msgpack_kvmap_query_integer_array.o msgpack_rpc_server_kvmap_set_value.o msgpack_kvmap_store_integer_array.o
 	ghdl -a -C $(GHDLFLAGS) --work=MSGPACK ../../../src/msgpack_rpc_integer_memory/vhdl/IntegerMemory_Interface.vhd
 
-IntegerMemory_Server.o : ../../../src/msgpack_rpc_integer_memory/vhdl/IntegerMemory_Server.vhd msgpack_object.o IntegerMemory_Interface.o IntegerMemory.o
+IntegerMemory_Server.o : ../../../src/msgpack_rpc_integer_memory/vhdl/IntegerMemory_Server.vhd IntegerMemory_Interface.o IntegerMemory.o
 	ghdl -a -C $(GHDLFLAGS) --work=MSGPACK ../../../src/msgpack_rpc_integer_memory/vhdl/IntegerMemory_Server.vhd
 
 test_bench.o : ../../../src/msgpack_rpc_integer_memory/vhdl/test_bench.vhd IntegerMemory_Server.o
