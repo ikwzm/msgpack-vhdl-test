@@ -1,0 +1,39 @@
+---
+name     : IntegerStream
+generate :
+    interface  : IntegerStream_Interface.vhd
+variables:
+        - name      : num_i
+          write     : true
+          read      : false
+          type      : Integer
+          interface :
+            name    : Stream
+            max_size: 4096
+            type:
+              name : Signed
+              width: 32
+            port:
+              data : "num_i_data"
+              strb : "num_i_strb"
+              last : "num_i_last"
+              valid: "num_i_valid"
+              ready: "num_i_ready"
+        - name      : num_o
+          write     : false
+          read      : true
+          type      : Integer
+          interface :
+            name    : Stream
+            max_size: 4096
+            type:
+              name : Signed
+              width: 32
+            port:
+              data : "num_o_data"
+              strb : "num_o_strb"
+              last : "num_o_last"
+              valid: "num_o_valid"
+              ready: "num_o_ready"
+              dsize: "num_o_size"
+---
