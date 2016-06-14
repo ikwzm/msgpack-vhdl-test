@@ -282,7 +282,7 @@ begin
                 RES_READY               => proc_res_ready  (1)            -- In  :
             );                                                            -- 
         PROC_QUERY_REG: block
-            signal    proc_1_value      :  std_logic_vector(31 downto 0);
+            signal    proc_1_data      :  std_logic_vector(31 downto 0);
         begin
             PROC_1 : MsgPack_KVMap_Query_Integer_Register   -- 
                 generic map (                                             -- 
@@ -312,11 +312,11 @@ begin
                     MATCH_OK            => proc_map_match_ok   (0)      , -- Out :
                     MATCH_NOT           => proc_map_match_not  (0)      , -- Out :
                     MATCH_SHIFT         => proc_map_match_shift(0)      , -- Out :
-                    VALUE               => proc_1_value                 , -- In  :
+                    VALUE               => proc_1_data                  , -- In  :
                     VALID               => '1'                          , -- In  :
                     READY               => open                           -- Out :
                 );                                                        -- 
-            proc_1_value <= std_logic_vector(reg_out);
+            proc_1_data <= std_logic_vector(reg_out);
         end block;
     end block;
     PROC_STORE_VARIABLES: block
@@ -373,7 +373,7 @@ begin
                 RES_READY               => proc_res_ready  (2)            -- In  :
             );                                                            -- 
         PROC_STORE_REG: block
-            signal    proc_0_value      :  std_logic_vector(31 downto 0);
+            signal    proc_0_data      :  std_logic_vector(31 downto 0);
         begin
             PROC_0 : MsgPack_KVMap_Store_Integer_Register   -- 
                 generic map (                                             -- 
@@ -400,13 +400,13 @@ begin
                     MATCH_OK            => proc_map_match_ok   (0)      , -- Out :
                     MATCH_NOT           => proc_map_match_not  (0)      , -- Out :
                     MATCH_SHIFT         => proc_map_match_shift(0)      , -- Out :
-                    VALUE               => proc_0_value                 , -- Out :
+                    VALUE               => proc_0_data                  , -- Out :
                     SIGN                => open                         , -- Out :
                     LAST                => open                         , -- Out :
                     VALID               => reg_we                       , -- Out :
-                    READY               => '1'                            -- Out :
+                    READY               => '1'                            -- In  :
                 );                                                        -- 
-            reg_in <= signed(proc_0_value);
+            reg_in <= signed(proc_0_data);
         end block;
     end block;
 end RTL;

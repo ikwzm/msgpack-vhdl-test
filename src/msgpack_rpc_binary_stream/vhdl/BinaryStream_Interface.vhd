@@ -219,7 +219,7 @@ begin
                 MATCH_SHIFT         => proc_map_match_shift(0)      , -- Out :
                 START               => open                         , -- Out :
                 BUSY                => open                         , -- Out :
-                SIZE                => open                         , -- In  :
+                SIZE                => open                         , -- Out :
                 DATA                => bin1_o_data                  , -- In  :
                 STRB                => "1"                          , -- In  :
                 LAST                => bin1_o_last                  , -- In  :
@@ -259,7 +259,7 @@ begin
                 MATCH_SHIFT         => proc_map_match_shift(1)      , -- Out :
                 START               => open                         , -- Out :
                 BUSY                => open                         , -- Out :
-                SIZE                => open                         , -- In  :
+                SIZE                => open                         , -- Out :
                 DATA                => bin4_o_data                  , -- In  :
                 STRB                => bin4_o_strb                  , -- In  :
                 LAST                => bin4_o_last                  , -- In  :
@@ -299,7 +299,7 @@ begin
                 MATCH_SHIFT         => proc_map_match_shift(2)      , -- Out :
                 START               => open                         , -- Out :
                 BUSY                => open                         , -- Out :
-                SIZE                => open                         , -- In  :
+                SIZE                => open                         , -- Out :
                 DATA                => str4_rdata                   , -- In  :
                 STRB                => str4_rstrb                   , -- In  :
                 LAST                => str4_rlast                   , -- In  :
