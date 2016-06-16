@@ -1,7 +1,7 @@
 ---
 name     : BinaryMemory
 generate :
-    interface  : BinaryMemory_Interface.vhd
+    interface  : {name: BinaryMemory_Interface, file: BinaryMemory_Interface.vhd}
 variables:
         - name      : bin1
           type      : Binary

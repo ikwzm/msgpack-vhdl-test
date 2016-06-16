@@ -1,7 +1,8 @@
 ---
 name     : IntegerMemory
 generate :
-    interface  : IntegerMemory_Interface.vhd
+    interface  : {name: IntegerMemory_Interface, file: IntegerMemory_Interface.vhd}
+    server     : {name: IntegerMemory_Server   , file: IntegerMemory_Server.vhd   }
 variables:
         - name      : data
           type      : Integer

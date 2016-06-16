@@ -1,7 +1,8 @@
 ---
 name     : Accumulator
 generate :
-    interface  : Accumulator_Interface.vhd
+    interface  : {name: Accumulator_Interface, file: Accumulator_Interface.vhd}
+    server     : {name: Accumulator_Server   , file: Accumulator_Server.vhd   }
 aliases  :
       Int32    : {name: Integer , width: 32}
 methods  :

@@ -139,7 +139,7 @@ Accumulator.o : ../../../src/msgpack_rpc_accumulator/vhdl/Accumulator.vhd
 Accumulator_Interface.o : ../../../src/msgpack_rpc_accumulator/vhdl/Accumulator_Interface.vhd msgpack_object.o msgpack_rpc.o msgpack_rpc_components.o msgpack_object_components.o msgpack_kvmap_components.o msgpack_rpc_server.o msgpack_rpc_method_main_with_param.o msgpack_object_store_integer_register.o msgpack_rpc_method_return_integer.o msgpack_rpc_server_kvmap_get_value.o msgpack_kvmap_query_integer_register.o msgpack_rpc_server_kvmap_set_value.o msgpack_kvmap_store_integer_register.o
 	ghdl -a -C $(GHDLFLAGS) --work=MSGPACK ../../../src/msgpack_rpc_accumulator/vhdl/Accumulator_Interface.vhd
 
-Accumulator_Server.o : ../../../src/msgpack_rpc_accumulator/vhdl/Accumulator_Server.vhd msgpack_object.o msgpack_rpc.o msgpack_rpc_components.o Accumulator_Interface.o Accumulator.o
+Accumulator_Server.o : ../../../src/msgpack_rpc_accumulator/vhdl/Accumulator_Server.vhd Accumulator_Interface.o Accumulator.o
 	ghdl -a -C $(GHDLFLAGS) --work=MSGPACK ../../../src/msgpack_rpc_accumulator/vhdl/Accumulator_Server.vhd
 
 test_bench.o : ../../../src/msgpack_rpc_accumulator/vhdl/test_bench.vhd Accumulator_Server.o

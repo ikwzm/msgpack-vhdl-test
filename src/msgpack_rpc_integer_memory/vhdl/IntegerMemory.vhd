@@ -8,7 +8,6 @@ entity IntegerMemory is
     reset        : in  std_logic;
     data_address : in  signed(32-1 downto 0);
     data_we      : in  std_logic;
-    data_oe      : in  std_logic;
     data_din     : in  signed(32-1 downto 0);
     data_dout    : out signed(32-1 downto 0);
     data_length  : out signed(32-1 downto 0)
