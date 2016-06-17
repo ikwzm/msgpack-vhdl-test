@@ -8,11 +8,13 @@ variables:
           type      : Integer
           interface :
             name: Memory
-            size: 4096
             type:
               name : Signed
               width: 32
             addr_type :
+              name : Signed
+              width: 32
+            size_type :
               name : Signed
               width: 32
             port:
@@ -21,4 +23,5 @@ variables:
               we   : "data_we"
               rdata: "data_dout"
               oe   : "data_oe"
+              default_size: "data_length"
 ---

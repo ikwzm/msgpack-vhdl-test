@@ -30,6 +30,8 @@ architecture RTL of IntegerMemory_Server is
     signal    data_din         :  signed(32-1 downto 0);
     signal    data_we          :  std_logic;
     signal    data_dout        :  signed(32-1 downto 0);
+    signal    data_oe          :  std_logic;
+    signal    data_length      :  signed(32-1 downto 0);
     component IntegerMemory_Interface is
         generic(
             I_BYTES              : integer := 1;
@@ -52,7 +54,9 @@ architecture RTL of IntegerMemory_Server is
             data_address         : out signed(32-1 downto 0);
             data_din             : out signed(32-1 downto 0);
             data_we              : out std_logic;
-            data_dout            : in  signed(32-1 downto 0)
+            data_dout            : in  signed(32-1 downto 0);
+            data_oe              : out std_logic;
+            data_length          : in  signed(32-1 downto 0)
         );
     end component;
     component IntegerMemory is
@@ -62,7 +66,9 @@ architecture RTL of IntegerMemory_Server is
             data_address         : in  signed(32-1 downto 0);
             data_din             : in  signed(32-1 downto 0);
             data_we              : in  std_logic;
-            data_dout            : out signed(32-1 downto 0)
+            data_dout            : out signed(32-1 downto 0);
+            data_oe              : in  std_logic;
+            data_length          : out signed(32-1 downto 0)
         );
     end component;
 begin
@@ -90,7 +96,9 @@ begin
             data_address         => data_address        ,
             data_din             => data_din            ,
             data_we              => data_we             ,
-            data_dout            => data_dout           
+            data_dout            => data_dout           ,
+            data_oe              => data_oe             ,
+            data_length          => data_length         
         );
     T : IntegerMemory
         port map(
@@ -99,6 +107,8 @@ begin
             data_address         => data_address        ,
             data_din             => data_din            ,
             data_we              => data_we             ,
-            data_dout            => data_dout           
+            data_dout            => data_dout           ,
+            data_oe              => data_oe             ,
+            data_length          => data_length         
         );
 end RTL;

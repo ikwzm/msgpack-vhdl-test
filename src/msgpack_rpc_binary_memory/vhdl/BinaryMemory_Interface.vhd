@@ -78,43 +78,53 @@ architecture RTL of BinaryMemory_Interface is
     signal    proc_res_last     :  std_logic_vector        (PROC_NUM-1 downto 0);
     signal    proc_res_ready    :  std_logic_vector        (PROC_NUM-1 downto 0);
     signal    proc_bin1_waddr   :  std_logic_vector(12-1 downto 0);
+    signal    proc_bin1_wvalid  :  std_logic;
     signal    proc_bin1_wready  :  std_logic;
     signal    proc_bin1_wstart  :  std_logic;
     signal    proc_bin1_wbusy   :  std_logic;
     signal    proc_bin1_raddr   :  std_logic_vector(12-1 downto 0);
     signal    proc_bin1_rvalid  :  std_logic;
+    signal    proc_bin1_rready  :  std_logic;
     signal    proc_bin1_rstart  :  std_logic;
     signal    proc_bin1_rbusy   :  std_logic;
     signal    proc_bin2_waddr   :  std_logic_vector(12-1 downto 0);
+    signal    proc_bin2_wvalid  :  std_logic;
     signal    proc_bin2_wready  :  std_logic;
     signal    proc_bin2_wstart  :  std_logic;
     signal    proc_bin2_wbusy   :  std_logic;
     signal    proc_bin2_raddr   :  std_logic_vector(12-1 downto 0);
     signal    proc_bin2_rvalid  :  std_logic;
+    signal    proc_bin2_rready  :  std_logic;
     signal    proc_bin2_rstart  :  std_logic;
     signal    proc_bin2_rbusy   :  std_logic;
     signal    proc_bin4_waddr   :  std_logic_vector(12-1 downto 0);
+    signal    proc_bin4_wvalid  :  std_logic;
     signal    proc_bin4_wready  :  std_logic;
     signal    proc_bin4_wstart  :  std_logic;
     signal    proc_bin4_wbusy   :  std_logic;
     signal    proc_bin4_raddr   :  std_logic_vector(12-1 downto 0);
     signal    proc_bin4_rvalid  :  std_logic;
+    signal    proc_bin4_rready  :  std_logic;
     signal    proc_bin4_rstart  :  std_logic;
     signal    proc_bin4_rbusy   :  std_logic;
     signal    proc_bin8_waddr   :  std_logic_vector(12-1 downto 0);
+    signal    proc_bin8_wvalid  :  std_logic;
     signal    proc_bin8_wready  :  std_logic;
     signal    proc_bin8_wstart  :  std_logic;
     signal    proc_bin8_wbusy   :  std_logic;
     signal    proc_bin8_raddr   :  std_logic_vector(12-1 downto 0);
     signal    proc_bin8_rvalid  :  std_logic;
+    signal    proc_bin8_rready  :  std_logic;
     signal    proc_bin8_rstart  :  std_logic;
     signal    proc_bin8_rbusy   :  std_logic;
     signal    proc_str4_waddr   :  std_logic_vector(12-1 downto 0);
+    signal    proc_str4_wvalid  :  std_logic;
     signal    proc_str4_wready  :  std_logic;
     signal    proc_str4_wstart  :  std_logic;
     signal    proc_str4_wbusy   :  std_logic;
     signal    proc_str4_raddr   :  std_logic_vector(12-1 downto 0);
     signal    proc_str4_rvalid  :  std_logic;
+    signal    proc_str4_rready  :  std_logic;
     signal    proc_str4_rstart  :  std_logic;
     signal    proc_str4_rbusy   :  std_logic;
 begin
@@ -228,8 +238,8 @@ begin
                 MATCH_PHASE         => 8                            , --
                 CODE_WIDTH          => MsgPack_RPC.Code_Length      , --
                 ADDR_BITS           => 12                           , --
-                DATA_BITS           => 8                            , --
                 SIZE_BITS           => 13                           , --
+                DATA_BITS           => 8                            , --
                 ENCODE_BINARY       => TRUE                         , --
                 ENCODE_STRING       => FALSE                          --
             )                                                         -- 
@@ -260,7 +270,7 @@ begin
                 SIZE                => open                         , -- Out :
                 DATA                => bin1_rdata                   , -- In  :
                 VALID               => proc_bin1_rvalid             , -- In  :
-                READY               => open                           -- Out :
+                READY               => proc_bin1_rready               -- Out :
             );                                                        -- 
         PROC_QUERY_BIN2 : MsgPack_KVMap_Query_Binary_Array   -- 
             generic map (                                             -- 
@@ -268,8 +278,8 @@ begin
                 MATCH_PHASE         => 8                            , --
                 CODE_WIDTH          => MsgPack_RPC.Code_Length      , --
                 ADDR_BITS           => 12                           , --
-                DATA_BITS           => 16                           , --
                 SIZE_BITS           => 13                           , --
+                DATA_BITS           => 16                           , --
                 ENCODE_BINARY       => TRUE                         , --
                 ENCODE_STRING       => FALSE                          --
             )                                                         -- 
@@ -300,7 +310,7 @@ begin
                 SIZE                => open                         , -- Out :
                 DATA                => bin2_rdata                   , -- In  :
                 VALID               => proc_bin2_rvalid             , -- In  :
-                READY               => open                           -- Out :
+                READY               => proc_bin2_rready               -- Out :
             );                                                        -- 
         PROC_QUERY_BIN4 : MsgPack_KVMap_Query_Binary_Array   -- 
             generic map (                                             -- 
@@ -308,8 +318,8 @@ begin
                 MATCH_PHASE         => 8                            , --
                 CODE_WIDTH          => MsgPack_RPC.Code_Length      , --
                 ADDR_BITS           => 12                           , --
-                DATA_BITS           => 32                           , --
                 SIZE_BITS           => 13                           , --
+                DATA_BITS           => 32                           , --
                 ENCODE_BINARY       => TRUE                         , --
                 ENCODE_STRING       => FALSE                          --
             )                                                         -- 
@@ -340,7 +350,7 @@ begin
                 SIZE                => open                         , -- Out :
                 DATA                => bin4_rdata                   , -- In  :
                 VALID               => proc_bin4_rvalid             , -- In  :
-                READY               => open                           -- Out :
+                READY               => proc_bin4_rready               -- Out :
             );                                                        -- 
         PROC_QUERY_BIN8 : MsgPack_KVMap_Query_Binary_Array   -- 
             generic map (                                             -- 
@@ -348,8 +358,8 @@ begin
                 MATCH_PHASE         => 8                            , --
                 CODE_WIDTH          => MsgPack_RPC.Code_Length      , --
                 ADDR_BITS           => 12                           , --
-                DATA_BITS           => 64                           , --
                 SIZE_BITS           => 13                           , --
+                DATA_BITS           => 64                           , --
                 ENCODE_BINARY       => TRUE                         , --
                 ENCODE_STRING       => FALSE                          --
             )                                                         -- 
@@ -380,7 +390,7 @@ begin
                 SIZE                => open                         , -- Out :
                 DATA                => bin8_rdata                   , -- In  :
                 VALID               => proc_bin8_rvalid             , -- In  :
-                READY               => open                           -- Out :
+                READY               => proc_bin8_rready               -- Out :
             );                                                        -- 
         PROC_QUERY_STR4 : MsgPack_KVMap_Query_Binary_Array   -- 
             generic map (                                             -- 
@@ -388,8 +398,8 @@ begin
                 MATCH_PHASE         => 8                            , --
                 CODE_WIDTH          => MsgPack_RPC.Code_Length      , --
                 ADDR_BITS           => 12                           , --
-                DATA_BITS           => 32                           , --
                 SIZE_BITS           => 13                           , --
+                DATA_BITS           => 32                           , --
                 ENCODE_BINARY       => FALSE                        , --
                 ENCODE_STRING       => TRUE                           --
             )                                                         -- 
@@ -420,7 +430,7 @@ begin
                 SIZE                => open                         , -- Out :
                 DATA                => str4_rdata                   , -- In  :
                 VALID               => proc_str4_rvalid             , -- In  :
-                READY               => open                           -- Out :
+                READY               => proc_str4_rready               -- Out :
             );                                                        -- 
     end block;
     PROC_STORE_VARIABLES: block
@@ -507,7 +517,7 @@ begin
                 DATA                => bin1_wdata                   , -- Out :
                 STRB                => bin1_wbe                     , -- Out :
                 LAST                => open                         , -- Out :
-                VALID               => bin1_we                      , -- Out :
+                VALID               => proc_bin1_wvalid             , -- Out :
                 READY               => proc_bin1_wready               -- In  :
             );                                                        -- 
         PROC_STORE_BIN2 : MsgPack_KVMap_Store_Binary_Array   -- 
@@ -541,7 +551,7 @@ begin
                 DATA                => bin2_wdata                   , -- Out :
                 STRB                => bin2_wbe                     , -- Out :
                 LAST                => open                         , -- Out :
-                VALID               => bin2_we                      , -- Out :
+                VALID               => proc_bin2_wvalid             , -- Out :
                 READY               => proc_bin2_wready               -- In  :
             );                                                        -- 
         PROC_STORE_BIN4 : MsgPack_KVMap_Store_Binary_Array   -- 
@@ -575,7 +585,7 @@ begin
                 DATA                => bin4_wdata                   , -- Out :
                 STRB                => bin4_wbe                     , -- Out :
                 LAST                => open                         , -- Out :
-                VALID               => bin4_we                      , -- Out :
+                VALID               => proc_bin4_wvalid             , -- Out :
                 READY               => proc_bin4_wready               -- In  :
             );                                                        -- 
         PROC_STORE_BIN8 : MsgPack_KVMap_Store_Binary_Array   -- 
@@ -609,7 +619,7 @@ begin
                 DATA                => bin8_wdata                   , -- Out :
                 STRB                => bin8_wbe                     , -- Out :
                 LAST                => open                         , -- Out :
-                VALID               => bin8_we                      , -- Out :
+                VALID               => proc_bin8_wvalid             , -- Out :
                 READY               => proc_bin8_wready               -- In  :
             );                                                        -- 
         PROC_STORE_STR4 : MsgPack_KVMap_Store_Binary_Array   -- 
@@ -643,213 +653,218 @@ begin
                 DATA                => str4_wdata                   , -- Out :
                 STRB                => str4_wbe                     , -- Out :
                 LAST                => open                         , -- Out :
-                VALID               => str4_we                      , -- Out :
+                VALID               => proc_str4_wvalid             , -- Out :
                 READY               => proc_str4_wready               -- In  :
             );                                                        -- 
     end block;
     PROC_ARB_BIN1 : block
         signal   proc_arb_state :  std_logic_vector(1 downto 0);
     begin
-         process(CLK, RST) begin
-             if (RST = '1') then
-                     proc_arb_state <= (others => '0');
-             elsif (CLK'event and CLK = '1') then
-                 if    (CLR = '1') then
-                     proc_arb_state <= (others => '0');
-                 else
-                     case proc_arb_state is
-                         when "00" => 
-                             if    (proc_bin1_wstart = '1') then
-                                 proc_arb_state <= "01";
-                             elsif (proc_bin1_rstart = '1') then
-                                 proc_arb_state <= "10";
-                             else
-                                 proc_arb_state <= "00";
-                             end if;
-                         when "01" =>
-                             if    (proc_bin1_wbusy = '1') then
-                                 proc_arb_state <= "01";
-                             else
-                                 proc_arb_state <= "00";
-                             end if;
-                         when "10" =>
-                             if    (proc_bin1_rbusy = '1') then
-                                 proc_arb_state <= "10";
-                             else
-                                 proc_arb_state <= "00";
-                             end if;
-                         when others => 
-                                 proc_arb_state <= "00";
-                     end case;
-                 end if;
-             end if;
-         end process;
-         proc_bin1_wready <= proc_arb_state(0);
-         proc_bin1_rvalid <= proc_arb_state(1);
-         bin1_addr <= proc_bin1_waddr when (proc_arb_state(0) = '1') else proc_bin1_raddr;
+        process(CLK, RST) begin
+            if (RST = '1') then
+                    proc_arb_state <= (others => '0');
+            elsif (CLK'event and CLK = '1') then
+                if    (CLR = '1') then
+                    proc_arb_state <= (others => '0');
+                else
+                    case proc_arb_state is
+                        when "00" => 
+                            if    (proc_bin1_wstart = '1') then
+                                proc_arb_state <= "01";
+                            elsif (proc_bin1_rstart = '1') then
+                                proc_arb_state <= "10";
+                            else
+                                proc_arb_state <= "00";
+                            end if;
+                        when "01" =>
+                            if    (proc_bin1_wbusy = '1') then
+                                proc_arb_state <= "01";
+                            else
+                                proc_arb_state <= "00";
+                            end if;
+                        when "10" =>
+                            if    (proc_bin1_rbusy = '1') then
+                                proc_arb_state <= "10";
+                            else
+                                proc_arb_state <= "00";
+                            end if;
+                        when others => 
+                                proc_arb_state <= "00";
+                    end case;
+                end if;
+            end if;
+        end process;
+        proc_bin1_wready <= proc_arb_state(0);
+        proc_bin1_rvalid <= proc_arb_state(1);
+        bin1_we <= proc_bin1_wvalid when (proc_arb_state(0) = '1') else '0';
+        bin1_addr <= proc_bin1_waddr when (proc_arb_state(0) = '1') else proc_bin1_raddr;
     end block;
     PROC_ARB_BIN2 : block
         signal   proc_arb_state :  std_logic_vector(1 downto 0);
     begin
-         process(CLK, RST) begin
-             if (RST = '1') then
-                     proc_arb_state <= (others => '0');
-             elsif (CLK'event and CLK = '1') then
-                 if    (CLR = '1') then
-                     proc_arb_state <= (others => '0');
-                 else
-                     case proc_arb_state is
-                         when "00" => 
-                             if    (proc_bin2_wstart = '1') then
-                                 proc_arb_state <= "01";
-                             elsif (proc_bin2_rstart = '1') then
-                                 proc_arb_state <= "10";
-                             else
-                                 proc_arb_state <= "00";
-                             end if;
-                         when "01" =>
-                             if    (proc_bin2_wbusy = '1') then
-                                 proc_arb_state <= "01";
-                             else
-                                 proc_arb_state <= "00";
-                             end if;
-                         when "10" =>
-                             if    (proc_bin2_rbusy = '1') then
-                                 proc_arb_state <= "10";
-                             else
-                                 proc_arb_state <= "00";
-                             end if;
-                         when others => 
-                                 proc_arb_state <= "00";
-                     end case;
-                 end if;
-             end if;
-         end process;
-         proc_bin2_wready <= proc_arb_state(0);
-         proc_bin2_rvalid <= proc_arb_state(1);
-         bin2_addr <= proc_bin2_waddr when (proc_arb_state(0) = '1') else proc_bin2_raddr;
+        process(CLK, RST) begin
+            if (RST = '1') then
+                    proc_arb_state <= (others => '0');
+            elsif (CLK'event and CLK = '1') then
+                if    (CLR = '1') then
+                    proc_arb_state <= (others => '0');
+                else
+                    case proc_arb_state is
+                        when "00" => 
+                            if    (proc_bin2_wstart = '1') then
+                                proc_arb_state <= "01";
+                            elsif (proc_bin2_rstart = '1') then
+                                proc_arb_state <= "10";
+                            else
+                                proc_arb_state <= "00";
+                            end if;
+                        when "01" =>
+                            if    (proc_bin2_wbusy = '1') then
+                                proc_arb_state <= "01";
+                            else
+                                proc_arb_state <= "00";
+                            end if;
+                        when "10" =>
+                            if    (proc_bin2_rbusy = '1') then
+                                proc_arb_state <= "10";
+                            else
+                                proc_arb_state <= "00";
+                            end if;
+                        when others => 
+                                proc_arb_state <= "00";
+                    end case;
+                end if;
+            end if;
+        end process;
+        proc_bin2_wready <= proc_arb_state(0);
+        proc_bin2_rvalid <= proc_arb_state(1);
+        bin2_we <= proc_bin2_wvalid when (proc_arb_state(0) = '1') else '0';
+        bin2_addr <= proc_bin2_waddr when (proc_arb_state(0) = '1') else proc_bin2_raddr;
     end block;
     PROC_ARB_BIN4 : block
         signal   proc_arb_state :  std_logic_vector(1 downto 0);
     begin
-         process(CLK, RST) begin
-             if (RST = '1') then
-                     proc_arb_state <= (others => '0');
-             elsif (CLK'event and CLK = '1') then
-                 if    (CLR = '1') then
-                     proc_arb_state <= (others => '0');
-                 else
-                     case proc_arb_state is
-                         when "00" => 
-                             if    (proc_bin4_wstart = '1') then
-                                 proc_arb_state <= "01";
-                             elsif (proc_bin4_rstart = '1') then
-                                 proc_arb_state <= "10";
-                             else
-                                 proc_arb_state <= "00";
-                             end if;
-                         when "01" =>
-                             if    (proc_bin4_wbusy = '1') then
-                                 proc_arb_state <= "01";
-                             else
-                                 proc_arb_state <= "00";
-                             end if;
-                         when "10" =>
-                             if    (proc_bin4_rbusy = '1') then
-                                 proc_arb_state <= "10";
-                             else
-                                 proc_arb_state <= "00";
-                             end if;
-                         when others => 
-                                 proc_arb_state <= "00";
-                     end case;
-                 end if;
-             end if;
-         end process;
-         proc_bin4_wready <= proc_arb_state(0);
-         proc_bin4_rvalid <= proc_arb_state(1);
-         bin4_addr <= proc_bin4_waddr when (proc_arb_state(0) = '1') else proc_bin4_raddr;
+        process(CLK, RST) begin
+            if (RST = '1') then
+                    proc_arb_state <= (others => '0');
+            elsif (CLK'event and CLK = '1') then
+                if    (CLR = '1') then
+                    proc_arb_state <= (others => '0');
+                else
+                    case proc_arb_state is
+                        when "00" => 
+                            if    (proc_bin4_wstart = '1') then
+                                proc_arb_state <= "01";
+                            elsif (proc_bin4_rstart = '1') then
+                                proc_arb_state <= "10";
+                            else
+                                proc_arb_state <= "00";
+                            end if;
+                        when "01" =>
+                            if    (proc_bin4_wbusy = '1') then
+                                proc_arb_state <= "01";
+                            else
+                                proc_arb_state <= "00";
+                            end if;
+                        when "10" =>
+                            if    (proc_bin4_rbusy = '1') then
+                                proc_arb_state <= "10";
+                            else
+                                proc_arb_state <= "00";
+                            end if;
+                        when others => 
+                                proc_arb_state <= "00";
+                    end case;
+                end if;
+            end if;
+        end process;
+        proc_bin4_wready <= proc_arb_state(0);
+        proc_bin4_rvalid <= proc_arb_state(1);
+        bin4_we <= proc_bin4_wvalid when (proc_arb_state(0) = '1') else '0';
+        bin4_addr <= proc_bin4_waddr when (proc_arb_state(0) = '1') else proc_bin4_raddr;
     end block;
     PROC_ARB_BIN8 : block
         signal   proc_arb_state :  std_logic_vector(1 downto 0);
     begin
-         process(CLK, RST) begin
-             if (RST = '1') then
-                     proc_arb_state <= (others => '0');
-             elsif (CLK'event and CLK = '1') then
-                 if    (CLR = '1') then
-                     proc_arb_state <= (others => '0');
-                 else
-                     case proc_arb_state is
-                         when "00" => 
-                             if    (proc_bin8_wstart = '1') then
-                                 proc_arb_state <= "01";
-                             elsif (proc_bin8_rstart = '1') then
-                                 proc_arb_state <= "10";
-                             else
-                                 proc_arb_state <= "00";
-                             end if;
-                         when "01" =>
-                             if    (proc_bin8_wbusy = '1') then
-                                 proc_arb_state <= "01";
-                             else
-                                 proc_arb_state <= "00";
-                             end if;
-                         when "10" =>
-                             if    (proc_bin8_rbusy = '1') then
-                                 proc_arb_state <= "10";
-                             else
-                                 proc_arb_state <= "00";
-                             end if;
-                         when others => 
-                                 proc_arb_state <= "00";
-                     end case;
-                 end if;
-             end if;
-         end process;
-         proc_bin8_wready <= proc_arb_state(0);
-         proc_bin8_rvalid <= proc_arb_state(1);
-         bin8_addr <= proc_bin8_waddr when (proc_arb_state(0) = '1') else proc_bin8_raddr;
+        process(CLK, RST) begin
+            if (RST = '1') then
+                    proc_arb_state <= (others => '0');
+            elsif (CLK'event and CLK = '1') then
+                if    (CLR = '1') then
+                    proc_arb_state <= (others => '0');
+                else
+                    case proc_arb_state is
+                        when "00" => 
+                            if    (proc_bin8_wstart = '1') then
+                                proc_arb_state <= "01";
+                            elsif (proc_bin8_rstart = '1') then
+                                proc_arb_state <= "10";
+                            else
+                                proc_arb_state <= "00";
+                            end if;
+                        when "01" =>
+                            if    (proc_bin8_wbusy = '1') then
+                                proc_arb_state <= "01";
+                            else
+                                proc_arb_state <= "00";
+                            end if;
+                        when "10" =>
+                            if    (proc_bin8_rbusy = '1') then
+                                proc_arb_state <= "10";
+                            else
+                                proc_arb_state <= "00";
+                            end if;
+                        when others => 
+                                proc_arb_state <= "00";
+                    end case;
+                end if;
+            end if;
+        end process;
+        proc_bin8_wready <= proc_arb_state(0);
+        proc_bin8_rvalid <= proc_arb_state(1);
+        bin8_we <= proc_bin8_wvalid when (proc_arb_state(0) = '1') else '0';
+        bin8_addr <= proc_bin8_waddr when (proc_arb_state(0) = '1') else proc_bin8_raddr;
     end block;
     PROC_ARB_STR4 : block
         signal   proc_arb_state :  std_logic_vector(1 downto 0);
     begin
-         process(CLK, RST) begin
-             if (RST = '1') then
-                     proc_arb_state <= (others => '0');
-             elsif (CLK'event and CLK = '1') then
-                 if    (CLR = '1') then
-                     proc_arb_state <= (others => '0');
-                 else
-                     case proc_arb_state is
-                         when "00" => 
-                             if    (proc_str4_wstart = '1') then
-                                 proc_arb_state <= "01";
-                             elsif (proc_str4_rstart = '1') then
-                                 proc_arb_state <= "10";
-                             else
-                                 proc_arb_state <= "00";
-                             end if;
-                         when "01" =>
-                             if    (proc_str4_wbusy = '1') then
-                                 proc_arb_state <= "01";
-                             else
-                                 proc_arb_state <= "00";
-                             end if;
-                         when "10" =>
-                             if    (proc_str4_rbusy = '1') then
-                                 proc_arb_state <= "10";
-                             else
-                                 proc_arb_state <= "00";
-                             end if;
-                         when others => 
-                                 proc_arb_state <= "00";
-                     end case;
-                 end if;
-             end if;
-         end process;
-         proc_str4_wready <= proc_arb_state(0);
-         proc_str4_rvalid <= proc_arb_state(1);
-         str4_addr <= proc_str4_waddr when (proc_arb_state(0) = '1') else proc_str4_raddr;
+        process(CLK, RST) begin
+            if (RST = '1') then
+                    proc_arb_state <= (others => '0');
+            elsif (CLK'event and CLK = '1') then
+                if    (CLR = '1') then
+                    proc_arb_state <= (others => '0');
+                else
+                    case proc_arb_state is
+                        when "00" => 
+                            if    (proc_str4_wstart = '1') then
+                                proc_arb_state <= "01";
+                            elsif (proc_str4_rstart = '1') then
+                                proc_arb_state <= "10";
+                            else
+                                proc_arb_state <= "00";
+                            end if;
+                        when "01" =>
+                            if    (proc_str4_wbusy = '1') then
+                                proc_arb_state <= "01";
+                            else
+                                proc_arb_state <= "00";
+                            end if;
+                        when "10" =>
+                            if    (proc_str4_rbusy = '1') then
+                                proc_arb_state <= "10";
+                            else
+                                proc_arb_state <= "00";
+                            end if;
+                        when others => 
+                                proc_arb_state <= "00";
+                    end case;
+                end if;
+            end if;
+        end process;
+        proc_str4_wready <= proc_arb_state(0);
+        proc_str4_rvalid <= proc_arb_state(1);
+        str4_we <= proc_str4_wvalid when (proc_arb_state(0) = '1') else '0';
+        str4_addr <= proc_str4_waddr when (proc_arb_state(0) = '1') else proc_str4_raddr;
     end block;
 end RTL;

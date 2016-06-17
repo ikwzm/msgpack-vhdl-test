@@ -23,7 +23,9 @@ entity  IntegerMemory_Interface is
         data_address         : out signed(32-1 downto 0);
         data_din             : out signed(32-1 downto 0);
         data_we              : out std_logic;
-        data_dout            : in  signed(32-1 downto 0)
+        data_dout            : in  signed(32-1 downto 0);
+        data_oe              : out std_logic;
+        data_length          : in  signed(32-1 downto 0)
     );
 end     IntegerMemory_Interface;
 library ieee;
@@ -57,11 +59,13 @@ architecture RTL of IntegerMemory_Interface is
     signal    proc_res_last     :  std_logic_vector        (PROC_NUM-1 downto 0);
     signal    proc_res_ready    :  std_logic_vector        (PROC_NUM-1 downto 0);
     signal    proc_data_waddr   :  signed(32-1 downto 0);
+    signal    proc_data_wvalid  :  std_logic;
     signal    proc_data_wready  :  std_logic;
     signal    proc_data_wstart  :  std_logic;
     signal    proc_data_wbusy   :  std_logic;
     signal    proc_data_raddr   :  signed(32-1 downto 0);
     signal    proc_data_rvalid  :  std_logic;
+    signal    proc_data_rready  :  std_logic;
     signal    proc_data_rstart  :  std_logic;
     signal    proc_data_rbusy   :  std_logic;
 begin
@@ -170,8 +174,9 @@ begin
                 RES_READY               => proc_res_ready  (0)            -- In  :
             );                                                            -- 
         PROC_QUERY_DATA: block
-            signal    proc_1_data      :  std_logic_vector(31 downto 0);
-            signal    proc_1_addr      :  std_logic_vector(31 downto 0);
+            signal    proc_1_data          :  std_logic_vector(31 downto 0);
+            signal    proc_1_addr          :  std_logic_vector(31 downto 0);
+            signal    proc_1_default_size  :  std_logic_vector(31 downto 0);
         begin
             PROC_1 : MsgPack_KVMap_Query_Integer_Array   -- 
                 generic map (                                             -- 
@@ -179,7 +184,7 @@ begin
                     CODE_WIDTH          => MsgPack_RPC.Code_Length      , --
                     MATCH_PHASE         => 8                            , --
                     ADDR_BITS           => 32                           , --
-                    SIZE_BITS           => 13                           , --
+                    SIZE_BITS           => 32                           , --
                     VALUE_BITS          => 32                           , --
                     VALUE_SIGN          => true                           --
                 )                                                         -- 
@@ -187,7 +192,7 @@ begin
                     CLK                 => CLK                          , -- In  :
                     RST                 => RST                          , -- in  :
                     CLR                 => CLR                          , -- in  :
-                    DEFAULT_SIZE        => "1000000000000"              , -- In  :
+                    DEFAULT_SIZE        => proc_1_default_size          , -- In  :
                     I_CODE              => proc_map_param_code          , -- In  :
                     I_LAST              => proc_map_param_last          , -- In  :
                     I_VALID             => proc_map_param_valid(0)      , -- In  :
@@ -210,10 +215,11 @@ begin
                     SIZE                => open                         , -- Out :
                     VALUE               => proc_1_data                  , -- In  :
                     VALID               => proc_data_rvalid             , -- In  :
-                    READY               => open                           -- Out :
+                    READY               => proc_data_rready               -- Out :
                 );                                                        -- 
             proc_1_data <= std_logic_vector(data_dout);
             proc_data_raddr <= signed(proc_1_addr);
+            proc_1_default_size <= std_logic_vector(data_length);
         end block;
     end block;
     PROC_STORE_VARIABLES: block
@@ -305,7 +311,7 @@ begin
                     VALUE               => proc_0_data                  , -- Out :
                     SIGN                => open                         , -- Out :
                     LAST                => open                         , -- Out :
-                    VALID               => data_we                      , -- Out :
+                    VALID               => proc_data_wvalid             , -- Out :
                     READY               => proc_data_wready               -- In  :
                 );                                                        -- 
             data_din <= signed(proc_0_data);
@@ -351,6 +357,8 @@ begin
          end process;
          proc_data_wready <= proc_arb_state(0);
          proc_data_rvalid <= proc_arb_state(1);
-         data_address <= proc_data_waddr when (proc_arb_state(0) = '1') else proc_data_raddr;
+    data_we <= proc_data_wvalid when (proc_arb_state(0) = '1') else '0';
+    data_oe <= '1' when (proc_arb_state(0) = '0') else '0';
+    data_address <= proc_data_waddr when (proc_arb_state(0) = '1') else proc_data_raddr;
     end block;
 end RTL;

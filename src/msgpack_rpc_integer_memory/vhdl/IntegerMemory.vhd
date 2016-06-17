@@ -8,6 +8,7 @@ entity IntegerMemory is
     reset        : in  std_logic;
     data_address : in  signed(32-1 downto 0);
     data_we      : in  std_logic;
+    data_oe      : in  std_logic;
     data_din     : in  signed(32-1 downto 0);
     data_dout    : out signed(32-1 downto 0);
     data_length  : out signed(32-1 downto 0)
@@ -33,7 +34,9 @@ begin
       if data_we = '1' then
         mem(to_integer(unsigned(data_address(DEPTH-1 downto 0)))) := std_logic_vector(data_din);
       end if;
-      data_dout <= signed(mem(to_integer(unsigned(data_address(DEPTH-1 downto 0)))));
+      if data_oe = '1' then
+          data_dout <= signed(mem(to_integer(unsigned(data_address(DEPTH-1 downto 0)))));
+      end if;
     end if;
   end process;
   
