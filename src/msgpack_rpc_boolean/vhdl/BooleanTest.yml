@@ -1,0 +1,31 @@
+---
+name     : BooleanTest
+generate :
+    interface  : BooleanTest_Interface.vhd
+methods  :
+    - name     : control
+      arguments:
+        - name      : status
+          type      : Boolean
+          interface : {name: Signal,   type: {name: Boolean}}
+      returns  :
+        - name      : return
+          type      : Boolean
+          interface : {name: Signal,   type: {name: Boolean}}
+variables  :
+        - name      : status
+          type      : Boolean
+          interface : {name: Register, type: {name: Boolean}}
+        - name      : stream1
+          type      : Boolean
+          interface : {name: Stream  , width: 1 , max_size: 4096, type: {name: Logic_Vector, width: 1}}
+        - name      : stream4
+          type      : Boolean
+          interface : {name: Stream  , width: 4 , max_size: 4096, type: {name: Logic_Vector, width: 1}}
+        - name      : memory1
+          type      : Boolean
+          interface : {name: Memory  , width: 1 , size    : 4096, type: {name: Logic_Vector, width: 1}}
+        - name      : memory4
+          type      : Boolean
+          interface : {name: Memory  , width: 4 , size    : 4096, type: {name: Logic_Vector, width: 1}}
+---

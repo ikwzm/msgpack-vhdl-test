@@ -167,7 +167,7 @@ begin
                 RES_READY               => proc_res_ready  (0)            -- In  :
             );                                                            -- 
         PROC_QUERY_NUM_O: block
-            signal    proc_1_data      :  std_logic_vector(31 downto 0);
+            signal    proc_1_data          :  std_logic_vector(31 downto 0);
         begin
             PROC_1 : MsgPack_KVMap_Query_Integer_Stream   -- 
                 generic map (                                             -- 

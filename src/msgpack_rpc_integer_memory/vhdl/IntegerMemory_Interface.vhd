@@ -321,44 +321,44 @@ begin
     PROC_ARB_DATA : block
         signal   proc_arb_state :  std_logic_vector(1 downto 0);
     begin
-         process(CLK, RST) begin
-             if (RST = '1') then
-                     proc_arb_state <= (others => '0');
-             elsif (CLK'event and CLK = '1') then
-                 if    (CLR = '1') then
-                     proc_arb_state <= (others => '0');
-                 else
-                     case proc_arb_state is
-                         when "00" => 
-                             if    (proc_data_wstart = '1') then
-                                 proc_arb_state <= "01";
-                             elsif (proc_data_rstart = '1') then
-                                 proc_arb_state <= "10";
-                             else
-                                 proc_arb_state <= "00";
-                             end if;
-                         when "01" =>
-                             if    (proc_data_wbusy = '1') then
-                                 proc_arb_state <= "01";
-                             else
-                                 proc_arb_state <= "00";
-                             end if;
-                         when "10" =>
-                             if    (proc_data_rbusy = '1') then
-                                 proc_arb_state <= "10";
-                             else
-                                 proc_arb_state <= "00";
-                             end if;
-                         when others => 
-                                 proc_arb_state <= "00";
-                     end case;
-                 end if;
-             end if;
-         end process;
-         proc_data_wready <= proc_arb_state(0);
-         proc_data_rvalid <= proc_arb_state(1);
-    data_we <= proc_data_wvalid when (proc_arb_state(0) = '1') else '0';
-    data_oe <= '1' when (proc_arb_state(0) = '0') else '0';
-    data_address <= proc_data_waddr when (proc_arb_state(0) = '1') else proc_data_raddr;
+        process(CLK, RST) begin
+            if (RST = '1') then
+                    proc_arb_state <= (others => '0');
+            elsif (CLK'event and CLK = '1') then
+                if    (CLR = '1') then
+                    proc_arb_state <= (others => '0');
+                else
+                    case proc_arb_state is
+                        when "00" => 
+                            if    (proc_data_wstart = '1') then
+                                proc_arb_state <= "01";
+                            elsif (proc_data_rstart = '1') then
+                                proc_arb_state <= "10";
+                            else
+                                proc_arb_state <= "00";
+                            end if;
+                        when "01" =>
+                            if    (proc_data_wbusy = '1') then
+                                proc_arb_state <= "01";
+                            else
+                                proc_arb_state <= "00";
+                            end if;
+                        when "10" =>
+                            if    (proc_data_rbusy = '1') then
+                                proc_arb_state <= "10";
+                            else
+                                proc_arb_state <= "00";
+                            end if;
+                        when others => 
+                                proc_arb_state <= "00";
+                    end case;
+                end if;
+            end if;
+        end process;
+        proc_data_wready <= proc_arb_state(0);
+        proc_data_rvalid <= proc_arb_state(1);
+        data_oe <= '1' when (proc_arb_state(0) = '0') else '0';
+        data_we <= proc_data_wvalid when (proc_arb_state(0) = '1') else '0';
+        data_address <= proc_data_waddr when (proc_arb_state(0) = '1') else proc_data_raddr;
     end block;
 end RTL;
