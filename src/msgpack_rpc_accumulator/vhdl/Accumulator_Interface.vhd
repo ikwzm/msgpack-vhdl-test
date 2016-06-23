@@ -154,8 +154,8 @@ begin
                 RET_BUSY                => proc_return_busy               -- In  :
             );                                                            -- 
         PROC_0_X: block
-            signal    proc_0_value   :  std_logic_vector(31 downto 0);
-            signal    proc_0_valid   :  std_logic;
+            signal    proc_0_value :  std_logic_vector(32-1 downto 0);
+            signal    proc_0_valid :  std_logic;
         begin
             process(CLK, RST) begin
                 if (RST = '1') then
@@ -193,28 +193,33 @@ begin
                     READY               => '1'                            -- In  :
                 );                                                        -- 
         end block;
-        PROC_RETURN : MsgPack_RPC_Method_Return_Integer  -- 
-            generic map (                                                 -- 
-                VALUE_WIDTH             => 32                           , --
-                RETURN_UINT             => FALSE                        , --
-                RETURN_INT              => TRUE                         , --
-                RETURN_FLOAT            => FALSE                        , --
-                RETURN_BOOLEAN          => FALSE                          --
-            )                                                             -- 
-            port map (                                                    -- 
-                CLK                     => CLK                          , -- In  :
-                RST                     => RST                          , -- in  :
-                CLR                     => CLR                          , -- in  :
-                RET_ERROR               => proc_return_error            , -- In  :
-                RET_START               => proc_return_start            , -- In  :
-                RET_DONE                => proc_return_done             , -- In  :
-                RET_BUSY                => proc_return_busy             , -- Out :
-                RES_CODE                => proc_res_code   (0)          , -- Out :
-                RES_VALID               => proc_res_valid  (0)          , -- Out :
-                RES_LAST                => proc_res_last   (0)          , -- Out :
-                RES_READY               => proc_res_ready  (0)          , -- In  :
-                VALUE                   => std_logic_vector(add_return)   -- In  :
-            );
+        PROC_RETURN : block
+            signal proc_return_value : std_logic_vector(32-1 downto 0);
+        begin
+            RET: MsgPack_RPC_Method_Return_Integer  -- 
+                generic map (                                                 -- 
+                    VALUE_WIDTH             => 32                           , --
+                    RETURN_UINT             => FALSE                        , --
+                    RETURN_INT              => TRUE                         , --
+                    RETURN_FLOAT            => FALSE                        , --
+                    RETURN_BOOLEAN          => FALSE                          --
+                )                                                             -- 
+                port map (                                                    -- 
+                    CLK                     => CLK                          , -- In  :
+                    RST                     => RST                          , -- in  :
+                    CLR                     => CLR                          , -- in  :
+                    RET_ERROR               => proc_return_error            , -- In  :
+                    RET_START               => proc_return_start            , -- In  :
+                    RET_DONE                => proc_return_done             , -- In  :
+                    RET_BUSY                => proc_return_busy             , -- Out :
+                    RES_CODE                => proc_res_code   (0)          , -- Out :
+                    RES_VALID               => proc_res_valid  (0)          , -- Out :
+                    RES_LAST                => proc_res_last   (0)          , -- Out :
+                    RES_READY               => proc_res_ready  (0)          , -- In  :
+                    VALUE                   => proc_return_value              -- In  :
+                );
+            proc_return_value <= std_logic_vector(add_return);
+        end block;
     end block;
     PROC_QUERY_VARIABLES: block
         constant  PROC_MAP_QUERY_SIZE   :  integer := 1;

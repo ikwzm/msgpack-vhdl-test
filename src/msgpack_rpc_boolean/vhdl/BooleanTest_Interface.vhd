@@ -190,9 +190,8 @@ begin
                 RET_BUSY                => proc_return_busy               -- In  :
             );                                                            -- 
         PROC_0_STATUS: block
-            signal    proc_0_value   :  boolean;
-            signal    proc_0_valid   :  std_logic;
-            signal    proc_0_data      :  std_logic_vector(0 downto 0);
+            signal    proc_0_value :  std_logic_vector(1-1 downto 0);
+            signal    proc_0_valid :  std_logic;
         begin
             process(CLK, RST) begin
                 if (RST = '1') then
@@ -201,11 +200,11 @@ begin
                     if    (CLR = '1') then
                          control_status <= FALSE;
                     elsif (proc_0_valid = '1') then
-                         control_status <= proc_0_value;
+                         control_status <= (proc_0_value(0) = '1');
                     end if;
                 end if;
             end process;
-            PROC_0 : MsgPack_Object_Store_Boolean_Register                      -- 
+            PROC_STORE_STATUS : MsgPack_Object_Store_Boolean_Register                      -- 
                 generic map (                                             -- 
                     CODE_WIDTH          => MsgPack_RPC.Code_Length        --
                 )                                                         -- 
@@ -219,12 +218,11 @@ begin
                     I_ERROR             => proc_set_param_error(0)      , -- Out :
                     I_DONE              => proc_set_param_done (0)      , -- Out :
                     I_SHIFT             => proc_set_param_shift(0)      , -- Out :
-                    VALUE               => proc_0_data(0)               , -- Out :
+                    VALUE               => proc_0_value(0)              , -- Out :
                     LAST                => open                         , -- Out :
                     VALID               => proc_0_valid                 , -- Out :
                     READY               => '1'                            -- In  :
                 );                                                        -- 
-            proc_0_value <= (proc_0_data(0) = '1');
         end block;
         PROC_RETURN : block
             signal proc_return_value : std_logic_vector(0 downto 0);

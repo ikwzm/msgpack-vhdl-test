@@ -1,4 +1,4 @@
-require './mksnr.rb'
+require_relative './mksnr.rb'
 
 File.open('test_2.snr','w') do |file|
 
