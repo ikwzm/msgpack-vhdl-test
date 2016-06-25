@@ -3,6 +3,7 @@ name     : IntegerMemory
 generate :
     interface  : {name: IntegerMemory_Interface, file: IntegerMemory_Interface.vhd}
     server     : {name: IntegerMemory_Server   , file: IntegerMemory_Server.vhd   }
+port     : {clock: clk, reset: reset, clear: }
 variables:
         - name      : data
           type      : Integer
