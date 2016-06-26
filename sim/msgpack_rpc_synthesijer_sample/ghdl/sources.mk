@@ -184,18 +184,18 @@ msgpack_rpc_server_kvmap_get_value.o : ../../../msgpack-vhdl/src/msgpack/rpc/msg
 msgpack_rpc_server_kvmap_set_value.o : ../../../msgpack-vhdl/src/msgpack/rpc/msgpack_rpc_server_kvmap_set_value.vhd msgpack_object.o msgpack_rpc.o msgpack_object_components.o msgpack_rpc_components.o msgpack_kvmap_components.o msgpack_kvmap_key_compare.o msgpack_object_code_reducer.o msgpack_object_decode_array.o msgpack_kvmap_store.o msgpack_rpc_method_return_nil.o
 	ghdl -a -C $(GHDLFLAGS) --work=MSGPACK ../../../msgpack-vhdl/src/msgpack/rpc/msgpack_rpc_server_kvmap_set_value.vhd
 
-dualportram.o : ../../../src/msgpack_rpc_synthesijer/vhdl/dualportram.vhd 
-	ghdl -a -C $(GHDLFLAGS) --work=MSGPACK ../../../src/msgpack_rpc_synthesijer/vhdl/dualportram.vhd
+dualportram.o : ../../../src/msgpack_rpc_synthesijer_sample/vhdl/dualportram.vhd 
+	ghdl -a -C $(GHDLFLAGS) --work=MSGPACK ../../../src/msgpack_rpc_synthesijer_sample/vhdl/dualportram.vhd
 
-Sample.o : ../../../src/msgpack_rpc_synthesijer/vhdl/Sample.vhd dualportram.o
-	ghdl -a -C $(GHDLFLAGS) --work=MSGPACK ../../../src/msgpack_rpc_synthesijer/vhdl/Sample.vhd
+Sample.o : ../../../src/msgpack_rpc_synthesijer_sample/vhdl/Sample.vhd dualportram.o
+	ghdl -a -C $(GHDLFLAGS) --work=MSGPACK ../../../src/msgpack_rpc_synthesijer_sample/vhdl/Sample.vhd
 
-Sample_Interface.o : ../../../src/msgpack_rpc_synthesijer/vhdl/Sample_Interface.vhd msgpack_object.o msgpack_rpc.o msgpack_rpc_components.o msgpack_object_components.o msgpack_kvmap_components.o msgpack_rpc_server.o msgpack_rpc_method_main_no_param.o msgpack_rpc_method_return_nil.o msgpack_rpc_method_main_with_param.o msgpack_object_store_boolean_register.o msgpack_rpc_method_return_integer.o msgpack_object_store_integer_register.o msgpack_rpc_server_kvmap_get_value.o msgpack_kvmap_query_integer_register.o msgpack_kvmap_query_boolean_register.o msgpack_kvmap_query_integer_array.o msgpack_rpc_server_kvmap_set_value.o msgpack_kvmap_store_integer_register.o msgpack_kvmap_store_boolean_register.o msgpack_kvmap_store_integer_array.o
-	ghdl -a -C $(GHDLFLAGS) --work=MSGPACK ../../../src/msgpack_rpc_synthesijer/vhdl/Sample_Interface.vhd
+Sample_Interface.o : ../../../src/msgpack_rpc_synthesijer_sample/vhdl/Sample_Interface.vhd msgpack_object.o msgpack_rpc.o msgpack_rpc_components.o msgpack_object_components.o msgpack_kvmap_components.o msgpack_rpc_server.o msgpack_rpc_method_main_no_param.o msgpack_rpc_method_return_nil.o msgpack_rpc_method_main_with_param.o msgpack_object_store_boolean_register.o msgpack_rpc_method_return_integer.o msgpack_object_store_integer_register.o msgpack_rpc_server_kvmap_get_value.o msgpack_kvmap_query_integer_register.o msgpack_kvmap_query_boolean_register.o msgpack_kvmap_query_integer_array.o msgpack_rpc_server_kvmap_set_value.o msgpack_kvmap_store_integer_register.o msgpack_kvmap_store_boolean_register.o msgpack_kvmap_store_integer_array.o
+	ghdl -a -C $(GHDLFLAGS) --work=MSGPACK ../../../src/msgpack_rpc_synthesijer_sample/vhdl/Sample_Interface.vhd
 
-Sample_Server.o : ../../../src/msgpack_rpc_synthesijer/vhdl/Sample_Server.vhd Sample_Interface.o Sample.o
-	ghdl -a -C $(GHDLFLAGS) --work=MSGPACK ../../../src/msgpack_rpc_synthesijer/vhdl/Sample_Server.vhd
+Sample_Server.o : ../../../src/msgpack_rpc_synthesijer_sample/vhdl/Sample_Server.vhd Sample_Interface.o Sample.o
+	ghdl -a -C $(GHDLFLAGS) --work=MSGPACK ../../../src/msgpack_rpc_synthesijer_sample/vhdl/Sample_Server.vhd
 
-test_bench.o : ../../../src/msgpack_rpc_synthesijer/vhdl/test_bench.vhd Sample_Server.o
-	ghdl -a -C $(GHDLFLAGS) --work=MSGPACK ../../../src/msgpack_rpc_synthesijer/vhdl/test_bench.vhd
+test_bench.o : ../../../src/msgpack_rpc_synthesijer_sample/vhdl/test_bench.vhd Sample_Server.o
+	ghdl -a -C $(GHDLFLAGS) --work=MSGPACK ../../../src/msgpack_rpc_synthesijer_sample/vhdl/test_bench.vhd
 

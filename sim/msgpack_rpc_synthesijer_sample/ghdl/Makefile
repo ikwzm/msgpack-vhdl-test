@@ -4,7 +4,7 @@ DUMMY_PLUG_SRC_PATH  = $(DUMMY_PLUG_PATH)/src/main/vhdl
 DUMMY_PLUG_WORK_PATH = $(DUMMY_PLUG_PATH)/sim/ghdl/dummy_plug
 DUMMY_PLUG_TOOL_PATH = $(DUMMY_PLUG_PATH)/tools
 
-SRC_PATH             = ../../../src/msgpack_rpc_synthesijer
+SRC_PATH             = ../../../src/msgpack_rpc_synthesijer_sample
 
 COPY       = cp
 REMOVE     = -rm

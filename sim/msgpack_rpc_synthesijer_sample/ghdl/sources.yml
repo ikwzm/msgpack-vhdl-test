@@ -7,5 +7,5 @@
     Format   :  "#{File.basename(file_name,\".vhd\")}.o : #{file_name} #{@use_list.map{|u|File.basename(u.file_name,\".vhd\")+\".o\"}.join(\" \")}\n\tghdl -a -C $(GHDLFLAGS) --work=#{library_name} #{file_name}\n\n"
     PathList :  
       - "../../../msgpack-vhdl/src/msgpack/"
-      - "../../../src/msgpack_rpc_synthesijer/vhdl/"
+      - "../../../src/msgpack_rpc_synthesijer_sample/vhdl/"
     Top      :  ["TEST_BENCH"]
