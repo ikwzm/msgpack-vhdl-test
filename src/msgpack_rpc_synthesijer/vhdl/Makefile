@@ -10,3 +10,11 @@ $(INTERFACE_VHDL_FILE) : Sample.vhd
 
 clean:
 	rm $(INTERFACE_VHDL_FILE) $(SERVER_VHDL_FILE)
+
+test:	
+	-rm $(INTERFACE_VHDL_FILE) $(SERVER_VHDL_FILE) test.log
+	$(RPC_IF_GEN) -v --server Sample.vhd
+	touch test.log
+	git diff $(INTERFACE_VHDL_FILE) >> test.log
+	git diff $(SERVER_VHDL_FILE)    >> test.log
+	cat test.log

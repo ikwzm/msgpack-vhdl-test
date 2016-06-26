@@ -9,4 +9,11 @@ $(INTERFACE_VHDL_FILE) : $(YAML_FILE)
 	$(RPC_IF_GEN) -v $(YAML_FILE)
 
 clean:
-	rm $(INTERFACE_VHDL_FILE) $(SERVER_VHDL_FILE)
+	rm $(INTERFACE_VHDL_FILE)
+
+test:	
+	-rm $(INTERFACE_VHDL_FILE) test.log
+	$(RPC_IF_GEN) -v $(YAML_FILE)
+	touch test.log
+	git diff $(INTERFACE_VHDL_FILE) >> test.log
+	cat test.log
