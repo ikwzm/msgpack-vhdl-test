@@ -32,9 +32,12 @@ entity  PROC_KVMAP_SET_VALUE_SAMPLE is
         PARAM_A_WE      : out std_logic;
         PARAM_B_VALUE   : out std_logic_vector(63 downto 0);
         PARAM_B_WE      : out std_logic;
+        PARAM_C_START   : out std_logic;
+        PARAM_C_BUSY    : out std_logic;
         PARAM_C_VALUE   : out std_logic_vector(31 downto 0);
-        PARAM_C_ADDR    : out std_logic_vector( 3 downto 0);
-        PARAM_C_WE      : out std_logic
+        PARAM_C_ADDR    : out std_logic_vector(15 downto 0);
+        PARAM_C_VALID   : out std_logic;
+        PARAM_C_READY   : in  std_logic
     );
 end  PROC_KVMAP_SET_VALUE_SAMPLE;
 -----------------------------------------------------------------------------------
@@ -47,8 +50,8 @@ library MsgPack;
 use     MsgPack.MsgPack_Object;
 use     MsgPack.MsgPack_RPC;
 use     MsgPack.MsgPack_RPC_Components.MsgPack_RPC_Server_KVMap_Set_Value;
-use     MsgPack.MsgPack_KVMap_Components.MsgPack_KVMap_Set_Integer;
-use     MsgPack.MsgPack_KVMap_Components.MsgPack_KVMap_Set_Integer_Memory;
+use     MsgPack.MsgPack_KVMap_Components.MsgPack_KVMap_Store_Integer_Register;
+use     MsgPack.MsgPack_KVMap_Components.MsgPack_KVMap_Store_Integer_Array;
 architecture RTL of PROC_KVMAP_SET_VALUE_SAMPLE is
     constant  STORE_SIZE        :  integer := 3;
     signal    map_match_req     :  std_logic_vector       (MATCH_PHASE-1 downto 0);
@@ -108,7 +111,7 @@ begin
     -------------------------------------------------------------------------------
     --
     -------------------------------------------------------------------------------
-    PARAM_A:  MsgPack_KVMap_Set_Integer              -- 
+    PARAM_A:  MsgPack_KVMap_Store_Integer_Register   -- 
         generic map (                                -- 
             KEY             => STRING'("PARAM_A")  , --
             CODE_WIDTH      => MsgPack_RPC.Code_Length  , --
@@ -142,7 +145,7 @@ begin
     -------------------------------------------------------------------------------
     --
     -------------------------------------------------------------------------------
-    PARAM_B:  MsgPack_KVMap_Set_Integer              -- 
+    PARAM_B:  MsgPack_KVMap_Store_Integer_Register              -- 
         generic map (                                -- 
             KEY             => STRING'("PARAM_B")  , --
             CODE_WIDTH      => MsgPack_RPC.Code_Length  , --
@@ -176,7 +179,7 @@ begin
     -------------------------------------------------------------------------------
     --
     -------------------------------------------------------------------------------
-    PARAM_C:  MsgPack_KVMap_Set_Integer_Memory       -- 
+    PARAM_C:  MsgPack_KVMap_Store_Integer_Array      -- 
         generic map (                                -- 
             KEY             => STRING'("PARAM_C")  , --
             CODE_WIDTH      => MsgPack_RPC.Code_Length  , --
@@ -202,11 +205,13 @@ begin
             MATCH_OK        => map_match_ok   (2)  , -- Out :
             MATCH_NOT       => map_match_not  (2)  , -- Out :
             MATCH_SHIFT     => map_match_shift(2)  , -- Out :
-            VALUE           => PARAM_C_VALUE       , -- Out :
+            START           => PARAM_C_START       , -- Out :
+            BUSY            => PARAM_C_BUSY        , -- Out :
             ADDR            => PARAM_C_ADDR        , -- Out :
+            VALUE           => PARAM_C_VALUE       , -- Out :
             SIGN            => open                , -- Out :
             LAST            => open                , -- Out :
-            VALID           => PARAM_C_WE          , -- Out :
-            READY           => '1'                   -- Out :
+            VALID           => PARAM_C_VALID       , -- Out :
+            READY           => PARAM_C_READY         -- Out :
         );
 end RTL;

@@ -1,0 +1,52 @@
+---
+name     : BinaryStream
+generate :
+    interface  : BinaryStream_Interface.vhd
+variables:
+        - name      : bin1_i
+          type      : Binary
+          read      : false
+          write     : true
+          interface :
+            name     :  Stream
+            max_size :  4096
+            width    :  1
+            port     : {data: "bin1_i_data", strb: , last: "bin1_i_last", valid: "bin1_i_valid", ready: "bin1_i_ready"}
+        - name      : bin1_o
+          type      : Binary
+          read      : true
+          write     : false
+          interface :
+            name     :  Stream
+            max_size :  4096
+            width    :  1
+            port     : {data: "bin1_o_data", strb: , last: "bin1_o_last", valid: "bin1_o_valid", ready: "bin1_o_ready"}
+        - name      : bin4_i
+          type      : Binary
+          read      : false
+          write     : true
+          interface :
+            name     :  Stream
+            size_type: {name: Logic_Vector, width: 20} 
+            width    :  4
+            max_size :  4096
+            port     : {data: "bin4_i_data", strb: "bin4_i_strb", last: "bin4_i_last", valid: "bin4_i_valid", ready: "bin4_i_ready"}
+        - name      : bin4_o
+          type      : Binary
+          read      : true
+          write     : false
+          interface :
+            name     :  Stream
+            size_type: {name: Logic_Vector, width: 20} 
+            width    :  4
+            max_size :  4096
+            port     : {data: "bin4_o_data", strb: "bin4_o_strb", last: "bin4_o_last", valid: "bin4_o_valid", ready: "bin4_o_ready", dsize: "bin4_o_size"}
+        - name      : str4
+          type      : String
+          read      : true
+          write     : true
+          interface :
+            name     :  Stream
+            max_size :  4096
+            width    :  4
+---

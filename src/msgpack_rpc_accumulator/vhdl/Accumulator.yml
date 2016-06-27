@@ -1,0 +1,24 @@
+---
+name     : Accumulator
+generate :
+    interface  : {name: Accumulator_Interface, file: Accumulator_Interface.vhd}
+    server     : {name: Accumulator_Server   , file: Accumulator_Server.vhd   }
+aliases  :
+      Int32    : {name: Integer , width: 32}
+port     : {clock: clk, reset: reset, clear: }
+methods  :
+    - name     : add
+      interface: {port: {request: add_req, busy: add_busy}}
+      arguments:
+        - name      : x
+          type      : Integer
+          interface : {name: Signal,   type: {name: Signed, width: 32}}
+      returns  :
+        - name      : return
+          type      : Integer
+          interface : {name: Signal,   type: {name: Signed, width: 32}}
+variables  :
+        - name      : reg
+          type      : Integer
+          interface : {name: Register, type: {name: Signed, width: 32}, port: {wdata: "reg_in", we: "reg_we", rdata: "reg_out"}}
+---

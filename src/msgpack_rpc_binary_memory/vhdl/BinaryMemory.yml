@@ -1,0 +1,41 @@
+---
+name     : BinaryMemory
+generate :
+    interface  : {name: BinaryMemory_Interface, file: BinaryMemory_Interface.vhd}
+variables:
+        - name      : bin1
+          type      : Binary
+          interface :
+            name :  Memory
+            size :  4096
+            width:  1
+            port : {addr: "bin1_addr", rdata: "bin1_rdata", wdata: "bin1_wdata", we: "bin1_we", wstrb: bin1_wbe}
+        - name      : bin2
+          type      : Binary
+          interface :
+            name : Memory
+            size : 4096
+            width: 2
+            port : {addr: "bin2_addr", rdata: "bin2_rdata", wdata: "bin2_wdata", we: "bin2_we", wstrb: bin2_wbe}
+        - name      : bin4
+          type      : Binary
+          interface :
+            name : Memory
+            size : 4096
+            width: 4
+            port : {addr: "bin4_addr", rdata: "bin4_rdata", wdata: "bin4_wdata", we: "bin4_we", wstrb: bin4_wbe}
+        - name      : bin8
+          type      : Binary
+          interface :
+            name : Memory
+            size : 4096
+            width: 8
+            port : {addr: "bin8_addr", rdata: "bin8_rdata", wdata: "bin8_wdata", we: "bin8_we", wstrb: bin8_wbe}
+        - name      : str4
+          type      : String
+          interface :
+            name : Memory
+            size : 4096
+            width: 4
+            port : {addr: "str4_addr", rdata: "str4_rdata", wdata: "str4_wdata", we: "str4_we", wstrb: str4_wbe}
+---

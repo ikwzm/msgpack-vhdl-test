@@ -1,0 +1,20 @@
+
+- Global:
+    Print    :  true
+
+- Library:
+    Name     :  msgpack
+    Format   :  "add_vhdl_file sources_1 #{library_name} #{file_name}"
+    PathList :  ["../../../msgpack-vhdl/src/msgpack/"]
+
+- Library:
+    Name     :  dummy_plug
+    Format   :  "add_vhdl_file sim_1     #{library_name} #{file_name}"
+    Exclude  :  ["../../../Dummy_Plug/src/main/vhdl/core/sync_alt.vhd"]
+    PathList :  ["../../../Dummy_Plug/src/main/vhdl/"]
+
+- Library:
+    Name     :  work
+    Format   :  "add_vhdl_file sim_1     #{library_name} #{file_name}"
+    PathList :  ["../../../src/msgpack_rpc_boolean/vhdl"]
+    Top      :  ["TEST_BENCH"]
