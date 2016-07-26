@@ -1,0 +1,36 @@
+---
+name: Fib
+methods:
+- name: fib
+  interface:
+    port:
+      request: fib_req
+      busy: fib_busy
+  returns:
+  - name: return
+    type: Integer
+    interface:
+      name: Signal
+      type:
+        name: Signed
+        width: 64
+  arguments:
+  - name: n
+    type: Integer
+    interface:
+      name: Signal
+      type:
+        name: Signed
+        width: 32
+variables: []
+port:
+  clock: clk
+  reset: reset
+  clear: 
+generate:
+  interface:
+    name: Fib_Interface
+    file: Fib_Interface.vhd
+  server:
+    name: Fib_Server
+    file: Fib_Server.vhd

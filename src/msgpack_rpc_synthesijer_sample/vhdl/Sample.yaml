@@ -1,0 +1,311 @@
+---
+name: Sample
+methods:
+- name: m0
+  interface:
+    port:
+      request: m0_req
+      busy: m0_busy
+- name: m1
+  interface:
+    port:
+      request: m1_req
+      busy: m1_busy
+  returns:
+  - name: return
+    type: Boolean
+    interface:
+      name: Signal
+      type:
+        name: Logic
+  arguments:
+  - name: p
+    type: Boolean
+    interface:
+      name: Signal
+      type:
+        name: Logic
+- name: m2
+  interface:
+    port:
+      request: m2_req
+      busy: m2_busy
+  returns:
+  - name: return
+    type: Integer
+    interface:
+      name: Signal
+      type:
+        name: Signed
+        width: 8
+  arguments:
+  - name: b
+    type: Integer
+    interface:
+      name: Signal
+      type:
+        name: Signed
+        width: 8
+  - name: i
+    type: Integer
+    interface:
+      name: Signal
+      type:
+        name: Signed
+        width: 32
+- name: m3
+  interface:
+    port:
+      request: m3_req
+      busy: m3_busy
+  returns:
+  - name: return
+    type: Integer
+    interface:
+      name: Signal
+      type:
+        name: Signed
+        width: 16
+  arguments:
+  - name: s
+    type: Integer
+    interface:
+      name: Signal
+      type:
+        name: Signed
+        width: 16
+  - name: i
+    type: Integer
+    interface:
+      name: Signal
+      type:
+        name: Signed
+        width: 32
+- name: m4
+  interface:
+    port:
+      request: m4_req
+      busy: m4_busy
+  returns:
+  - name: return
+    type: Integer
+    interface:
+      name: Signal
+      type:
+        name: Signed
+        width: 64
+  arguments:
+  - name: a3
+    type: Integer
+    interface:
+      name: Signal
+      type:
+        name: Signed
+        width: 8
+  - name: a2
+    type: Integer
+    interface:
+      name: Signal
+      type:
+        name: Signed
+        width: 16
+  - name: a1
+    type: Integer
+    interface:
+      name: Signal
+      type:
+        name: Signed
+        width: 32
+  - name: a0
+    type: Integer
+    interface:
+      name: Signal
+      type:
+        name: Signed
+        width: 64
+variables:
+- name: ivar
+  type: Integer
+  write: true
+  read: true
+  interface:
+    name: Register
+    type:
+      name: Signed
+      width: 32
+    port:
+      wdata: ivar_in
+      we: ivar_we
+      rdata: ivar_out
+- name: bvar
+  type: Integer
+  write: true
+  read: true
+  interface:
+    name: Register
+    type:
+      name: Signed
+      width: 8
+    port:
+      wdata: bvar_in
+      we: bvar_we
+      rdata: bvar_out
+- name: svar
+  type: Integer
+  write: true
+  read: true
+  interface:
+    name: Register
+    type:
+      name: Signed
+      width: 16
+    port:
+      wdata: svar_in
+      we: svar_we
+      rdata: svar_out
+- name: lvar
+  type: Integer
+  write: true
+  read: true
+  interface:
+    name: Register
+    type:
+      name: Signed
+      width: 64
+    port:
+      wdata: lvar_in
+      we: lvar_we
+      rdata: lvar_out
+- name: tvar
+  type: Boolean
+  write: true
+  read: true
+  interface:
+    name: Register
+    type:
+      name: Logic
+    port:
+      wdata: tvar_in
+      we: tvar_we
+      rdata: tvar_out
+- name: imem
+  type: Integer
+  write: true
+  read: true
+  interface:
+    name: Memory
+    type:
+      name: Signed
+      width: 32
+    addr_type:
+      name: Signed
+      width: 32
+    size_type:
+      name: Signed
+      width: 32
+    port:
+      addr: imem_address
+      wdata: imem_din
+      we: imem_we
+      rdata: imem_dout
+      oe: imem_oe
+      default_size: imem_length
+- name: bmem
+  type: Integer
+  write: true
+  read: true
+  interface:
+    name: Memory
+    type:
+      name: Signed
+      width: 8
+    addr_type:
+      name: Signed
+      width: 32
+    size_type:
+      name: Signed
+      width: 32
+    port:
+      addr: bmem_address
+      wdata: bmem_din
+      we: bmem_we
+      rdata: bmem_dout
+      oe: bmem_oe
+      default_size: bmem_length
+- name: smem
+  type: Integer
+  write: true
+  read: true
+  interface:
+    name: Memory
+    type:
+      name: Signed
+      width: 16
+    addr_type:
+      name: Signed
+      width: 32
+    size_type:
+      name: Signed
+      width: 32
+    port:
+      addr: smem_address
+      wdata: smem_din
+      we: smem_we
+      rdata: smem_dout
+      oe: smem_oe
+      default_size: smem_length
+- name: lmem
+  type: Integer
+  write: true
+  read: true
+  interface:
+    name: Memory
+    type:
+      name: Signed
+      width: 64
+    addr_type:
+      name: Signed
+      width: 32
+    size_type:
+      name: Signed
+      width: 32
+    port:
+      addr: lmem_address
+      wdata: lmem_din
+      we: lmem_we
+      rdata: lmem_dout
+      oe: lmem_oe
+      default_size: lmem_length
+- name: tmem
+  type: Integer
+  write: true
+  read: true
+  interface:
+    name: Memory
+    type:
+      name: Signed
+      width: 1
+    addr_type:
+      name: Signed
+      width: 32
+    size_type:
+      name: Signed
+      width: 32
+    port:
+      addr: tmem_address
+      wdata: tmem_din
+      we: tmem_we
+      rdata: tmem_dout
+      oe: tmem_oe
+      default_size: tmem_length
+port:
+  clock: clk
+  reset: reset
+  clear: 
+generate:
+  interface:
+    name: Sample_Interface
+    file: Sample_Interface.vhd
+  server:
+    name: Sample_Server
+    file: Sample_Server.vhd
