@@ -140,6 +140,7 @@ begin
                 SET_PARAM_SHIFT         => proc_set_param_shift         , -- In  :
                 RUN_REQ                 => fib_req                      , -- Out :
                 RUN_BUSY                => fib_busy                     , -- In  :
+                RUN_DONE                => '0'                          , -- In  :
                 RET_ID                  => proc_res_id     (0)          , -- Out :
                 RET_START               => proc_return_start            , -- Out :
                 RET_DONE                => proc_return_done             , -- Out :

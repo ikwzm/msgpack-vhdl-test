@@ -21,7 +21,7 @@ test_1 : test_bench.o dut test_1.snr
 clean  : 
 	$(REMOVE) *.o *.cf
 
-dut    : fib_server.o
+dut    : Fib_Server.o
 
 sources.mk   : sources.yml
 	make -C $(SRC_PATH)/vhdl/

@@ -19,7 +19,7 @@ clean:
 
 test:	
 	-rm $(INTERFACE_VHDL_FILE) $(SERVER_VHDL_FILE) test.log
-	$(RPC_IF_GEN) -v --server Sample.vhd
+	$(RPC_IF_GEN) -v --server Fib.vhd
 	touch test.log
 	git diff $(INTERFACE_VHDL_FILE) >> test.log
 	git diff $(SERVER_VHDL_FILE)    >> test.log

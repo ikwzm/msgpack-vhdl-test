@@ -6,7 +6,7 @@ generate :
 port     : {clock: CLK, reset: RST, clear: }
 methods  :
     - name     : fib
-      interface: {port: {request: GO, busy: BUSY}}
+      interface: {port: {request: GO, busy: BUSY, done: DONE}}
       arguments:
         - name      : n
           type      : Integer

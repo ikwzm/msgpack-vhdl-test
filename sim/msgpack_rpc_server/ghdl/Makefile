@@ -11,9 +11,7 @@ REMOVE     = -rm
 GHDL       = ghdl
 GHDLFLAGS  = --mb-comments -P$(DUMMY_PLUG_WORK_PATH)
 
-test   : test_bench.o dut
-	$(GHDL) -e $(GHDLFLAGS) --work=msgpack TEST_BENCH
-	$(GHDL) -r $(GHDLFLAGS) --work=msgpack TEST_BENCH
+test   : test_1 test_2 test 3
 
 test_1 : test_bench.o dut $(SRC_PATH)/msgpack_rpc_server/scenarios/test_1.snr 
 	$(COPY) $(SRC_PATH)/msgpack_rpc_server/scenarios/test_1.snr test.snr
@@ -31,7 +29,7 @@ test_3 : test_bench.o dut $(SRC_PATH)/msgpack_rpc_server/scenarios/test_3.snr
 	$(GHDL) -r $(GHDLFLAGS) --work=msgpack TEST_BENCH
 
 clean  : 
-	$(REMOVE) *.o *.cf
+	$(REMOVE) *.o *.cf *.snr sources.mk
 
 dut    : msgpack_rpc_server.o
 

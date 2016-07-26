@@ -11,20 +11,17 @@ REMOVE     = -rm
 GHDL       = ghdl
 GHDLFLAGS  = --mb-comments -P$(DUMMY_PLUG_WORK_PATH)
 
-test   : test_bench.o dut
-	-$(GHDL) -e $(GHDLFLAGS) --work=msgpack TEST_BENCH
-	-$(GHDL) -r $(GHDLFLAGS) --work=msgpack TEST_BENCH
+test   : test_1
 
 test_1 : test_bench.o dut test_1.snr 
 	$(COPY) test_1.snr test.snr
 	-$(GHDL) -e $(GHDLFLAGS) --work=msgpack TEST_BENCH
 	-$(GHDL) -r $(GHDLFLAGS) --work=msgpack TEST_BENCH
 
-
 clean  : 
-	$(REMOVE) *.o *.cf
+	$(REMOVE) *.o *.cf *.snr sources.mk
 
-dut    : fibonacci_server.o
+dut    : Fibonacci_Server.o
 
 sources.mk   : sources.yml
 	make -C $(SRC_PATH)/vhdl/
