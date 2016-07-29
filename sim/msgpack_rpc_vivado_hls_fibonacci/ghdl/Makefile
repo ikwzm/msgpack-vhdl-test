@@ -4,7 +4,7 @@ DUMMY_PLUG_SRC_PATH  = $(DUMMY_PLUG_PATH)/src/main/vhdl
 DUMMY_PLUG_WORK_PATH = $(DUMMY_PLUG_PATH)/sim/ghdl/dummy_plug
 DUMMY_PLUG_TOOL_PATH = $(DUMMY_PLUG_PATH)/tools
 
-SRC_PATH             = ../../../src/msgpack_rpc_fibonacci
+SRC_PATH             = ../../../src/msgpack_rpc_vivado_hls_fibonacci
 
 COPY       = cp
 REMOVE     = -rm
@@ -19,9 +19,12 @@ test_1 : test_bench.o dut test_1.snr
 	-$(GHDL) -r $(GHDLFLAGS) --work=msgpack TEST_BENCH
 
 clean  : 
-	$(REMOVE) *.o *.cf *.snr sources.mk
+	$(REMOVE) *.o *.cf
 
-dut    : Fibonacci_Server.o
+dut    : Fibonacci_Server.o fib.o
+
+fib.o : $(SRC_PATH)/hls/fib_prj/solution1/syn/vhdl/fib.vhd
+	ghdl -a -C $(GHDLFLAGS) --work=MSGPACK $<
 
 sources.mk   : sources.yml
 	make -C $(SRC_PATH)/vhdl/

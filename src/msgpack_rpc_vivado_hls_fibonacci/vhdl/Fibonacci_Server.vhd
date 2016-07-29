@@ -26,11 +26,12 @@ use     ieee.numeric_std.all;
 architecture RTL of Fibonacci_Server is
     signal    reset            :  std_logic;
     signal    reset_n          :  std_logic;
-    signal    GO               :  std_logic;
-    signal    BUSY             :  std_logic;
-    signal    DONE             :  std_logic;
-    signal    N                :  std_logic_vector(8-1 downto 0);
-    signal    O                :  std_logic_vector(64-1 downto 0);
+    signal    ap_start         :  std_logic;
+    signal    ap_idle          :  std_logic;
+    signal    ap_ready         :  std_logic;
+    signal    ap_done          :  std_logic;
+    signal    n                :  std_logic_vector(32-1 downto 0);
+    signal    ap_return        :  std_logic_vector(64-1 downto 0);
     component Fibonacci_Interface is
         generic(
             I_BYTES              : integer := 1;
@@ -50,22 +51,24 @@ architecture RTL of Fibonacci_Server is
             O_LAST               : out std_logic;
             O_VALID              : out std_logic;
             O_READY              : in  std_logic;
-            GO                   : out std_logic;
-            BUSY                 : in  std_logic;
-            DONE                 : in  std_logic;
-            N                    : out std_logic_vector(8-1 downto 0);
-            O                    : in  std_logic_vector(64-1 downto 0)
+            ap_start             : out std_logic;
+            ap_idle              : in  std_logic;
+            ap_ready             : in  std_logic;
+            ap_done              : in  std_logic;
+            n                    : out std_logic_vector(32-1 downto 0);
+            ap_return            : in  std_logic_vector(64-1 downto 0)
         );
     end component;
     component FIB is
         port(
-            CLK                  : in  std_logic;
-            RST                  : in  std_logic;
-            GO                   : in  std_logic;
-            BUSY                 : out std_logic;
-            DONE                 : out std_logic;
-            N                    : in  std_logic_vector(8-1 downto 0);
-            O                    : out std_logic_vector(64-1 downto 0)
+            ap_clk               : in  std_logic;
+            ap_rst               : in  std_logic;
+            ap_start             : in  std_logic;
+            ap_idle              : out std_logic;
+            ap_ready             : out std_logic;
+            ap_done              : out std_logic;
+            n                    : in  std_logic_vector(32-1 downto 0);
+            ap_return            : out std_logic_vector(64-1 downto 0)
         );
     end component;
 begin
@@ -90,20 +93,22 @@ begin
             O_LAST               => O_TLAST             ,
             O_VALID              => O_TVALID            ,
             O_READY              => O_TREADY            ,
-            GO                   => GO                  ,
-            BUSY                 => BUSY                ,
-            DONE                 => DONE                ,
-            N                    => N                   ,
-            O                    => O                   
+            ap_start             => ap_start            ,
+            ap_idle              => ap_idle             ,
+            ap_ready             => ap_ready            ,
+            ap_done              => ap_done             ,
+            n                    => n                   ,
+            ap_return            => ap_return           
         );
     T : FIB
         port map(
-            CLK                  => CLK                 ,
-            RST                  => reset               ,
-            GO                   => GO                  ,
-            BUSY                 => BUSY                ,
-            DONE                 => DONE                ,
-            N                    => N                   ,
-            O                    => O                   
+            ap_clk               => CLK                 ,
+            ap_rst               => reset               ,
+            ap_start             => ap_start            ,
+            ap_idle              => ap_idle             ,
+            ap_ready             => ap_ready            ,
+            ap_done              => ap_done             ,
+            n                    => n                   ,
+            ap_return            => ap_return           
         );
 end RTL;

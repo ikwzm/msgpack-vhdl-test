@@ -75,7 +75,10 @@ begin
             PARAM_LAST      => PARAM_LAST          , -- In  :
             PARAM_SHIFT     => PARAM_SHIFT         , -- Out :
             RUN_REQ         => start_req           , -- Out :
+            RUN_ACK         => start_busy          , -- In  :
             RUN_BUSY        => start_busy          , -- In  :
+            RUN_DONE        => '0'                 , -- In  :
+            RUNNING         => open                , -- Out :
             RET_ID          => PROC_RES_ID         , -- Out :
             RET_ERROR       => return_error        , -- Out :
             RET_START       => return_start        , -- Out :

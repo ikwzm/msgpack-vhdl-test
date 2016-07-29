@@ -79,15 +79,12 @@ msgpack_rpc_method_return_integer.o : ../../../msgpack-vhdl/src/msgpack/rpc/msgp
 msgpack_rpc_server.o : ../../../msgpack-vhdl/src/msgpack/rpc/msgpack_rpc_server.vhd msgpack_object.o msgpack_rpc.o msgpack_rpc_components.o msgpack_rpc_server_requester.o msgpack_rpc_server_responder.o
 	ghdl -a -C $(GHDLFLAGS) --work=MSGPACK ../../../msgpack-vhdl/src/msgpack/rpc/msgpack_rpc_server.vhd
 
-Fibonacci_Interface.o : ../../../src/msgpack_rpc_fibonacci/vhdl/Fibonacci_Interface.vhd msgpack_object.o msgpack_rpc.o msgpack_rpc_components.o msgpack_object_components.o msgpack_rpc_server.o msgpack_rpc_method_main_with_param.o msgpack_object_store_integer_register.o msgpack_rpc_method_return_integer.o
-	ghdl -a -C $(GHDLFLAGS) --work=MSGPACK ../../../src/msgpack_rpc_fibonacci/vhdl/Fibonacci_Interface.vhd
+Fibonacci_Interface.o : ../../../src/msgpack_rpc_vivado_hls_fibonacci/vhdl/Fibonacci_Interface.vhd msgpack_object.o msgpack_rpc.o msgpack_rpc_components.o msgpack_object_components.o msgpack_rpc_server.o msgpack_rpc_method_main_with_param.o msgpack_object_store_integer_register.o msgpack_rpc_method_return_integer.o
+	ghdl -a -C $(GHDLFLAGS) --work=MSGPACK ../../../src/msgpack_rpc_vivado_hls_fibonacci/vhdl/Fibonacci_Interface.vhd
 
-fib.o : ../../../src/msgpack_rpc_fibonacci/vhdl/fib.vhd 
-	ghdl -a -C $(GHDLFLAGS) --work=MSGPACK ../../../src/msgpack_rpc_fibonacci/vhdl/fib.vhd
+Fibonacci_Server.o : ../../../src/msgpack_rpc_vivado_hls_fibonacci/vhdl/Fibonacci_Server.vhd Fibonacci_Interface.o
+	ghdl -a -C $(GHDLFLAGS) --work=MSGPACK ../../../src/msgpack_rpc_vivado_hls_fibonacci/vhdl/Fibonacci_Server.vhd
 
-Fibonacci_Server.o : ../../../src/msgpack_rpc_fibonacci/vhdl/Fibonacci_Server.vhd Fibonacci_Interface.o fib.o
-	ghdl -a -C $(GHDLFLAGS) --work=MSGPACK ../../../src/msgpack_rpc_fibonacci/vhdl/Fibonacci_Server.vhd
-
-test_bench.o : ../../../src/msgpack_rpc_fibonacci/vhdl/test_bench.vhd Fibonacci_Server.o
-	ghdl -a -C $(GHDLFLAGS) --work=MSGPACK ../../../src/msgpack_rpc_fibonacci/vhdl/test_bench.vhd
+test_bench.o : ../../../src/msgpack_rpc_vivado_hls_fibonacci/vhdl/test_bench.vhd Fibonacci_Server.o
+	ghdl -a -C $(GHDLFLAGS) --work=MSGPACK ../../../src/msgpack_rpc_vivado_hls_fibonacci/vhdl/test_bench.vhd
 
