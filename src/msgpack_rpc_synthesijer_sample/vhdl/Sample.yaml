@@ -3,11 +3,13 @@ name: Sample
 methods:
 - name: m0
   interface:
+    type: synthesijer
     port:
       request: m0_req
       busy: m0_busy
 - name: m1
   interface:
+    type: synthesijer
     port:
       request: m1_req
       busy: m1_busy
@@ -27,6 +29,7 @@ methods:
         name: Logic
 - name: m2
   interface:
+    type: synthesijer
     port:
       request: m2_req
       busy: m2_busy
@@ -55,6 +58,7 @@ methods:
         width: 32
 - name: m3
   interface:
+    type: synthesijer
     port:
       request: m3_req
       busy: m3_busy
@@ -83,6 +87,7 @@ methods:
         width: 32
 - name: m4
   interface:
+    type: synthesijer
     port:
       request: m4_req
       busy: m4_busy

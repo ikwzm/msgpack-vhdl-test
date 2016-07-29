@@ -111,8 +111,10 @@ begin
             SET_PARAM_DONE  => set_param_done      , -- In  :
             SET_PARAM_SHIFT => set_param_shift     , -- In  :
             RUN_REQ         => add_req             , -- Out :
+            RUN_ACK         => add_busy            , -- In  :
             RUN_BUSY        => add_busy            , -- In  :
             RUN_DONE        => '0'                 , -- In  :
+            RUNNING         => open                , -- Out :
             RET_ID          => PROC_RES_ID         , -- Out :
             RET_ERROR       => return_error        , -- Out :
             RET_START       => return_start        , -- Out :

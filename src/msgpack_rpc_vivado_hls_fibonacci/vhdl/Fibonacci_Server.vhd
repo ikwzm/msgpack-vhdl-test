@@ -28,6 +28,7 @@ architecture RTL of Fibonacci_Server is
     signal    reset_n          :  std_logic;
     signal    ap_start         :  std_logic;
     signal    ap_idle          :  std_logic;
+    signal    ap_ready         :  std_logic;
     signal    ap_done          :  std_logic;
     signal    n                :  std_logic_vector(32-1 downto 0);
     signal    ap_return        :  std_logic_vector(64-1 downto 0);
@@ -52,6 +53,7 @@ architecture RTL of Fibonacci_Server is
             O_READY              : in  std_logic;
             ap_start             : out std_logic;
             ap_idle              : in  std_logic;
+            ap_ready             : in  std_logic;
             ap_done              : in  std_logic;
             n                    : out std_logic_vector(32-1 downto 0);
             ap_return            : in  std_logic_vector(64-1 downto 0)
@@ -63,6 +65,7 @@ architecture RTL of Fibonacci_Server is
             ap_rst               : in  std_logic;
             ap_start             : in  std_logic;
             ap_idle              : out std_logic;
+            ap_ready             : out std_logic;
             ap_done              : out std_logic;
             n                    : in  std_logic_vector(32-1 downto 0);
             ap_return            : out std_logic_vector(64-1 downto 0)
@@ -92,6 +95,7 @@ begin
             O_READY              => O_TREADY            ,
             ap_start             => ap_start            ,
             ap_idle              => ap_idle             ,
+            ap_ready             => ap_ready            ,
             ap_done              => ap_done             ,
             n                    => n                   ,
             ap_return            => ap_return           
@@ -102,6 +106,7 @@ begin
             ap_rst               => reset               ,
             ap_start             => ap_start            ,
             ap_idle              => ap_idle             ,
+            ap_ready             => ap_ready            ,
             ap_done              => ap_done             ,
             n                    => n                   ,
             ap_return            => ap_return           

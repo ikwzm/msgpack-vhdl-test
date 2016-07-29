@@ -22,6 +22,7 @@ entity  Fibonacci_Interface is
         O_READY              : in  std_logic;
         ap_start             : out std_logic;
         ap_idle              : in  std_logic;
+        ap_ready             : in  std_logic;
         ap_done              : in  std_logic;
         n                    : out std_logic_vector(32-1 downto 0);
         ap_return            : in  std_logic_vector(64-1 downto 0)
@@ -109,6 +110,8 @@ begin
         signal    proc_return_done      :  std_logic;
         signal    proc_return_busy      :  std_logic;
         signal    proc_start            :  std_logic;
+        signal    proc_run_req          :  std_logic;
+        signal    proc_run_ack          :  std_logic;
         signal    proc_run_busy         :  std_logic;
     begin
         PROC_MAIN: MsgPack_RPC_Method_Main_with_Param         -- 
@@ -140,15 +143,19 @@ begin
                 SET_PARAM_ERROR         => proc_set_param_error         , -- In  :
                 SET_PARAM_DONE          => proc_set_param_done          , -- In  :
                 SET_PARAM_SHIFT         => proc_set_param_shift         , -- In  :
-                RUN_REQ                 => ap_start                     , -- Out :
+                RUN_REQ                 => proc_run_req                 , -- Out :
+                RUN_ACK                 => proc_run_ack                 , -- In  :
                 RUN_BUSY                => proc_run_busy                , -- In  :
                 RUN_DONE                => ap_done                      , -- In  :
+                RUNNING                 => open                         , -- Out :
                 RET_ID                  => proc_res_id     (0)          , -- Out :
                 RET_START               => proc_return_start            , -- Out :
                 RET_DONE                => proc_return_done             , -- Out :
                 RET_ERROR               => proc_return_error            , -- Out :
                 RET_BUSY                => proc_return_busy               -- In  :
             );                                                            -- 
+        ap_start <= '1' when (proc_run_req = '1' and ap_ready = '0') else '0';
+        proc_run_ack <= ap_ready;
         proc_run_busy <= '1' when (ap_idle = '0') else '0';
         PROC_0_N: block
             signal    proc_0_value :  std_logic_vector(32-1 downto 0);

@@ -250,8 +250,10 @@ begin
                 PARAM_LAST              => proc_param_last (0)          , -- In  :
                 PARAM_SHIFT             => proc_param_shift(0)          , -- Out :
                 RUN_REQ                 => m0_req                       , -- Out :
+                RUN_ACK                 => m0_busy                      , -- In  :
                 RUN_BUSY                => m0_busy                      , -- In  :
                 RUN_DONE                => '0'                          , -- In  :
+                RUNNING                 => open                         , -- Out :
                 RET_ID                  => proc_res_id     (0)          , -- Out :
                 RET_START               => proc_return_start            , -- Out :
                 RET_ERROR               => proc_return_error            , -- Out :
@@ -317,8 +319,10 @@ begin
                 SET_PARAM_DONE          => proc_set_param_done          , -- In  :
                 SET_PARAM_SHIFT         => proc_set_param_shift         , -- In  :
                 RUN_REQ                 => m1_req                       , -- Out :
+                RUN_ACK                 => m1_busy                      , -- In  :
                 RUN_BUSY                => m1_busy                      , -- In  :
                 RUN_DONE                => '0'                          , -- In  :
+                RUNNING                 => open                         , -- Out :
                 RET_ID                  => proc_res_id     (1)          , -- Out :
                 RET_START               => proc_return_start            , -- Out :
                 RET_DONE                => proc_return_done             , -- Out :
@@ -432,8 +436,10 @@ begin
                 SET_PARAM_DONE          => proc_set_param_done          , -- In  :
                 SET_PARAM_SHIFT         => proc_set_param_shift         , -- In  :
                 RUN_REQ                 => m2_req                       , -- Out :
+                RUN_ACK                 => m2_busy                      , -- In  :
                 RUN_BUSY                => m2_busy                      , -- In  :
                 RUN_DONE                => '0'                          , -- In  :
+                RUNNING                 => open                         , -- Out :
                 RET_ID                  => proc_res_id     (2)          , -- Out :
                 RET_START               => proc_return_start            , -- Out :
                 RET_DONE                => proc_return_done             , -- Out :
@@ -592,8 +598,10 @@ begin
                 SET_PARAM_DONE          => proc_set_param_done          , -- In  :
                 SET_PARAM_SHIFT         => proc_set_param_shift         , -- In  :
                 RUN_REQ                 => m3_req                       , -- Out :
+                RUN_ACK                 => m3_busy                      , -- In  :
                 RUN_BUSY                => m3_busy                      , -- In  :
                 RUN_DONE                => '0'                          , -- In  :
+                RUNNING                 => open                         , -- Out :
                 RET_ID                  => proc_res_id     (3)          , -- Out :
                 RET_START               => proc_return_start            , -- Out :
                 RET_DONE                => proc_return_done             , -- Out :
@@ -752,8 +760,10 @@ begin
                 SET_PARAM_DONE          => proc_set_param_done          , -- In  :
                 SET_PARAM_SHIFT         => proc_set_param_shift         , -- In  :
                 RUN_REQ                 => m4_req                       , -- Out :
+                RUN_ACK                 => m4_busy                      , -- In  :
                 RUN_BUSY                => m4_busy                      , -- In  :
                 RUN_DONE                => '0'                          , -- In  :
+                RUNNING                 => open                         , -- Out :
                 RET_ID                  => proc_res_id     (4)          , -- Out :
                 RET_START               => proc_return_start            , -- Out :
                 RET_DONE                => proc_return_done             , -- Out :

@@ -6,7 +6,7 @@ generate :
 port     : {clock: ap_clk, reset: ap_rst, clear: }
 methods  :
     - name     : fib
-      interface: {port: {request: ap_start, idle: ap_idle, done: ap_done}}
+      interface: {type: ap_ctrl_hs}
       arguments:
         - name      : n
           type      : Integer

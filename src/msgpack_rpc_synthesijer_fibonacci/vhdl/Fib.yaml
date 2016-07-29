@@ -3,6 +3,7 @@ name: Fib
 methods:
 - name: fib
   interface:
+    type: synthesijer
     port:
       request: fib_req
       busy: fib_busy

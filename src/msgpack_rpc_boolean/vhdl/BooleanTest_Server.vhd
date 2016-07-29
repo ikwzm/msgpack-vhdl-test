@@ -88,6 +88,7 @@ architecture RTL of BooleanTest_Server is
     -------------------------------------------------------------------------------
     signal   control_req    :  std_logic;
     signal   control_busy   :  std_logic;
+    signal   control_done   :  std_logic;
     signal   control_status :  boolean;
     signal   control_return :  boolean;
     signal   status_wdata   :  boolean;
@@ -149,6 +150,7 @@ architecture RTL of BooleanTest_Server is
             O_READY         : in  std_logic;
             control_REQ     : out std_logic;
             control_BUSY    : in  std_logic;
+            control_DONE    : in  std_logic;
             control_status  : out boolean;
             control_return  : in  boolean;
             status_wdata    : out boolean;
@@ -259,6 +261,7 @@ begin
             O_READY         => O_TREADY        , -- In  :
             control_req     => control_req     , -- Out :
             control_busy    => control_busy    , -- In  :
+            control_done    => control_done    , -- In  :
             control_status  => control_status  , -- Out :
             control_return  => control_return  , -- In  :
             status_wdata    => status_wdata    , -- Out :
@@ -306,7 +309,7 @@ begin
                 control_return <= FALSE;
                 status_rdata   <= FALSE;
         elsif (CLK'event and CLK = '1') then
-            if (control_req = '1') then
+            if (control_req = '1' and control_busy = '0') then
                 control_busy   <= '1';
                 control_return <= control_status;
             else
@@ -317,6 +320,7 @@ begin
             end if;
         end if;
     end process;
+    control_done <= control_busy;
     -------------------------------------------------------------------------------
     --
     -------------------------------------------------------------------------------
