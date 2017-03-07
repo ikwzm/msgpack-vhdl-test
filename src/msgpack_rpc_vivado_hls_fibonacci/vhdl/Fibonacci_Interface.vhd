@@ -142,7 +142,7 @@ begin
                 SET_PARAM_DONE          => proc_set_param_done          , -- In  :
                 SET_PARAM_SHIFT         => proc_set_param_shift         , -- In  :
                 RUN_REQ                 => ap_start                     , -- Out :
-                RUN_ACK                 => proc_run_busy                , -- In  :
+                RUN_ACK                 => ap_ready                     , -- In  :
                 RUN_BUSY                => proc_run_busy                , -- In  :
                 RUN_DONE                => ap_done                      , -- In  :
                 RUNNING                 => open                         , -- Out :
