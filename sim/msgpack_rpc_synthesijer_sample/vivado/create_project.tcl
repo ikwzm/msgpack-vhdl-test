@@ -83,7 +83,7 @@ set_property "top" "Server_Sample"  $obj
 #
 set obj [get_filesets sim_1]
 set_property "top" "TEST_BENCH"  $obj
-set_property "generic" "SCENARIO_FILE=../../../../../../src/msgpack_rpc_synthesijer/scenarios/test_1.snr" $obj
+set_property "generic" "SCENARIO_FILE=../../../../../../src/msgpack_rpc_synthesijer_sample/scenarios/test_1.snr" $obj
 
 update_compile_order -fileset sources_1
 update_compile_order -fileset sim_1
