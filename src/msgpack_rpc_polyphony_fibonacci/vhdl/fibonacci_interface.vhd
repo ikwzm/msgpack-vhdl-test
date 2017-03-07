@@ -20,11 +20,11 @@ entity  Fibonacci_Interface is
         O_LAST               : out std_logic;
         O_VALID              : out std_logic;
         O_READY              : in  std_logic;
-        GO                   : out std_logic;
-        BUSY                 : in  std_logic;
-        DONE                 : in  std_logic;
-        N                    : out std_logic_vector(8-1 downto 0);
-        O                    : in  std_logic_vector(64-1 downto 0)
+        fib_ready            : out std_logic;
+        fib_accept           : out std_logic;
+        fib_valid            : in  std_logic;
+        fib_in_n             : out signed(32-1 downto 0);
+        fib_out_0            : in  signed(32-1 downto 0)
     );
 end     Fibonacci_Interface;
 library ieee;
@@ -109,6 +109,9 @@ begin
         signal    proc_return_done      :  std_logic;
         signal    proc_return_busy      :  std_logic;
         signal    proc_start            :  std_logic;
+        signal    proc_run_request      :  std_logic;
+        signal    proc_run_busy         :  std_logic;
+        signal    proc_run_done         :  std_logic;
     begin
         PROC_MAIN: MsgPack_RPC_Method_Main_with_Param         -- 
             generic map (                                                 -- 
@@ -139,10 +142,10 @@ begin
                 SET_PARAM_ERROR         => proc_set_param_error         , -- In  :
                 SET_PARAM_DONE          => proc_set_param_done          , -- In  :
                 SET_PARAM_SHIFT         => proc_set_param_shift         , -- In  :
-                RUN_REQ                 => GO                           , -- Out :
-                RUN_ACK                 => BUSY                         , -- In  :
-                RUN_BUSY                => BUSY                         , -- In  :
-                RUN_DONE                => DONE                         , -- In  :
+                RUN_REQ                 => proc_run_request             , -- Out :
+                RUN_ACK                 => proc_run_busy                , -- In  :
+                RUN_BUSY                => proc_run_busy                , -- In  :
+                RUN_DONE                => proc_run_done                , -- In  :
                 RUNNING                 => open                         , -- Out :
                 RET_ID                  => proc_res_id     (0)          , -- Out :
                 RET_START               => proc_return_start            , -- Out :
@@ -150,25 +153,42 @@ begin
                 RET_ERROR               => proc_return_error            , -- Out :
                 RET_BUSY                => proc_return_busy               -- In  :
             );                                                            -- 
+        process(CLK, RST) begin
+            if (RST = '1') then
+                    proc_run_busy <= '0';
+            elsif (CLK'event and CLK = '1') then
+                if    (CLR = '1') then
+                    proc_run_busy <= '0';
+                elsif (proc_run_busy = '0' and proc_run_request = '1') or
+                      (proc_run_busy = '1' and fib_valid = '0') then
+                    proc_run_busy <= '1';
+                else
+                    proc_run_busy <= '0';
+                end if;
+            end if;
+        end process;
+        fib_ready <= proc_run_request;
+        fib_accept <= proc_run_busy;
+        proc_run_done <= '1' when (proc_run_busy = '1' and fib_valid = '1') else '0';
         PROC_0_N: block
-            signal    proc_0_value :  std_logic_vector(8-1 downto 0);
+            signal    proc_0_value :  std_logic_vector(32-1 downto 0);
             signal    proc_0_valid :  std_logic;
         begin
             process(CLK, RST) begin
                 if (RST = '1') then
-                         N <= (others => '0');
+                         fib_in_n <= (others => '0');
                 elsif (CLK'event and CLK = '1') then
                     if    (CLR = '1') then
-                         N <= (others => '0');
+                         fib_in_n <= (others => '0');
                     elsif (proc_0_valid = '1') then
-                         N <= proc_0_value;
+                         fib_in_n <= signed(proc_0_value);
                     end if;
                 end if;
             end process;
             PROC_STORE_N : MsgPack_Object_Store_Integer_Register                      -- 
                 generic map (                                             -- 
                     CODE_WIDTH          => MsgPack_RPC.Code_Length      , --
-                    VALUE_BITS          => 8                            , --
+                    VALUE_BITS          => 32                           , --
                     VALUE_SIGN          => true                         , --
                     CHECK_RANGE         => TRUE                         , --
                     ENABLE64            => TRUE                           --
@@ -191,13 +211,13 @@ begin
                 );                                                        -- 
         end block;
         PROC_RETURN : block
-            signal proc_return_value : std_logic_vector(64-1 downto 0);
+            signal proc_return_value : std_logic_vector(32-1 downto 0);
         begin
             RET: MsgPack_RPC_Method_Return_Integer  -- 
                 generic map (                                                 -- 
-                    VALUE_WIDTH             => 64                           , --
-                    RETURN_UINT             => TRUE                         , --
-                    RETURN_INT              => FALSE                        , --
+                    VALUE_WIDTH             => 32                           , --
+                    RETURN_UINT             => FALSE                        , --
+                    RETURN_INT              => TRUE                         , --
                     RETURN_FLOAT            => FALSE                        , --
                     RETURN_BOOLEAN          => FALSE                          --
                 )                                                             -- 
@@ -215,7 +235,7 @@ begin
                     RES_READY               => proc_res_ready  (0)          , -- In  :
                     VALUE                   => proc_return_value              -- In  :
                 );
-            proc_return_value <= O;
+            proc_return_value <= std_logic_vector(fib_out_0);
         end block;
     end block;
 end RTL;
