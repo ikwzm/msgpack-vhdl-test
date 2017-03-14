@@ -56,8 +56,12 @@ architecture RTL of PROC_ADD_SAMPLE is
     signal    return_done       :  std_logic;
     signal    return_busy       :  std_logic;
     signal    proc_start        :  std_logic;
-    signal    add_req           :  std_logic;
+    signal    add_req_valid     :  std_logic;
+    signal    add_req_ready     :  std_logic;
+    signal    add_res_valid     :  std_logic;
+    signal    add_res_ready     :  std_logic;
     signal    add_busy          :  std_logic;
+    signal    add_busy_reg      :  std_logic;
     signal    add_a             :  std_logic_vector(31 downto 0);
     signal    add_a_default     :  std_logic_vector(31 downto 0) := (others => '0');
     signal    add_b             :  std_logic_vector(31 downto 0);
@@ -110,10 +114,10 @@ begin
             SET_PARAM_ERROR => set_param_error     , -- In  :
             SET_PARAM_DONE  => set_param_done      , -- In  :
             SET_PARAM_SHIFT => set_param_shift     , -- In  :
-            RUN_REQ         => add_req             , -- Out :
-            RUN_ACK         => add_busy            , -- In  :
-            RUN_BUSY        => add_busy            , -- In  :
-            RUN_DONE        => '0'                 , -- In  :
+            RUN_REQ_VAL     => add_req_valid       , -- Out :
+            RUN_REQ_RDY     => add_req_ready       , -- In  :
+            RUN_RES_VAL     => add_res_valid       , -- In  :
+            RUN_RES_RDY     => add_res_ready       , -- Out :
             RUNNING         => open                , -- Out :
             RET_ID          => PROC_RES_ID         , -- Out :
             RET_ERROR       => return_error        , -- Out :
@@ -207,6 +211,19 @@ begin
             add_b           => signed(add_b)       , -- In  :
             add_return      => add_return          , -- Out :
             add_busy        => add_busy            , -- Out :
-            add_req         => add_req               -- In  :
+            add_req         => add_req_valid         -- In  :
         );
+    process(CLK, RST) begin
+        if (RST = '1') then
+                add_busy_reg <= '0';
+        elsif (CLK'event and CLK = '1') then
+            if (CLR = '1') then
+                add_busy_reg <= '0';
+            else
+                add_busy_reg <= add_busy;
+            end if;
+        end if;
+    end process;
+    add_req_ready <= '1' when (add_busy_reg = '0' and add_busy = '1') else '0';
+    add_res_valid <= '1' when (add_busy_reg = '1' and add_busy = '0') else '0';
 end RTL;

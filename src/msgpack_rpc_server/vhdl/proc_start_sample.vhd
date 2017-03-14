@@ -47,7 +47,10 @@ architecture RTL of PROC_START_SAMPLE is
     signal    return_start      :  std_logic;
     signal    return_done       :  std_logic;
     signal    return_busy       :  std_logic;
-    signal    start_req         :  std_logic;
+    signal    start_req_valid   :  std_logic;
+    signal    start_req_ready   :  std_logic;
+    signal    start_res_valid   :  std_logic;
+    signal    start_res_ready   :  std_logic;
     signal    start_busy        :  std_logic;
 begin
     -------------------------------------------------------------------------------
@@ -74,10 +77,10 @@ begin
             PARAM_VALID     => PARAM_VALID         , -- In  :
             PARAM_LAST      => PARAM_LAST          , -- In  :
             PARAM_SHIFT     => PARAM_SHIFT         , -- Out :
-            RUN_REQ         => start_req           , -- Out :
-            RUN_ACK         => start_busy          , -- In  :
-            RUN_BUSY        => start_busy          , -- In  :
-            RUN_DONE        => '0'                 , -- In  :
+            RUN_REQ_VAL     => start_req_valid     , -- Out :
+            RUN_REQ_RDY     => start_req_ready     , -- In  :
+            RUN_RES_VAL     => start_res_valid     , -- In  :
+            RUN_RES_RDY     => start_res_ready     , -- Out :
             RUNNING         => open                , -- Out :
             RET_ID          => PROC_RES_ID         , -- Out :
             RET_ERROR       => return_error        , -- Out :
@@ -112,8 +115,10 @@ begin
             if (CLR = '1') then
                 start_busy <= '0';
             else
-                start_busy <= start_req;
+                start_busy <= start_req_valid;
             end if;
         end if;
     end process;
+    start_req_ready <= '1';
+    start_res_valid <= start_busy;
 end RTL;

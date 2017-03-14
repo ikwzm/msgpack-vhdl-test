@@ -1,12 +1,12 @@
 -----------------------------------------------------------------------------------
 --!     @file    BooleanTest_Server.vhd
 --!     @brief   Sample Module for MsgPack_RPC_Server
---!     @version 0.2.0
---!     @date    2016/6/4
+--!     @version 0.2.5
+--!     @date    2017/3/14
 --!     @author  Ichiro Kawazome <ichiro_k@ca2.so-net.ne.jp>
 -----------------------------------------------------------------------------------
 --
---      Copyright (C) 2016 Ichiro Kawazome
+--      Copyright (C) 2016-2017 Ichiro Kawazome
 --      All rights reserved.
 --
 --      Redistribution and use in source and binary forms, with or without
@@ -86,9 +86,11 @@ architecture RTL of BooleanTest_Server is
     -------------------------------------------------------------------------------
     --
     -------------------------------------------------------------------------------
-    signal   control_req    :  std_logic;
+    signal   control_req_val:  std_logic;
+    signal   control_req_rdy:  std_logic;
+    signal   control_res_val:  std_logic;
+    signal   control_res_rdy:  std_logic;
     signal   control_busy   :  std_logic;
-    signal   control_done   :  std_logic;
     signal   control_status :  boolean;
     signal   control_return :  boolean;
     signal   status_wdata   :  boolean;
@@ -148,9 +150,10 @@ architecture RTL of BooleanTest_Server is
             O_LAST          : out std_logic;
             O_VALID         : out std_logic;
             O_READY         : in  std_logic;
-            control_REQ     : out std_logic;
-            control_BUSY    : in  std_logic;
-            control_DONE    : in  std_logic;
+            control_REQ_VAL : out std_logic;
+            control_REQ_RDY : in  std_logic;
+            control_RES_VAL : in  std_logic;
+            control_RES_RDY : out std_logic;
             control_status  : out boolean;
             control_return  : in  boolean;
             status_wdata    : out boolean;
@@ -259,9 +262,10 @@ begin
             O_LAST          => O_TLAST         , -- Out :
             O_VALID         => O_TVALID        , -- Out :
             O_READY         => O_TREADY        , -- In  :
-            control_req     => control_req     , -- Out :
-            control_busy    => control_busy    , -- In  :
-            control_done    => control_done    , -- In  :
+            control_REQ_VAL => control_req_val , -- Out :
+            control_REQ_RDY => control_req_rdy , -- In  :
+            control_RES_VAL => control_res_val , -- In  :
+            control_RES_RDY => control_res_rdy , -- Out :
             control_status  => control_status  , -- Out :
             control_return  => control_return  , -- In  :
             status_wdata    => status_wdata    , -- Out :
@@ -309,10 +313,10 @@ begin
                 control_return <= FALSE;
                 status_rdata   <= FALSE;
         elsif (CLK'event and CLK = '1') then
-            if (control_req = '1' and control_busy = '0') then
+            if    (control_req_val = '1' and control_req_rdy = '1') then
                 control_busy   <= '1';
                 control_return <= control_status;
-            else
+            elsif (control_res_val = '1' and control_res_rdy = '1') then
                 control_busy   <= '0';
             end if;
             if (status_we = '1') then
@@ -320,7 +324,8 @@ begin
             end if;
         end if;
     end process;
-    control_done <= control_busy;
+    control_req_rdy <= '1' when (control_busy = '0' and control_req_val = '1') else '0';
+    control_res_val <= '1' when (control_busy = '1') else '0';
     -------------------------------------------------------------------------------
     --
     -------------------------------------------------------------------------------

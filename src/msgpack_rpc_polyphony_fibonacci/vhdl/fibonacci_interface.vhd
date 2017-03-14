@@ -109,9 +109,9 @@ begin
         signal    proc_return_done      :  std_logic;
         signal    proc_return_busy      :  std_logic;
         signal    proc_start            :  std_logic;
-        signal    proc_run_request      :  std_logic;
+        signal    proc_run_req_valid    :  std_logic;
+        signal    proc_run_res_valid    :  std_logic;
         signal    proc_run_busy         :  std_logic;
-        signal    proc_run_done         :  std_logic;
     begin
         PROC_MAIN: MsgPack_RPC_Method_Main_with_Param         -- 
             generic map (                                                 -- 
@@ -142,10 +142,10 @@ begin
                 SET_PARAM_ERROR         => proc_set_param_error         , -- In  :
                 SET_PARAM_DONE          => proc_set_param_done          , -- In  :
                 SET_PARAM_SHIFT         => proc_set_param_shift         , -- In  :
-                RUN_REQ                 => proc_run_request             , -- Out :
-                RUN_ACK                 => proc_run_busy                , -- In  :
-                RUN_BUSY                => proc_run_busy                , -- In  :
-                RUN_DONE                => proc_run_done                , -- In  :
+                RUN_REQ_VAL             => proc_run_req_valid           , -- Out :
+                RUN_REQ_RDY             => '1'                          , -- In  :
+                RUN_RES_VAL             => proc_run_res_valid           , -- In  :
+                RUN_RES_RDY             => open                         , -- Out :
                 RUNNING                 => open                         , -- Out :
                 RET_ID                  => proc_res_id     (0)          , -- Out :
                 RET_START               => proc_return_start            , -- Out :
@@ -159,7 +159,7 @@ begin
             elsif (CLK'event and CLK = '1') then
                 if    (CLR = '1') then
                     proc_run_busy <= '0';
-                elsif (proc_run_busy = '0' and proc_run_request = '1') or
+                elsif (proc_run_busy = '0' and proc_run_req_valid = '1') or
                       (proc_run_busy = '1' and fib_valid = '0') then
                     proc_run_busy <= '1';
                 else
@@ -167,9 +167,9 @@ begin
                 end if;
             end if;
         end process;
-        fib_ready <= proc_run_request;
+        fib_ready <= proc_run_req_valid;
         fib_accept <= proc_run_busy;
-        proc_run_done <= '1' when (proc_run_busy = '1' and fib_valid = '1') else '0';
+        proc_run_res_valid <= '1' when (proc_run_busy = '1' and fib_valid = '1') else '0';
         PROC_0_N: block
             signal    proc_0_value :  std_logic_vector(32-1 downto 0);
             signal    proc_0_valid :  std_logic;
