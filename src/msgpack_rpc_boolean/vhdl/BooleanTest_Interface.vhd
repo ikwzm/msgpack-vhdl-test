@@ -20,9 +20,10 @@ entity  BooleanTest_Interface is
         O_LAST               : out std_logic;
         O_VALID              : out std_logic;
         O_READY              : in  std_logic;
-        control_REQ          : out std_logic;
-        control_BUSY         : in  std_logic;
-        control_DONE         : in  std_logic;
+        control_REQ_VAL      : out std_logic;
+        control_REQ_RDY      : in  std_logic;
+        control_RES_VAL      : in  std_logic;
+        control_RES_RDY      : out std_logic;
         control_status       : out boolean;
         control_return       : in  boolean;
         status_wdata         : out boolean;
@@ -182,10 +183,10 @@ begin
                 SET_PARAM_ERROR         => proc_set_param_error         , -- In  :
                 SET_PARAM_DONE          => proc_set_param_done          , -- In  :
                 SET_PARAM_SHIFT         => proc_set_param_shift         , -- In  :
-                RUN_REQ                 => control_REQ                  , -- Out :
-                RUN_ACK                 => control_BUSY                 , -- In  :
-                RUN_BUSY                => control_BUSY                 , -- In  :
-                RUN_DONE                => control_DONE                 , -- In  :
+                RUN_REQ_VAL             => control_REQ_VAL              , -- Out :
+                RUN_REQ_RDY             => control_REQ_RDY              , -- In  :
+                RUN_RES_VAL             => control_RES_VAL              , -- In  :
+                RUN_RES_RDY             => control_RES_RDY              , -- Out :
                 RUNNING                 => open                         , -- Out :
                 RET_ID                  => proc_res_id     (0)          , -- Out :
                 RET_START               => proc_return_start            , -- Out :
