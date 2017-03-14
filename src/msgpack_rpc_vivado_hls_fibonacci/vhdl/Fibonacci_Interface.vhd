@@ -110,7 +110,6 @@ begin
         signal    proc_return_done      :  std_logic;
         signal    proc_return_busy      :  std_logic;
         signal    proc_start            :  std_logic;
-        signal    proc_run_busy         :  std_logic;
     begin
         PROC_MAIN: MsgPack_RPC_Method_Main_with_Param         -- 
             generic map (                                                 -- 
@@ -141,10 +140,10 @@ begin
                 SET_PARAM_ERROR         => proc_set_param_error         , -- In  :
                 SET_PARAM_DONE          => proc_set_param_done          , -- In  :
                 SET_PARAM_SHIFT         => proc_set_param_shift         , -- In  :
-                RUN_REQ                 => ap_start                     , -- Out :
-                RUN_ACK                 => ap_ready                     , -- In  :
-                RUN_BUSY                => proc_run_busy                , -- In  :
-                RUN_DONE                => ap_done                      , -- In  :
+                RUN_REQ_VAL             => ap_start                     , -- Out :
+                RUN_REQ_RDY             => ap_ready                     , -- In  :
+                RUN_RES_VAL             => ap_done                      , -- In  :
+                RUN_RES_RDY             => open                         , -- Out :
                 RUNNING                 => open                         , -- Out :
                 RET_ID                  => proc_res_id     (0)          , -- Out :
                 RET_START               => proc_return_start            , -- Out :
@@ -152,7 +151,6 @@ begin
                 RET_ERROR               => proc_return_error            , -- Out :
                 RET_BUSY                => proc_return_busy               -- In  :
             );                                                            -- 
-        proc_run_busy <= '1' when (ap_idle = '0') else '0';
         PROC_0_N: block
             signal    proc_0_value :  std_logic_vector(32-1 downto 0);
             signal    proc_0_valid :  std_logic;
