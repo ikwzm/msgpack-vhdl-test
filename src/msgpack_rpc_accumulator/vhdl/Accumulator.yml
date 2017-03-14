@@ -8,7 +8,7 @@ aliases  :
 port     : {clock: clk, reset: reset, clear: }
 methods  :
     - name     : add
-      interface: {port: {request: add_req, busy: add_busy}}
+      interface: {type: synthesijer, port: {request: add_req, busy: add_busy}}
       arguments:
         - name      : x
           type      : Integer
