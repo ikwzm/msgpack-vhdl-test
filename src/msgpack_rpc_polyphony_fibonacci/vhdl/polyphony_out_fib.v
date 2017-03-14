@@ -15,8 +15,8 @@ module fib
   localparam fib_b1_S1 = 1;
   localparam fib_ifthen3_S0 = 2;
   localparam fib_ifelse4_S1 = 3;
-  localparam fib_ifthen6_S0 = 4;
-  localparam fib_ifelse7_S0 = 5;
+  localparam fib_ifelse7_S0 = 4;
+  localparam fib_ifthen6_S0 = 5;
   localparam fib_forelse11_S1 = 6;
   localparam fib_exit2_FINISH = 7;
   localparam L1_fortest9_S0 = 8;
@@ -27,20 +27,20 @@ module fib
   
   //signals: 
   reg        [3:0] fib_state;
-  reg signed [31:0] i4;
-  reg signed [31:0] n1;
-  reg signed [31:0] r03;
-  wire cond21;
-  wire cond23;
-  reg signed [31:0] t223;
   reg signed [31:0] r13;
-  wire cond20;
+  reg signed [31:0] i2;
   reg signed [31:0] i3;
-  reg signed [31:0] r14;
+  reg signed [31:0] r12;
+  wire cond25;
+  wire cond22;
+  reg signed [31:0] t242;
+  reg signed [31:0] r02;
+  reg signed [31:0] n1;
+  wire cond23;
   //combinations: 
-  assign cond20 = (n1 <= 0);
-  assign cond21 = (n1 == 1);
-  assign cond23 = (i3 < t223);
+  assign cond22 = (n1 <= 0);
+  assign cond23 = (n1 == 1);
+  assign cond25 = (i2 < t242);
   
   always @(posedge clk) begin
     if (rst) begin
@@ -55,7 +55,7 @@ module fib
         end
       end
       fib_b1_S1: begin
-        if (cond20) begin
+        if (cond22) begin
           fib_state <= fib_ifthen3_S0;
         end else if (1) begin
           fib_state <= fib_ifelse4_S1;
@@ -66,24 +66,24 @@ module fib
         fib_state <= fib_exit2_FINISH;
       end
       fib_ifelse4_S1: begin
-        if (cond21) begin
+        if (cond23) begin
           fib_state <= fib_ifthen6_S0;
         end else if (1) begin
           fib_state <= fib_ifelse7_S0;
         end
       end
+      fib_ifelse7_S0: begin
+        i2 <= 0;
+        r02 <= 0;
+        r12 <= 1;
+        fib_state <= L1_fortest9_S0;
+      end
       fib_ifthen6_S0: begin
         fib_out_0 <= 1;
         fib_state <= fib_exit2_FINISH;
       end
-      fib_ifelse7_S0: begin
-        i3 <= 0;
-        r03 <= 0;
-        r13 <= 1;
-        fib_state <= L1_fortest9_S0;
-      end
       fib_forelse11_S1: begin
-        fib_out_0 <= r13;
+        fib_out_0 <= r12;
         fib_state <= fib_exit2_FINISH;
       end
       fib_exit2_FINISH: begin
@@ -93,28 +93,28 @@ module fib
         end
       end
       L1_fortest9_S0: begin
-        t223 <= (n1 - 1);
+        t242 <= (n1 - 1);
         fib_state <= L1_fortest9_S1;
       end
       L1_fortest9_S1: begin
-        if (cond23) begin
+        if (cond25) begin
           fib_state <= L1_forbody10_S0;
         end else if (1) begin
           fib_state <= fib_forelse11_S1;
         end
       end
       L1_forbody10_S0: begin
-        r14 <= (r03 + r13);
+        r13 <= (r02 + r12);
         fib_state <= L1_continue12_S0;
       end
       L1_continue12_S0: begin
-        i4 <= (i3 + 1);
-        r03 <= r13;
+        i3 <= (i2 + 1);
+        r02 <= r12;
         fib_state <= L1_continue12_S1;
       end
       L1_continue12_S1: begin
-        i3 <= i4;
-        r13 <= r14;
+        i2 <= i3;
+        r12 <= r13;
         fib_state <= L1_fortest9_S0;
       end
       endcase
