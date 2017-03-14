@@ -226,6 +226,9 @@ begin
         signal    proc_return_error     :  std_logic;
         signal    proc_return_busy      :  std_logic;
         signal    proc_start            :  std_logic;
+        signal    proc_run_req_ready    :  std_logic;
+        signal    proc_run_res_valid    :  std_logic;
+        signal    proc_run_busy         :  std_logic;
     begin
         PROC_MAIN: MsgPack_RPC_Method_Main_No_Param         -- 
             generic map (                                                 -- 
@@ -249,17 +252,30 @@ begin
                 PARAM_VALID             => proc_param_valid(0)          , -- In  :
                 PARAM_LAST              => proc_param_last (0)          , -- In  :
                 PARAM_SHIFT             => proc_param_shift(0)          , -- Out :
-                RUN_REQ                 => m0_req                       , -- Out :
-                RUN_ACK                 => m0_busy                      , -- In  :
-                RUN_BUSY                => m0_busy                      , -- In  :
-                RUN_DONE                => '0'                          , -- In  :
+                RUN_REQ_VAL             => m0_req                       , -- Out :
+                RUN_REQ_RDY             => proc_run_req_ready           , -- In  :
+                RUN_RES_VAL             => proc_run_res_valid           , -- In  :
+                RUN_RES_RDY             => open                         , -- Out :
                 RUNNING                 => open                         , -- Out :
                 RET_ID                  => proc_res_id     (0)          , -- Out :
                 RET_START               => proc_return_start            , -- Out :
                 RET_ERROR               => proc_return_error            , -- Out :
                 RET_DONE                => proc_return_done             , -- Out :
                 RET_BUSY                => proc_return_busy               -- In  :
-            );                                                            -- 
+            );                                                            --
+        process(CLK, RST) begin
+            if (RST = '1') then
+                    proc_run_busy <= '0';
+            elsif (CLK'event and CLK = '1') then
+                if (CLR = '1') then
+                    proc_run_busy <= '0';
+                else
+                    proc_run_busy <= m0_busy;
+                end if;
+            end if;
+        end process;
+        proc_run_req_ready <= '1' when (proc_run_busy = '0' and m0_busy = '1') else '0';
+        proc_run_res_valid <= '1' when (proc_run_busy = '1' and m0_busy = '0') else '0';
         PROC_RETURN : MsgPack_RPC_Method_Return_Nil              -- 
             port map (                                                    -- 
                 CLK                     => CLK                          , -- In  :
@@ -288,6 +304,9 @@ begin
         signal    proc_return_done      :  std_logic;
         signal    proc_return_busy      :  std_logic;
         signal    proc_start            :  std_logic;
+        signal    proc_run_req_ready    :  std_logic;
+        signal    proc_run_res_valid    :  std_logic;
+        signal    proc_run_busy         :  std_logic;
     begin
         PROC_MAIN: MsgPack_RPC_Method_Main_with_Param         -- 
             generic map (                                                 -- 
@@ -318,10 +337,10 @@ begin
                 SET_PARAM_ERROR         => proc_set_param_error         , -- In  :
                 SET_PARAM_DONE          => proc_set_param_done          , -- In  :
                 SET_PARAM_SHIFT         => proc_set_param_shift         , -- In  :
-                RUN_REQ                 => m1_req                       , -- Out :
-                RUN_ACK                 => m1_busy                      , -- In  :
-                RUN_BUSY                => m1_busy                      , -- In  :
-                RUN_DONE                => '0'                          , -- In  :
+                RUN_REQ_VAL             => m1_req                       , -- Out :
+                RUN_REQ_RDY             => proc_run_req_ready           , -- In  :
+                RUN_RES_VAL             => proc_run_res_valid           , -- In  :
+                RUN_RES_RDY             => open                         , -- Out :
                 RUNNING                 => open                         , -- Out :
                 RET_ID                  => proc_res_id     (1)          , -- Out :
                 RET_START               => proc_return_start            , -- Out :
@@ -329,6 +348,19 @@ begin
                 RET_ERROR               => proc_return_error            , -- Out :
                 RET_BUSY                => proc_return_busy               -- In  :
             );                                                            -- 
+        process(CLK, RST) begin
+            if (RST = '1') then
+                    proc_run_busy <= '0';
+            elsif (CLK'event and CLK = '1') then
+                if (CLR = '1') then
+                    proc_run_busy <= '0';
+                else
+                    proc_run_busy <= m1_busy;
+                end if;
+            end if;
+        end process;
+        proc_run_req_ready <= '1' when (proc_run_busy = '0' and m1_busy = '1') else '0';
+        proc_run_res_valid <= '1' when (proc_run_busy = '1' and m1_busy = '0') else '0';
         PROC_0_P: block
             signal    proc_0_value :  std_logic_vector(1-1 downto 0);
             signal    proc_0_valid :  std_logic;
@@ -405,6 +437,9 @@ begin
         signal    proc_return_done      :  std_logic;
         signal    proc_return_busy      :  std_logic;
         signal    proc_start            :  std_logic;
+        signal    proc_run_req_ready    :  std_logic;
+        signal    proc_run_res_valid    :  std_logic;
+        signal    proc_run_busy         :  std_logic;
     begin
         PROC_MAIN: MsgPack_RPC_Method_Main_with_Param         -- 
             generic map (                                                 -- 
@@ -435,10 +470,10 @@ begin
                 SET_PARAM_ERROR         => proc_set_param_error         , -- In  :
                 SET_PARAM_DONE          => proc_set_param_done          , -- In  :
                 SET_PARAM_SHIFT         => proc_set_param_shift         , -- In  :
-                RUN_REQ                 => m2_req                       , -- Out :
-                RUN_ACK                 => m2_busy                      , -- In  :
-                RUN_BUSY                => m2_busy                      , -- In  :
-                RUN_DONE                => '0'                          , -- In  :
+                RUN_REQ_VAL             => m2_req                       , -- Out :
+                RUN_REQ_RDY             => proc_run_req_ready           , -- In  :
+                RUN_RES_VAL             => proc_run_res_valid           , -- In  :
+                RUN_RES_RDY             => open                         , -- Out :
                 RUNNING                 => open                         , -- Out :
                 RET_ID                  => proc_res_id     (2)          , -- Out :
                 RET_START               => proc_return_start            , -- Out :
@@ -446,6 +481,19 @@ begin
                 RET_ERROR               => proc_return_error            , -- Out :
                 RET_BUSY                => proc_return_busy               -- In  :
             );                                                            -- 
+        process(CLK, RST) begin
+            if (RST = '1') then
+                    proc_run_busy <= '0';
+            elsif (CLK'event and CLK = '1') then
+                if (CLR = '1') then
+                    proc_run_busy <= '0';
+                else
+                    proc_run_busy <= m2_busy;
+                end if;
+            end if;
+        end process;
+        proc_run_req_ready <= '1' when (proc_run_busy = '0' and m2_busy = '1') else '0';
+        proc_run_res_valid <= '1' when (proc_run_busy = '1' and m2_busy = '0') else '0';
         PROC_0_B: block
             signal    proc_0_value :  std_logic_vector(8-1 downto 0);
             signal    proc_0_valid :  std_logic;
@@ -567,6 +615,9 @@ begin
         signal    proc_return_done      :  std_logic;
         signal    proc_return_busy      :  std_logic;
         signal    proc_start            :  std_logic;
+        signal    proc_run_req_ready    :  std_logic;
+        signal    proc_run_res_valid    :  std_logic;
+        signal    proc_run_busy         :  std_logic;
     begin
         PROC_MAIN: MsgPack_RPC_Method_Main_with_Param         -- 
             generic map (                                                 -- 
@@ -597,10 +648,10 @@ begin
                 SET_PARAM_ERROR         => proc_set_param_error         , -- In  :
                 SET_PARAM_DONE          => proc_set_param_done          , -- In  :
                 SET_PARAM_SHIFT         => proc_set_param_shift         , -- In  :
-                RUN_REQ                 => m3_req                       , -- Out :
-                RUN_ACK                 => m3_busy                      , -- In  :
-                RUN_BUSY                => m3_busy                      , -- In  :
-                RUN_DONE                => '0'                          , -- In  :
+                RUN_REQ_VAL             => m3_req                       , -- Out :
+                RUN_REQ_RDY             => proc_run_req_ready           , -- In  :
+                RUN_RES_VAL             => proc_run_res_valid           , -- In  :
+                RUN_RES_RDY             => open                         , -- Out :
                 RUNNING                 => open                         , -- Out :
                 RET_ID                  => proc_res_id     (3)          , -- Out :
                 RET_START               => proc_return_start            , -- Out :
@@ -608,6 +659,19 @@ begin
                 RET_ERROR               => proc_return_error            , -- Out :
                 RET_BUSY                => proc_return_busy               -- In  :
             );                                                            -- 
+        process(CLK, RST) begin
+            if (RST = '1') then
+                    proc_run_busy <= '0';
+            elsif (CLK'event and CLK = '1') then
+                if (CLR = '1') then
+                    proc_run_busy <= '0';
+                else
+                    proc_run_busy <= m3_busy;
+                end if;
+            end if;
+        end process;
+        proc_run_req_ready <= '1' when (proc_run_busy = '0' and m3_busy = '1') else '0';
+        proc_run_res_valid <= '1' when (proc_run_busy = '1' and m3_busy = '0') else '0';
         PROC_0_S: block
             signal    proc_0_value :  std_logic_vector(16-1 downto 0);
             signal    proc_0_valid :  std_logic;
@@ -729,6 +793,9 @@ begin
         signal    proc_return_done      :  std_logic;
         signal    proc_return_busy      :  std_logic;
         signal    proc_start            :  std_logic;
+        signal    proc_run_req_ready    :  std_logic;
+        signal    proc_run_res_valid    :  std_logic;
+        signal    proc_run_busy         :  std_logic;
     begin
         PROC_MAIN: MsgPack_RPC_Method_Main_with_Param         -- 
             generic map (                                                 -- 
@@ -759,10 +826,10 @@ begin
                 SET_PARAM_ERROR         => proc_set_param_error         , -- In  :
                 SET_PARAM_DONE          => proc_set_param_done          , -- In  :
                 SET_PARAM_SHIFT         => proc_set_param_shift         , -- In  :
-                RUN_REQ                 => m4_req                       , -- Out :
-                RUN_ACK                 => m4_busy                      , -- In  :
-                RUN_BUSY                => m4_busy                      , -- In  :
-                RUN_DONE                => '0'                          , -- In  :
+                RUN_REQ_VAL             => m4_req                       , -- Out :
+                RUN_REQ_RDY             => proc_run_req_ready           , -- In  :
+                RUN_RES_VAL             => proc_run_res_valid           , -- In  :
+                RUN_RES_RDY             => open                         , -- Out :
                 RUNNING                 => open                         , -- Out :
                 RET_ID                  => proc_res_id     (4)          , -- Out :
                 RET_START               => proc_return_start            , -- Out :
@@ -770,6 +837,19 @@ begin
                 RET_ERROR               => proc_return_error            , -- Out :
                 RET_BUSY                => proc_return_busy               -- In  :
             );                                                            -- 
+        process(CLK, RST) begin
+            if (RST = '1') then
+                    proc_run_busy <= '0';
+            elsif (CLK'event and CLK = '1') then
+                if (CLR = '1') then
+                    proc_run_busy <= '0';
+                else
+                    proc_run_busy <= m4_busy;
+                end if;
+            end if;
+        end process;
+        proc_run_req_ready <= '1' when (proc_run_busy = '0' and m4_busy = '1') else '0';
+        proc_run_res_valid <= '1' when (proc_run_busy = '1' and m4_busy = '0') else '0';
         PROC_0_A3: block
             signal    proc_0_value :  std_logic_vector(8-1 downto 0);
             signal    proc_0_valid :  std_logic;
